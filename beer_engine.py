@@ -19,7 +19,7 @@ import os
 import webbrowser
 import ast
 
-__mode__ = 'local'
+__mode__ = 'pyinstaller'
 class beer_engine_mainwin:
 	def __init__(self, master=None):
 
@@ -3845,7 +3845,7 @@ def resource_path(relative_path):
 		if os.path.basename(relative_path) == 'logo.png':
 			return '/usr/include/wheelers-wort-works/logo.png'
 		else:
-			return os.path.join(os.path.abspath('~/.config/Wheelers-Wort-Works/'), relative_path)
+			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/'), relative_path)
 
 
 def main():

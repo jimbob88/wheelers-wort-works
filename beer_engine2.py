@@ -4,15 +4,10 @@ from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
-try:
-	import Tkinter as tk
-	import tkinter.ttk as ttk
-	from Tkinter import filedialog, messagebox
-except:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import Tkinter as tk
+import ttk
+import tkFileDialog as filedialog
+import tkMessageBox as messagebox
 import sys
 import brew_data2 as brew_data
 import platform
@@ -23,7 +18,7 @@ import os
 import webbrowser
 import ast
 
-__mode__ = u'local'
+__mode__ = u'pyinstaller'
 class beer_engine_mainwin(object):
 	def __init__(self, master=None):
 
@@ -3849,7 +3844,7 @@ def resource_path(relative_path):
 		if os.path.basename(relative_path) == u'logo.png':
 			return u'/usr/include/wheelers-wort-works/logo.png'
 		else:
-			return os.path.join(os.path.abspath(u'~/.config/Wheelers-Wort-Works/'), relative_path)
+			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), relative_path)
 
 
 def main():
