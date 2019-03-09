@@ -19,6 +19,7 @@ import os
 import webbrowser
 import ast
 
+__mode__ = 'local'
 class beer_engine_mainwin:
 	def __init__(self, master=None):
 
@@ -33,10 +34,8 @@ class beer_engine_mainwin:
 		if sys.platform == "win32":
 			self.style.theme_use('winnative')
 
-		os.chdir(os.path.expanduser('.'))
-
-		if not os.path.isfile('hop_data.txt'):
-			with open('hop_data.txt', 'w') as f:
+		if not os.path.isfile(resource_path('hop_data.txt')):
+			with open(resource_path('hop_data.txt'), 'w') as f:
 				for hop, value in brew_data.hop_data.items():
 					name = hop
 					hop_type = value['Form']
@@ -46,7 +45,7 @@ class beer_engine_mainwin:
 					description = value['Description']
 					f.write('{name}\t{hop_type}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(name=name, hop_type=hop_type, origin=origin, alpha=alpha, use=use, description=description))
 		else:
-			with open('hop_data.txt', 'r') as f:
+			with open(resource_path('hop_data.txt'), 'r') as f:
 				data = [line.strip().split('\t') for line in f]
 				for hop in data:
 					# 'Nelson Sauvin': {'Form': 'Whole', 'Origin': 'New Zeland', 'Description': '', 'Use': 'General Purpose', 'Alpha': 12.7}
@@ -58,8 +57,8 @@ class beer_engine_mainwin:
 					description = hop[5] if len(hop) >= 6 else ''
 					brew_data.hop_data[name] = {'Form': hop_type, 'Origin': origin, 'Alpha': alpha, 'Use': use, 'Description': description}
 				#print('hop_data =', brew_data.hop_data)
-		if not os.path.isfile('grain_data.txt'):
-			with open('grain_data.txt', 'w') as f:
+		if not os.path.isfile(resource_path('grain_data.txt')):
+			with open(resource_path('grain_data.txt'), 'w') as f:
 				for ingredient, value in brew_data.grist_data.items():
 					name = ingredient
 					ebc = value['EBC']
@@ -70,7 +69,7 @@ class beer_engine_mainwin:
 					description = value['Description']
 					f.write('{name}\t{ebc}\t{grain_type}\t{extract}\t{moisture}\t{fermentability}\t{description}\n'.format(name=name, ebc=ebc, grain_type=grain_type, extract=extract, moisture=moisture, fermentability=fermentability, description=description))
 		else:
-			with open('grain_data.txt', 'r') as f:
+			with open(resource_path('grain_data.txt'), 'r') as f:
 				data = [line.strip().split('\t') for line in f]
 				for ingredient in data:
 					# {'Wheat Flour': {'EBC': 0.0, 'Type': 3.0, 'Extract': 304.0, 'Description': 'No Description', 'Moisture': 11.0, 'Fermentability': 62.0}}
@@ -84,8 +83,8 @@ class beer_engine_mainwin:
 					brew_data.grist_data[name] = {'EBC': ebc, 'Type': grain_type, 'Extract': extract, 'Description': description, 'Moisture': moisture, 'Fermentability': fermentability}
 				#print('grist_data =', brew_data.grist_data)
 
-		if not os.path.isfile('yeast_data.txt'):
-			with open('yeast_data.txt', 'w') as f:
+		if not os.path.isfile(resource_path('yeast_data.txt')):
+			with open(resource_path('yeast_data.txt'), 'w') as f:
 				for yeast, value in brew_data.yeast_data.items():
 					name = yeast
 					yeast_type = value['Type']
@@ -97,7 +96,7 @@ class beer_engine_mainwin:
 					description = value['Description']
 					f.write('{name}\t{yeast_type}\t{lab}\t{flocculation}\t{attenuation}\t{temperature}\t{origin}\t{description}\n'.format(name=name, yeast_type=yeast_type, lab=lab, flocculation=flocculation, attenuation=attenuation, temperature=temperature, origin=origin, description=description))
 		else:
-			with open('yeast_data.txt', 'r') as f:
+			with open(resource_path('yeast_data.txt'), 'r') as f:
 				data = [line.strip().split('\t') for line in f]
 				for yeast in data:
 					name = yeast[0]
@@ -110,8 +109,8 @@ class beer_engine_mainwin:
 					description = yeast[7]
 					brew_data.yeast_data[name] = {'Type': yeast_type, 'Lab': lab, 'Flocculation': flocculation, 'Attenuation': attenuation, 'Temperature': temperature, 'Description': description, 'Origin': origin}
 
-		if not os.path.isfile('defaults.txt'):
-			with open('defaults.txt', 'w') as f:
+		if not os.path.isfile(resource_path('defaults.txt')):
+			with open(resource_path('defaults.txt'), 'w') as f:
 				volume = brew_data.constants['Volume']
 				efficiency = brew_data.constants['Efficiency']*100
 				evaporation = round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
@@ -121,7 +120,7 @@ class beer_engine_mainwin:
 				boil_time = brew_data.constants['Default Boil Time']
 				f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio, attenuation=attenuation, save_close=save_close, boil_time=boil_time))
 		else:
-			with open('defaults.txt', 'r') as f:
+			with open(resource_path('defaults.txt'), 'r') as f:
 				data = [line.strip().split('=') for line in f]
 				for constants in data:
 					if constants[0] == 'efficiency': brew_data.constants['Efficiency'] = float(constants[1])/100
@@ -141,7 +140,7 @@ class beer_engine_mainwin:
 		self.current_file = ''
 		self.master = master
 		self.master.protocol("WM_DELETE_WINDOW", self.quit)
-		self.master.tk.call('wm', 'iconphoto', self.master._w, tk.PhotoImage(file='/usr/include/wheelers-wort-works/logo.png'))
+		self.master.tk.call('wm', 'iconphoto', self.master._w, tk.PhotoImage(file=resource_path('logo.png')))
 		self.master.geometry("792x473+674+369")
 		self.master.title("Wheeler's Wort Works")
 		self.master.configure(highlightcolor="black")
@@ -3831,6 +3830,22 @@ def _on_shiftmouse(event, widget):
 			widget.xview_scroll(-1, 'units')
 		elif event.num == 5:
 			widget.xview_scroll(1, 'units')
+
+def resource_path(relative_path):
+	""" Get absolute path to resource, works for dev and for PyInstaller """
+	if __mode__ in ['pyinstaller', 'local']:
+		try:
+			# PyInstaller creates a temp folder and stores path in _MEIPASS
+			base_path = sys._MEIPASS
+		except Exception:
+			base_path = os.path.abspath(".")
+
+		return os.path.join(base_path, relative_path)
+	elif __mode__ == 'deb':
+		if os.path.basename(relative_path) == 'logo.png':
+			return '/usr/include/wheelers-wort-works/logo.png'
+		else:
+			return os.path.join(os.path.abspath('~/.config/Wheelers-Wort-Works/'), relative_path)
 
 
 def main():
