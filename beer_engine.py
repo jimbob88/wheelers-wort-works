@@ -31,8 +31,6 @@ class beer_engine_mainwin:
 		font9 = "-family {DejaVu Sans} -size 7 -weight normal -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 
 		if not os.path.isfile(resource_path('hop_data.txt')):
 			with open(resource_path('hop_data.txt'), 'w') as f:
@@ -145,8 +143,6 @@ class beer_engine_mainwin:
 		self.master.title("Wheeler's Wort Works")
 		self.master.configure(highlightcolor="black")
 		self.master.resizable(0, 0)
-
-
 		self.tabbed_frame = ttk.Notebook(self.master)
 
 		self.first_tab = ttk.Frame(self.tabbed_frame)
@@ -211,8 +207,6 @@ class beer_engine_mainwin:
 		self.boil_volume_ent.configure(justify='center')
 		self.boil_volume_ent.configure(textvariable=self.boil_vol)
 		self.boil_vol.set(str(brew_data.constants['Volume']*brew_data.constants['Boil Volume Scale']))
-
-
 		self.ingredient_rem_butt = tk.Button(self.first_tab)
 		self.ingredient_rem_butt.place(relx=0.013, rely=0.402, height=29
 				, width=76)
@@ -307,8 +301,6 @@ class beer_engine_mainwin:
 		self.original_gravity_ent.configure(font="TkFixedFont")
 		self.original_gravity_ent.configure(selectbackground="#c4c4c4")
 		self.original_gravity_ent.configure(justify='center')
-
-
 		self.ingredient_zero_butt = tk.Button(self.first_tab)
 		self.ingredient_zero_butt.place(relx=0.745, rely=0.211, height=29
 				, width=55)
@@ -442,15 +434,11 @@ class beer_engine_mainwin:
 		self.hop_rem_butt.configure(cursor="X_cursor")
 		self.hop_rem_butt.configure(text='''Remove''')
 		self.hop_rem_butt.configure(command=self.delete_hop)
-
-
 		self.quit_btt = tk.Button(self.first_tab)
 		self.quit_btt.place(relx=0.922, rely=0.93, height=29, width=53)
 		self.quit_btt.configure(activebackground="#f9f9f9")
 		self.quit_btt.configure(text='''Quit''')
 		self.quit_btt.configure(command=self.quit)
-
-
 		self.menubar = tk.Menu(self.master,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
 		self.master.configure(menu = self.menubar)
 
@@ -571,8 +559,6 @@ class beer_engine_mainwin:
 		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9")
 		self.rem_alpha_butt_1.configure(text='''Alpha -1''')
 		self.rem_alpha_butt_1.configure(command=lambda: self.add_alpha(-1))
-
-
 		self.style.configure('Treeview.Heading',  font="TkDefaultFont")
 		self.style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Deja Vu Sans Mono', 9)) #Calibri
 		self.frame_ingredients = tk.Frame(self.first_tab, width=600)
@@ -826,8 +812,6 @@ class beer_engine_mainwin:
 					lb = weight/brew_data.constants['Conversion']['lb-g']
 					oz = (lb-int(lb))*16
 					self.hops[idx] = {'Name': hop['Name'], 'Values': {'Type': type, 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (lb, oz), 'Grams': weight, 'Percent': percent}}
-
-
 		refresh_util()
 		refresh_indiv_ibu()
 		for hop in self.hops:
@@ -918,8 +902,6 @@ class beer_engine_mainwin:
 								listbox.selection_set(first=n)
 								return
 						listbox.yview(n)
-
-
 		add_hop_gui = tk.Toplevel()
 		add_hop_gui.resizable(0, 0)
 		hop_options = ScrolledListBox(add_hop_gui)
@@ -1580,8 +1562,6 @@ class beer_engine_mainwin:
 					#for key, constant in brew_data.constants.items(): f.write('database\xa7constant\xa7{name}\t{data}\n'.format(name=key, data=constant))
 					f.write('database\xa7constant\xa7{constants}'.format(constants=brew_data.constants))
 
-
-
 	def save(self):
 		if self.current_file != '':
 			self.save_file(self.current_file)
@@ -1721,8 +1701,6 @@ class hops_editor(tk.Frame):
 		font9 = "-family {DejaVu Sans} -size 10 -weight bold -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
 		self.style.configure('.',font="TkDefaultFont")
@@ -1863,8 +1841,6 @@ class hops_editor(tk.Frame):
 		self.hop_use_combo_values = ["Bittering", "Aroma", "General Purpose"]
 		self.hop_use_combo.configure(values=self.hop_use_combo_values)
 		self.hop_use_combo.configure(takefocus="")
-
-
 		self.hop_comm_ent = ttk.Entry(self.hop_panedwindow2)
 		self.hop_comm_ent.place(relx=0.028, rely=0.5, relheight=0.046
 				, relwidth=0.956, bordermode='ignore')
@@ -1912,8 +1888,6 @@ class hops_editor(tk.Frame):
 		self.hop_save_data_butt.configure(command=self.save)
 
 		self.hop_lstbx.bind('<<ListboxSelect>>', self.select_listbox)
-
-
 		self.show_data(list(sorted(brew_data.hop_data.keys()))[0])
 
 	def __adjust_sash0(self, event):
@@ -2051,8 +2025,6 @@ class grist_editor(tk.Frame):
 		font9 = "-family {DejaVu Sans} -size 9 -weight bold -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
 		self.style.configure('.',font="TkDefaultFont")
@@ -2290,8 +2262,6 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.bind('<<ListboxSelect>>', self.select_listbox)
 
 		self.show_data(list(sorted(brew_data.grist_data.keys()))[0])
-
-
 	def __adjust_sash0(self, event):
 		paned = event.widget
 		pos = [400, ]
@@ -2427,8 +2397,6 @@ class defaults_editor(tk.Frame):
 		font9 = "-family {DejaVu Sans} -size 10 -weight bold -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
 		self.style.configure('.',font="TkDefaultFont")
@@ -2625,8 +2593,6 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_min_lbl.configure(width=65)
 
 
-
-
 	def reset_to_defaults(self):
 		self.target_vol_ent.delete(0, tk.END)
 		self.boil_vol_ent.delete(0, tk.END)
@@ -2650,8 +2616,6 @@ class defaults_editor(tk.Frame):
 				elif constants[0] == 'boil_time':
 					self.default_boil_time_spinbox.delete(0, tk.END)
 					self.default_boil_time_spinbox.insert(0, constants[1])
-
-
 	def save_all(self):
 		with open('defaults.txt', 'w') as f:
 			volume = float(self.target_vol_ent.get())
@@ -2686,8 +2650,6 @@ class defaults_editor(tk.Frame):
 		self.boil_vol_ent.insert(0, round(brew_data.constants['Boil Volume Scale']*100, 1))
 		self.liquor_to_grist_ent.insert(0,  brew_data.constants['Liquor To Grist Ratio'])
 		self.default_boil_time_spinbox.insert(0, brew_data.constants['Default Boil Time'])
-
-
 class special_editor(tk.Frame):
 	def __init__(self, parent):
 		tk.Frame.__init__(self, parent)
@@ -2709,15 +2671,11 @@ class special_editor(tk.Frame):
 		font9 = "-family {DejaVu Sans} -size 9 -weight normal -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
 		self.style.configure('.',font="TkDefaultFont")
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
-
-
 		'''
 		 	Low	Med	High
 		C	54	62	70
@@ -2911,8 +2869,6 @@ class special_editor(tk.Frame):
 		self.attenuation_low_65.configure(justify='left')
 		self.attenuation_low_65.configure(value='low-65')
 		self.attenuation_low_65.configure(variable=self.current_attenuation)
-
-
 		self.attenuation_low_66 = tk.Radiobutton(self)
 		self.attenuation_low_66.place(relx=0.076, rely=0.296
 				, relheight=0.049, relwidth=0.039)
@@ -2975,8 +2931,6 @@ class special_editor(tk.Frame):
 		self.attenuation_low_72.configure(justify='left')
 		self.attenuation_low_72.configure(value='low-72')
 		self.attenuation_low_72.configure(variable=self.current_attenuation)
-
-
 		####################################### MEDIUM #######################################
 		self.attenuation_med_62 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_med_62.place(relx=0.5, rely=0.182, relheight=0.084
@@ -3226,8 +3180,6 @@ class special_editor(tk.Frame):
 		self.water_boil_disable.configure(variable=self.water_boil_is_disabled)
 		self.water_boil_disable.configure(command=self.water_boil_check)
 
-
-
 		self.water_boil_time_spinbx = tk.Spinbox(self.water_boil_frame, from_=1.0, to=9999.0)
 		self.water_boil_time_spinbx.place(relx=0.444, rely=0.4, relheight=0.307, relwidth=0.322
 				, bordermode='ignore')
@@ -3249,8 +3201,6 @@ class special_editor(tk.Frame):
 		self.water_boil_time_lbl.configure(relief='flat')
 		self.water_boil_time_lbl.configure(text='''Boil Time:''')
 		self.water_boil_check()
-
-
 
 	@staticmethod
 	def popup1(event, *args, **kwargs):
@@ -3323,15 +3273,11 @@ class yeast_editor(tk.Frame):
 		font9 = "-family {DejaVu Sans} -size 10 -weight bold -slant "  \
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
-		if sys.platform == "win32":
-			self.style.theme_use('winnative')
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
 		self.style.configure('.',font="TkDefaultFont")
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
-
-
 
 		self.TPanedwindow1 = ttk.Panedwindow(self, orient="horizontal")
 		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
@@ -3600,8 +3546,6 @@ class yeast_editor(tk.Frame):
 		if yeast_type not in self.yeast_type_combo_values:
 			self.yeast_type_combo_values.append(yeast_type)
 			self.yeast_type_combo.configure(values=self.yeast_type_combo_values)
-
-
 		self.yeast_flocc_combo.set(flocculation)
 		self.yeast_type_combo.set(yeast_type)
 
@@ -3635,8 +3579,6 @@ class yeast_editor(tk.Frame):
 		self.yeast_done_butt.configure(state=state)
 		self.yeast_clear_butt.configure(state=state)
 		self.yeast_cancel_butt.configure(state=state)
-
-
 	def clear_form(self):
 		self.yeast_name_ent.delete(0, tk.END)
 		self.yeast_comm_ent.delete(0, tk.END)
@@ -3704,8 +3646,6 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.delete(0, tk.END)
 		for yeast in sorted(brew_data.yeast_data):
 			self.yeast_lstbx.insert(tk.END, yeast)
-
-
 class AutoScroll(object):
 	'''Configure the scrollbars for a widget.'''
 
@@ -3846,8 +3786,6 @@ def resource_path(relative_path):
 			return '/usr/include/wheelers-wort-works/logo.png'
 		else:
 			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/'), relative_path)
-
-
 def main():
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
