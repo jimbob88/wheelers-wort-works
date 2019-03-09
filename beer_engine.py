@@ -33,7 +33,7 @@ class beer_engine_mainwin:
 		if sys.platform == "win32":
 			self.style.theme_use('winnative')
 
-		os.chdir(os.path.expanduser('~/.config/Wheelers-Wort-Works/'))
+		os.chdir(os.path.expanduser('.'))
 
 		if not os.path.isfile('hop_data.txt'):
 			with open('hop_data.txt', 'w') as f:
