@@ -18,11 +18,11 @@ import os
 import webbrowser
 import ast
 
-__mode__ = u'pyinstaller'
+__mode__ = u'local'
+_bgcolor = u'#d9d9d9'
 class beer_engine_mainwin(object):
 	def __init__(self, master=None):
 
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -138,13 +138,13 @@ class beer_engine_mainwin(object):
 		self.master = master
 		self.master.protocol(u"WM_DELETE_WINDOW", self.quit)
 		self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
-		self.master.geometry(u"792x473+674+369")
+		self.master.geometry(u"800x480+674+369")
 		self.master.title(u"Wheeler's Wort Works")
 		self.master.configure(highlightcolor=u"black")
 		self.master.resizable(0, 0)
 		self.tabbed_frame = ttk.Notebook(self.master)
 
-		self.first_tab = ttk.Frame(self.tabbed_frame)
+		self.first_tab = tk.Frame(self.tabbed_frame)
 		self.second_tab = hops_editor(self.tabbed_frame)
 		self.third_tab = grist_editor(self.tabbed_frame)
 		self.fourth_tab = yeast_editor(self.tabbed_frame)
@@ -161,6 +161,7 @@ class beer_engine_mainwin(object):
 		self.master.columnconfigure(0, weight=1)
 
 		######################## First Tab ########################
+		self.first_tab.configure(background=_bgcolor)
 		self.recipe_name_ent = tk.Entry(self.first_tab)
 		self.recipe_name_ent.place(relx=0.126, rely=0.021, height=23
 				, relwidth=0.21)
@@ -325,7 +326,7 @@ class beer_engine_mainwin(object):
 		self.calc_lbl = tk.Message(self.calculation_frame)
 		self.calc_lbl.place(relx=0.083, rely=0.108, height=137, width=103 #97
 				, bordermode=u'ignore')
-		self.calc_lbl.configure(background=u"#d9d9d9")
+		self.calc_lbl.configure( background=_bgcolor)
 		self.calc_lbl.configure(foreground=u"#000000")
 		self.calc_lbl.configure(font=(None, 7), pady=5,padx=5)
 		self.calc_lbl.configure(relief=u'flat')
@@ -445,35 +446,35 @@ class beer_engine_mainwin(object):
 		self.menubar.add_cascade(menu=self.sub_menu,
 				activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"File")
 		self.sub_menu1 = tk.Menu(self.master,tearoff=0)
 		self.sub_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Open",
 				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), title = u"Select file", filetypes = ((u"BERF",u"*.berf *.berfx"), (u"all files",u"*.*")))))
 		self.sub_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Save",
 				command=self.save)
 		self.sub_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Save All",
 				command=self.save_all)
 		self.sub_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Save As",
@@ -481,14 +482,14 @@ class beer_engine_mainwin(object):
 		self.sub_menu.add_cascade(menu=self.sub_menu1,
 				activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Print")
 		self.sub_menu1.add_command(
 				activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"to browser",
@@ -496,7 +497,7 @@ class beer_engine_mainwin(object):
 		self.sub_menu.add_command(
 				activebackground=u"#ececec",
 				activeforeground=u"#000000",
-				background=u"#d9d9d9",
+				 background=_bgcolor,
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Quit",
@@ -1692,7 +1693,6 @@ class hops_editor(tk.Frame):
 	def widgets(self):
 		u'''This class configures and populates the toplevel window.
 		   top is the toplevel containing window.'''
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -1706,15 +1706,14 @@ class hops_editor(tk.Frame):
 		self.style.map(u'.',background=
 			[(u'selected', _compcolor), (u'active',_ana2color)])
 
-		self.TPanedwindow1 = ttk.Panedwindow(self, orient=u"horizontal")
+		self.TPanedwindow1 = tk.PanedWindow(self, orient=u"horizontal")
 		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
 				, relwidth=0.966)
-		self.TPanedwindow1.configure(width=765)
-		self.hop_panedwindow1 = ttk.Labelframe(width=400, text=u'Hops:')
+		self.TPanedwindow1.configure(width=800)
+		self.hop_panedwindow1 = tk.LabelFrame(width=400, text=u'Hops:', background=_bgcolor)
 		self.TPanedwindow1.add(self.hop_panedwindow1)
-		self.hop_panedwindow2 = ttk.Labelframe(text=u'Modifications:')
+		self.hop_panedwindow2 = tk.LabelFrame(text=u'Modifications:', background=_bgcolor)
 		self.TPanedwindow1.add(self.hop_panedwindow2)
-		self.__funcid0 = self.TPanedwindow1.bind(u'<Map>', self.__adjust_sash0)
 
 		self.hop_lstbx = ScrolledListBox(self.hop_panedwindow1)
 		self.hop_lstbx.place(relx=0.025, rely=0.043, relheight=0.887
@@ -1725,73 +1724,73 @@ class hops_editor(tk.Frame):
 		self.hop_lstbx.configure(selectbackground=u"#c4c4c4")
 		self.hop_lstbx.configure(width=10)
 
-		self.hop_delete_butt = ttk.Button(self.hop_panedwindow1)
+		self.hop_delete_butt = tk.Button(self.hop_panedwindow1)
 		self.hop_delete_butt.place(relx=0.025, rely=0.929, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_delete_butt.configure(takefocus=u"")
 		self.hop_delete_butt.configure(text=u'''Delete''')
 		self.hop_delete_butt.configure(command=self.delete)
 
-		self.hop_modify_butt = ttk.Button(self.hop_panedwindow1)
+		self.hop_modify_butt = tk.Button(self.hop_panedwindow1)
 		self.hop_modify_butt.place(relx=0.35, rely=0.929, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_modify_butt.configure(takefocus=u"")
 		self.hop_modify_butt.configure(text=u'''Modify''')
 		self.hop_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.hop_new_butt = ttk.Button(self.hop_panedwindow1)
+		self.hop_new_butt = tk.Button(self.hop_panedwindow1)
 		self.hop_new_butt.place(relx=0.725, rely=0.929, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_new_butt.configure(takefocus=u"")
 		self.hop_new_butt.configure(text=u'''New''')
 		self.hop_new_butt.configure(command=self.new)
 
-		self.hop_name_lbl = ttk.Label(self.hop_panedwindow2)
+		self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode=u'ignore')
-		self.hop_name_lbl.configure(background=u"#d9d9d9")
+		self.hop_name_lbl.configure( background=_bgcolor)
 		self.hop_name_lbl.configure(foreground=u"#000000")
 		self.hop_name_lbl.configure(font=font9)
 		self.hop_name_lbl.configure(relief=u'flat')
 		self.hop_name_lbl.configure(text=u'''Name:''')
 
-		self.hop_form_lbl = ttk.Label(self.hop_panedwindow2)
+		self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_form_lbl.place(relx=0.056, rely=0.152, height=19, width=49
 				, bordermode=u'ignore')
-		self.hop_form_lbl.configure(background=u"#d9d9d9")
+		self.hop_form_lbl.configure( background=_bgcolor)
 		self.hop_form_lbl.configure(foreground=u"#000000")
 		self.hop_form_lbl.configure(font=font9)
 		self.hop_form_lbl.configure(relief=u'flat')
 		self.hop_form_lbl.configure(text=u'''Form:''')
 
-		self.hop_alpha_lbl = ttk.Label(self.hop_panedwindow2)
+		self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_alpha_lbl.place(relx=0.056, rely=0.283, height=19, width=49
 				, bordermode=u'ignore')
-		self.hop_alpha_lbl.configure(background=u"#d9d9d9")
+		self.hop_alpha_lbl.configure( background=_bgcolor)
 		self.hop_alpha_lbl.configure(foreground=u"#000000")
 		self.hop_alpha_lbl.configure(font=font9)
 		self.hop_alpha_lbl.configure(relief=u'flat')
 		self.hop_alpha_lbl.configure(text=u'''Alpha:''')
 
-		self.hop_origin_lbl = ttk.Label(self.hop_panedwindow2)
+		self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_origin_lbl.place(relx=0.056, rely=0.217, height=19, width=54
 				, bordermode=u'ignore')
-		self.hop_origin_lbl.configure(background=u"#d9d9d9")
+		self.hop_origin_lbl.configure( background=_bgcolor)
 		self.hop_origin_lbl.configure(foreground=u"#000000")
 		self.hop_origin_lbl.configure(font=font9)
 		self.hop_origin_lbl.configure(relief=u'flat')
 		self.hop_origin_lbl.configure(text=u'''Origin:''')
 
-		self.hop_use_lbl = ttk.Label(self.hop_panedwindow2)
+		self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_use_lbl.place(relx=0.056, rely=0.348, height=19, width=49
 				, bordermode=u'ignore')
-		self.hop_use_lbl.configure(background=u"#d9d9d9")
+		self.hop_use_lbl.configure( background=_bgcolor)
 		self.hop_use_lbl.configure(foreground=u"#000000")
 		self.hop_use_lbl.configure(font=font9)
 		self.hop_use_lbl.configure(relief=u'flat')
 		self.hop_use_lbl.configure(text=u'''Use:''')
 
-		self.hop_name_ent = ttk.Entry(self.hop_panedwindow2)
+		self.hop_name_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_name_ent.place(relx=0.222, rely=0.087, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.hop_name_ent.configure(justify=u'center')
@@ -1809,7 +1808,7 @@ class hops_editor(tk.Frame):
 		self.hop_form_combo_values = [u"Whole", u"Pellet"]
 		self.hop_form_combo.configure(values=self.hop_form_combo_values)
 
-		self.hop_origin_ent = ttk.Entry(self.hop_panedwindow2)
+		self.hop_origin_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_origin_ent.place(relx=0.222, rely=0.217, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.hop_origin_ent.configure(justify=u'center')
@@ -1817,17 +1816,17 @@ class hops_editor(tk.Frame):
 		self.hop_origin_ent.configure(takefocus=u"")
 		self.hop_origin_ent.configure(cursor=u"xterm")
 
-		self.hop_alpha_ent = ttk.Entry(self.hop_panedwindow2)
+		self.hop_alpha_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_alpha_ent.place(relx=0.222, rely=0.283, relheight=0.046
 				, relwidth=0.456, bordermode=u'ignore')
 		self.hop_alpha_ent.configure(justify=u'center')
 		self.hop_alpha_ent.configure(takefocus=u"")
 		self.hop_alpha_ent.configure(cursor=u"xterm")
 
-		self.hop_alpha_percent = ttk.Label(self.hop_panedwindow2)
+		self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
 		self.hop_alpha_percent.place(relx=0.694, rely=0.283, height=19, width=15
 				, bordermode=u'ignore')
-		self.hop_alpha_percent.configure(background=u"#d9d9d9")
+		self.hop_alpha_percent.configure( background=_bgcolor)
 		self.hop_alpha_percent.configure(foreground=u"#000000")
 		self.hop_alpha_percent.configure(font=font9)
 		self.hop_alpha_percent.configure(relief=u'flat')
@@ -1840,45 +1839,45 @@ class hops_editor(tk.Frame):
 		self.hop_use_combo_values = [u"Bittering", u"Aroma", u"General Purpose"]
 		self.hop_use_combo.configure(values=self.hop_use_combo_values)
 		self.hop_use_combo.configure(takefocus=u"")
-		self.hop_comm_ent = ttk.Entry(self.hop_panedwindow2)
+		self.hop_comm_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_comm_ent.place(relx=0.028, rely=0.5, relheight=0.046
 				, relwidth=0.956, bordermode=u'ignore')
 		self.hop_comm_ent.configure(width=344)
 		self.hop_comm_ent.configure(takefocus=u"")
 		self.hop_comm_ent.configure(cursor=u"xterm")
 
-		self.hop_comm_lbl = ttk.Label(self.hop_panedwindow2)
-		self.hop_comm_lbl.place(relx=0.056, rely=0.457, height=19, width=99
+		self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
 				, bordermode=u'ignore')
-		self.hop_comm_lbl.configure(background=u"#d9d9d9")
+		self.hop_comm_lbl.configure( background=_bgcolor)
 		self.hop_comm_lbl.configure(foreground=u"#000000")
 		self.hop_comm_lbl.configure(font=font9)
 		self.hop_comm_lbl.configure(relief=u'flat')
 		self.hop_comm_lbl.configure(text=u'''Comments:''')
 		self.hop_comm_lbl.configure(width=99)
 
-		self.hop_cancel_butt = ttk.Button(self.hop_panedwindow2)
+		self.hop_cancel_butt = tk.Button(self.hop_panedwindow2)
 		self.hop_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_cancel_butt.configure(takefocus=u"")
 		self.hop_cancel_butt.configure(text=u'''Cancel''')
 		self.hop_cancel_butt.configure(command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE)))
 
-		self.hop_clear_butt = ttk.Button(self.hop_panedwindow2)
+		self.hop_clear_butt = tk.Button(self.hop_panedwindow2)
 		self.hop_clear_butt.place(relx=0.389, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_clear_butt.configure(takefocus=u"")
 		self.hop_clear_butt.configure(text=u'''Clear Form''')
 		self.hop_clear_butt.configure(command=self.clear_form)
 
-		self.hop_done_butt = ttk.Button(self.hop_panedwindow2)
+		self.hop_done_butt = tk.Button(self.hop_panedwindow2)
 		self.hop_done_butt.place(relx=0.75, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.hop_done_butt.configure(takefocus=u"")
 		self.hop_done_butt.configure(text=u'''Done''')
 		self.hop_done_butt.configure(command=self.done)
 
-		self.hop_save_data_butt = ttk.Button(self.hop_panedwindow2)
+		self.hop_save_data_butt = tk.Button(self.hop_panedwindow2)
 		self.hop_save_data_butt.place(relx=0.222, rely=0.696, height=108
 				, width=213, bordermode=u'ignore')
 		self.hop_save_data_butt.configure(takefocus=u"")
@@ -1990,7 +1989,7 @@ class hops_editor(tk.Frame):
 		self.hop_lstbx.yview(tk.END)
 
 	def save(self):
-		with open(u'hop_data.txt', u'w') as f:
+		with open(resource_path(u'hop_data.txt'), u'w') as f:
 			for hop, value in brew_data.hop_data.items():
 				name = hop
 				type = value[u'Form']
@@ -2014,7 +2013,6 @@ class grist_editor(tk.Frame):
 	def widgets(self):
 		u'''This class configures and populates the selflevel window.
 		   self is the selflevel containing window.'''
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -2030,15 +2028,14 @@ class grist_editor(tk.Frame):
 		self.style.map(u'.',background=
 			[(u'selected', _compcolor), (u'active',_ana2color)])
 
-		self.TPanedwindow1 = ttk.Panedwindow(self, orient=u"horizontal")
+		self.TPanedwindow1 = tk.PanedWindow(self, orient=u"horizontal",  background=_bgcolor)
 		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
 				, relwidth=0.966)
-		self.grist_panedwindow1 = ttk.Labelframe(width=400
-				, text=u'Fermentable Ingredients:')
+		self.grist_panedwindow1 = tk.LabelFrame(width=400
+				, text=u'Fermentable Ingredients:',  background=_bgcolor)
 		self.TPanedwindow1.add(self.grist_panedwindow1)
-		self.grist_panedwindow2 = ttk.Labelframe(text=u'Modifications:')
+		self.grist_panedwindow2 = tk.LabelFrame(text=u'Modifications:',  background=_bgcolor)
 		self.TPanedwindow1.add(self.grist_panedwindow2)
-		self.__funcid0 = self.TPanedwindow1.bind(u'<Map>', self.__adjust_sash0)
 
 		self.grist_lstbx = ScrolledListBox(self.grist_panedwindow1)
 		self.grist_lstbx.place(relx=0.025, rely=0.043, relheight=0.887
@@ -2049,37 +2046,37 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.configure(selectbackground=u"#c4c4c4")
 		self.grist_lstbx.configure(width=10)
 
-		self.grist_delete_butt = ttk.Button(self.grist_panedwindow1)
+		self.grist_delete_butt = tk.Button(self.grist_panedwindow1)
 		self.grist_delete_butt.place(relx=0.025, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_delete_butt.configure(takefocus=u"")
 		self.grist_delete_butt.configure(text=u'''Delete''')
 		self.grist_delete_butt.configure(command=self.delete)
 
-		self.grist_modify_butt = ttk.Button(self.grist_panedwindow1)
+		self.grist_modify_butt = tk.Button(self.grist_panedwindow1)
 		self.grist_modify_butt.place(relx=0.35, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_modify_butt.configure(takefocus=u"")
 		self.grist_modify_butt.configure(text=u'''Modify''')
 		self.grist_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.grist_new_butt = ttk.Button(self.grist_panedwindow1)
+		self.grist_new_butt = tk.Button(self.grist_panedwindow1)
 		self.grist_new_butt.place(relx=0.725, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_new_butt.configure(takefocus=u"")
 		self.grist_new_butt.configure(text=u'''New''')
 		self.grist_new_butt.configure(command=self.new)
 
-		self.grist_name_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_name_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode=u'ignore')
-		self.grist_name_lbl.configure(background=u"#d9d9d9")
+		self.grist_name_lbl.configure( background=_bgcolor)
 		self.grist_name_lbl.configure(foreground=u"#000000")
 		self.grist_name_lbl.configure(font=font10)
 		self.grist_name_lbl.configure(relief=u'flat')
 		self.grist_name_lbl.configure(text=u'''Name:''')
 
-		self.grist_name_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_name_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_name_ent.place(relx=0.222, rely=0.087, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.grist_name_ent.configure(justify=u'center')
@@ -2087,94 +2084,94 @@ class grist_editor(tk.Frame):
 		self.grist_name_ent.configure(takefocus=u"")
 		self.grist_name_ent.configure(cursor=u"xterm")
 
-		self.grist_ferment_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_ferment_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_ferment_ent.place(relx=0.361, rely=0.348, relheight=0.046
 				, relwidth=0.372, bordermode=u'ignore')
 		self.grist_ferment_ent.configure(takefocus=u"")
 		self.grist_ferment_ent.configure(cursor=u"xterm")
 		self.grist_ferment_ent.configure(justify=u'center')
 
-		self.grist_comm_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_comm_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_comm_ent.place(relx=0.028, rely=0.5, relheight=0.046
 				, relwidth=0.956, bordermode=u'ignore')
 		self.grist_comm_ent.configure(foreground=u"#000000")
 		self.grist_comm_ent.configure(takefocus=u"")
 		self.grist_comm_ent.configure(cursor=u"xterm")
 
-		self.grist_comm_lbl = ttk.Label(self.grist_panedwindow2)
-		self.grist_comm_lbl.place(relx=0.056, rely=0.457, height=19, width=99
+		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
 				, bordermode=u'ignore')
-		self.grist_comm_lbl.configure(background=u"#d9d9d9")
+		self.grist_comm_lbl.configure( background=_bgcolor)
 		self.grist_comm_lbl.configure(foreground=u"#000000")
 		self.grist_comm_lbl.configure(font=font10)
 		self.grist_comm_lbl.configure(relief=u'flat')
 		self.grist_comm_lbl.configure(text=u'''Comments:''')
 
-		self.grist_cancel_butt = ttk.Button(self.grist_panedwindow2)
+		self.grist_cancel_butt = tk.Button(self.grist_panedwindow2)
 		self.grist_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_cancel_butt.configure(takefocus=u"")
 		self.grist_cancel_butt.configure(text=u'''Cancel''')
 		self.grist_cancel_butt.configure(command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
 
-		self.grist_clear_butt = ttk.Button(self.grist_panedwindow2)
+		self.grist_clear_butt = tk.Button(self.grist_panedwindow2)
 		self.grist_clear_butt.place(relx=0.389, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_clear_butt.configure(takefocus=u"")
 		self.grist_clear_butt.configure(text=u'''Clear Form''')
 		self.grist_clear_butt.configure(command=self.clear_form)
 
-		self.grist_done_butt = ttk.Button(self.grist_panedwindow2)
+		self.grist_done_butt = tk.Button(self.grist_panedwindow2)
 		self.grist_done_butt.place(relx=0.75, rely=0.565, height=28, width=83
 				, bordermode=u'ignore')
 		self.grist_done_butt.configure(takefocus=u"")
 		self.grist_done_butt.configure(text=u'''Done''')
 		self.grist_done_butt.configure(command=self.done)
 
-		self.grist_save_data_butt = ttk.Button(self.grist_panedwindow2)
+		self.grist_save_data_butt = tk.Button(self.grist_panedwindow2)
 		self.grist_save_data_butt.place(relx=0.222, rely=0.696, height=108
 				, width=213, bordermode=u'ignore')
 		self.grist_save_data_butt.configure(takefocus=u"")
 		self.grist_save_data_butt.configure(text=u'''Save to Database''')
 		self.grist_save_data_butt.configure(command=self.save)
 
-		self.grist_colour_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_colour_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_colour_lbl.place(relx=0.056, rely=0.152, height=19, width=60
 				, bordermode=u'ignore')
-		self.grist_colour_lbl.configure(background=u"#d9d9d9")
+		self.grist_colour_lbl.configure( background=_bgcolor)
 		self.grist_colour_lbl.configure(foreground=u"#000000")
 		self.grist_colour_lbl.configure(font=font10)
 		self.grist_colour_lbl.configure(relief=u'flat')
 		self.grist_colour_lbl.configure(text=u'''Colour:''')
 
-		self.grist_extract_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_extract_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_extract_lbl.place(relx=0.056, rely=0.217, height=19, width=60
 				, bordermode=u'ignore')
-		self.grist_extract_lbl.configure(background=u"#d9d9d9")
+		self.grist_extract_lbl.configure( background=_bgcolor)
 		self.grist_extract_lbl.configure(foreground=u"#000000")
 		self.grist_extract_lbl.configure(font=font10)
 		self.grist_extract_lbl.configure(relief=u'flat')
 		self.grist_extract_lbl.configure(text=u'''Extract:''')
 
-		self.grist_moisture_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_moisture_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_moisture_lbl.place(relx=0.056, rely=0.283, height=19, width=80
 				, bordermode=u'ignore')
-		self.grist_moisture_lbl.configure(background=u"#d9d9d9")
+		self.grist_moisture_lbl.configure( background=_bgcolor)
 		self.grist_moisture_lbl.configure(foreground=u"#000000")
 		self.grist_moisture_lbl.configure(font=font10)
 		self.grist_moisture_lbl.configure(relief=u'flat')
 		self.grist_moisture_lbl.configure(text=u'''Moisture:''')
 
-		self.grist_ferment_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_ferment_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_ferment_lbl.place(relx=0.056, rely=0.348, height=19, width=107
 				, bordermode=u'ignore')
-		self.grist_ferment_lbl.configure(background=u"#d9d9d9")
+		self.grist_ferment_lbl.configure( background=_bgcolor)
 		self.grist_ferment_lbl.configure(foreground=u"#000000")
 		self.grist_ferment_lbl.configure(font=font9)
 		self.grist_ferment_lbl.configure(relief=u'flat')
 		self.grist_ferment_lbl.configure(text=u'''Fermentability:''')
 
-		self.grist_colour_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_colour_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_colour_ent.place(relx=0.222, rely=0.152, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.grist_colour_ent.configure(justify=u'center')
@@ -2182,7 +2179,7 @@ class grist_editor(tk.Frame):
 		self.grist_colour_ent.configure(takefocus=u"")
 		self.grist_colour_ent.configure(cursor=u"xterm")
 
-		self.grist_extract_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_extract_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_extract_ent.place(relx=0.222, rely=0.217, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.grist_extract_ent.configure(justify=u'center')
@@ -2190,7 +2187,7 @@ class grist_editor(tk.Frame):
 		self.grist_extract_ent.configure(takefocus=u"")
 		self.grist_extract_ent.configure(cursor=u"xterm")
 
-		self.grist_moisture_ent = ttk.Entry(self.grist_panedwindow2)
+		self.grist_moisture_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_moisture_ent.place(relx=0.278, rely=0.283, relheight=0.046
 				, relwidth=0.456, bordermode=u'ignore')
 		self.grist_moisture_ent.configure(justify=u'center')
@@ -2198,46 +2195,46 @@ class grist_editor(tk.Frame):
 		self.grist_moisture_ent.configure(takefocus=u"")
 		self.grist_moisture_ent.configure(cursor=u"xterm")
 
-		self.grist_colour_percent = ttk.Label(self.grist_panedwindow2)
+		self.grist_colour_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_colour_percent.place(relx=0.75, rely=0.152, height=19, width=40
 				, bordermode=u'ignore')
-		self.grist_colour_percent.configure(background=u"#d9d9d9")
+		self.grist_colour_percent.configure( background=_bgcolor)
 		self.grist_colour_percent.configure(foreground=u"#000000")
 		self.grist_colour_percent.configure(font=font10)
 		self.grist_colour_percent.configure(relief=u'flat')
 		self.grist_colour_percent.configure(text=u'''EBC''')
 
-		self.grist_extract_ldk = ttk.Label(self.grist_panedwindow2)
+		self.grist_extract_ldk = tk.Label(self.grist_panedwindow2)
 		self.grist_extract_ldk.place(relx=0.75, rely=0.217, height=19, width=60
 				, bordermode=u'ignore')
-		self.grist_extract_ldk.configure(background=u"#d9d9d9")
+		self.grist_extract_ldk.configure( background=_bgcolor)
 		self.grist_extract_ldk.configure(foreground=u"#000000")
 		self.grist_extract_ldk.configure(font=font10)
 		self.grist_extract_ldk.configure(relief=u'flat')
 		self.grist_extract_ldk.configure(text=u'''LDK''')
 
-		self.grist_moisture_percent = ttk.Label(self.grist_panedwindow2)
+		self.grist_moisture_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_moisture_percent.place(relx=0.75, rely=0.283, height=19, width=20
 				, bordermode=u'ignore')
-		self.grist_moisture_percent.configure(background=u"#d9d9d9")
+		self.grist_moisture_percent.configure( background=_bgcolor)
 		self.grist_moisture_percent.configure(foreground=u"#000000")
 		self.grist_moisture_percent.configure(font=font10)
 		self.grist_moisture_percent.configure(relief=u'flat')
 		self.grist_moisture_percent.configure(text=u'''%''')
 
-		self.grist_ferment_percent = ttk.Label(self.grist_panedwindow2)
+		self.grist_ferment_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_ferment_percent.place(relx=0.75, rely=0.348, height=19, width=20
 				, bordermode=u'ignore')
-		self.grist_ferment_percent.configure(background=u"#d9d9d9")
+		self.grist_ferment_percent.configure( background=_bgcolor)
 		self.grist_ferment_percent.configure(foreground=u"#000000")
 		self.grist_ferment_percent.configure(font=font10)
 		self.grist_ferment_percent.configure(relief=u'flat')
 		self.grist_ferment_percent.configure(text=u'''%''')
 
-		self.grist_type_lbl = ttk.Label(self.grist_panedwindow2)
+		self.grist_type_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_type_lbl.place(relx=0.056, rely=0.413, height=19, width=50
 				, bordermode=u'ignore')
-		self.grist_type_lbl.configure(background=u"#d9d9d9")
+		self.grist_type_lbl.configure( background=_bgcolor)
 		self.grist_type_lbl.configure(foreground=u"#000000")
 		self.grist_type_lbl.configure(font=font10)
 		self.grist_type_lbl.configure(relief=u'flat')
@@ -2350,7 +2347,7 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.yview(tk.END)
 
 	def save(self):
-		with open(u'grain_data.txt', u'w') as f:
+		with open(resource_path(u'grain_data.txt'), u'w') as f:
 			for ingredient, value in brew_data.grist_data.items():
 				name = ingredient
 				ebc = value[u'EBC']
@@ -2388,7 +2385,6 @@ class defaults_editor(tk.Frame):
 		self.reset_to_defaults()
 
 	def widgets(self):
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -2402,32 +2398,32 @@ class defaults_editor(tk.Frame):
 		self.style.map(u'.',background=
 			[(u'selected', _compcolor), (u'active',_ana2color)])
 
-		self.target_vol_lbl = ttk.Label(self)
+		self.target_vol_lbl = tk.Label(self)
 		self.target_vol_lbl.place(relx=0.038, rely=0.063, height=19, width=118)
-		self.target_vol_lbl.configure(background=u"#d9d9d9")
+		self.target_vol_lbl.configure( background=_bgcolor)
 		self.target_vol_lbl.configure(foreground=u"#000000")
 		self.target_vol_lbl.configure(font=font9)
 		self.target_vol_lbl.configure(relief=u'flat')
 		self.target_vol_lbl.configure(text=u'''Target Volume:''')
 
-		self.boil_vol_lbl = ttk.Label(self)
+		self.boil_vol_lbl = tk.Label(self)
 		self.boil_vol_lbl.place(relx=0.038, rely=0.148, height=19, width=143)
-		self.boil_vol_lbl.configure(background=u"#d9d9d9")
+		self.boil_vol_lbl.configure( background=_bgcolor)
 		self.boil_vol_lbl.configure(foreground=u"#000000")
 		self.boil_vol_lbl.configure(font=font9)
 		self.boil_vol_lbl.configure(relief=u'flat')
 		self.boil_vol_lbl.configure(text=u'''Boil Volume Scale:''')
 
-		self.liquor_to_grist_lbl = ttk.Label(self)
+		self.liquor_to_grist_lbl = tk.Label(self)
 		self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317, height=19
 				, width=165)
-		self.liquor_to_grist_lbl.configure(background=u"#d9d9d9")
+		self.liquor_to_grist_lbl.configure( background=_bgcolor)
 		self.liquor_to_grist_lbl.configure(foreground=u"#000000")
 		self.liquor_to_grist_lbl.configure(font=font9)
 		self.liquor_to_grist_lbl.configure(relief=u'flat')
 		self.liquor_to_grist_lbl.configure(text=u'''Liquor To Grist Ratio:''')
 
-		self.target_vol_ent = ttk.Entry(self)
+		self.target_vol_ent = tk.Entry(self)
 		self.target_vol_ent.place(relx=0.202, rely=0.063, relheight=0.044
 				, relwidth=0.106)
 		self.target_vol_ent.configure(justify=u'center')
@@ -2435,94 +2431,94 @@ class defaults_editor(tk.Frame):
 		self.target_vol_ent.configure(takefocus=u"")
 		self.target_vol_ent.configure(cursor=u"xterm")
 
-		self.boil_vol_ent = ttk.Entry(self)
+		self.boil_vol_ent = tk.Entry(self)
 		self.boil_vol_ent.place(relx=0.227, rely=0.148, relheight=0.044
 				, relwidth=0.106)
 		self.boil_vol_ent.configure(justify=u'center')
 		self.boil_vol_ent.configure(takefocus=u"")
 		self.boil_vol_ent.configure(cursor=u"xterm")
 
-		self.liquor_to_grist_ent = ttk.Entry(self)
+		self.liquor_to_grist_ent = tk.Entry(self)
 		self.liquor_to_grist_ent.place(relx=0.253, rely=0.317, relheight=0.044
 				, relwidth=0.106)
 		self.liquor_to_grist_ent.configure(justify=u'center')
 		self.liquor_to_grist_ent.configure(takefocus=u"")
 		self.liquor_to_grist_ent.configure(cursor=u"xterm")
 
-		self.target_vol_litres_lbl = ttk.Label(self)
+		self.target_vol_litres_lbl = tk.Label(self)
 		self.target_vol_litres_lbl.place(relx=0.316, rely=0.063, height=19
 				, width=46)
-		self.target_vol_litres_lbl.configure(background=u"#d9d9d9")
+		self.target_vol_litres_lbl.configure( background=_bgcolor)
 		self.target_vol_litres_lbl.configure(foreground=u"#000000")
 		self.target_vol_litres_lbl.configure(font=font9)
 		self.target_vol_litres_lbl.configure(relief=u'flat')
 		self.target_vol_litres_lbl.configure(text=u'''Litres''')
 
-		self.mash_efficiency_lbl = ttk.Label(self)
+		self.mash_efficiency_lbl = tk.Label(self)
 		self.mash_efficiency_lbl.place(relx=0.038, rely=0.233, height=19
 				, width=125)
-		self.mash_efficiency_lbl.configure(background=u"#d9d9d9")
+		self.mash_efficiency_lbl.configure( background=_bgcolor)
 		self.mash_efficiency_lbl.configure(foreground=u"#000000")
 		self.mash_efficiency_lbl.configure(font=font9)
 		self.mash_efficiency_lbl.configure(relief=u'flat')
 		self.mash_efficiency_lbl.configure(text=u'''Mash Efficiency:''')
 
-		self.mash_efficiency_ent = ttk.Entry(self)
+		self.mash_efficiency_ent = tk.Entry(self)
 		self.mash_efficiency_ent.place(relx=0.215, rely=0.233, relheight=0.044
 				, relwidth=0.106)
 		self.mash_efficiency_ent.configure(justify=u'center')
 		self.mash_efficiency_ent.configure(takefocus=u"")
 		self.mash_efficiency_ent.configure(cursor=u"xterm")
 
-		self.boil_vol_percent_lbl = ttk.Label(self)
+		self.boil_vol_percent_lbl = tk.Label(self)
 		self.boil_vol_percent_lbl.place(relx=0.341, rely=0.148, height=19
 				, width=15)
-		self.boil_vol_percent_lbl.configure(background=u"#d9d9d9")
+		self.boil_vol_percent_lbl.configure( background=_bgcolor)
 		self.boil_vol_percent_lbl.configure(foreground=u"#000000")
 		self.boil_vol_percent_lbl.configure(font=font9)
 		self.boil_vol_percent_lbl.configure(relief=u'flat')
 		self.boil_vol_percent_lbl.configure(text=u'''%''')
 
-		self.mash_efficiency_percent_lbl = ttk.Label(self)
+		self.mash_efficiency_percent_lbl = tk.Label(self)
 		self.mash_efficiency_percent_lbl.place(relx=0.328, rely=0.233, height=19
 				, width=15)
-		self.mash_efficiency_percent_lbl.configure(background=u"#d9d9d9")
+		self.mash_efficiency_percent_lbl.configure( background=_bgcolor)
 		self.mash_efficiency_percent_lbl.configure(foreground=u"#000000")
 		self.mash_efficiency_percent_lbl.configure(font=font9)
 		self.mash_efficiency_percent_lbl.configure(relief=u'flat')
 		self.mash_efficiency_percent_lbl.configure(text=u'''%''')
 
-		self.liquor_to_grist_lperkg_lbl = ttk.Label(self)
+		self.liquor_to_grist_lperkg_lbl = tk.Label(self)
 		self.liquor_to_grist_lperkg_lbl.place(relx=0.366, rely=0.317, height=19
 				, width=35)
-		self.liquor_to_grist_lperkg_lbl.configure(background=u"#d9d9d9")
+		self.liquor_to_grist_lperkg_lbl.configure( background=_bgcolor)
 		self.liquor_to_grist_lperkg_lbl.configure(foreground=u"#000000")
 		self.liquor_to_grist_lperkg_lbl.configure(font=font9)
 		self.liquor_to_grist_lperkg_lbl.configure(relief=u'flat')
 		self.liquor_to_grist_lperkg_lbl.configure(text=u'''L/kg''')
 
-		self.save_all_butt = ttk.Button(self)
+		self.save_all_butt = tk.Button(self)
 		self.save_all_butt.place(relx=0.808, rely=0.93, height=28, width=143)
 		self.save_all_butt.configure(takefocus=u"")
 		self.save_all_butt.configure(text=u'''Save All As Defaults''')
 		self.save_all_butt.configure(command=self.save_all)
 
-		self.done_button = ttk.Button(self)
+		self.done_button = tk.Button(self)
 		self.done_button.place(relx=0.694, rely=0.93, height=28, width=83)
 		self.done_button.configure(takefocus=u"")
 		self.done_button.configure(text=u'''Done''')
 		self.done_button.configure(command=self.temp_save)
 
-		self.reset_to_defaults_butt = ttk.Button(self)
+		self.reset_to_defaults_butt = tk.Button(self)
 		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=127)
 		self.reset_to_defaults_butt.configure(takefocus=u"")
 		self.reset_to_defaults_butt.configure(text=u'''Reset To Defaults''')
 		self.reset_to_defaults_butt.configure(command=self.reset_to_defaults)
 
-		self.attenuation_defaults_lbl= ttk.Label(self)
+		self.attenuation_defaults_lbl= tk.Label(self)
 		self.attenuation_defaults_lbl.place(relx=0.038, rely=0.402, height=19
 				, width=155)
-		self.attenuation_defaults_lbl.configure(background=u"#d9d9d9")
+		self.attenuation_defaults_lbl.configure( background=_bgcolor)
 		self.attenuation_defaults_lbl.configure(foreground=u"#000000")
 		self.attenuation_defaults_lbl.configure(font=font9)
 		self.attenuation_defaults_lbl.configure(relief=u'flat')
@@ -2545,10 +2541,10 @@ class defaults_editor(tk.Frame):
 		self.attenuation_temp_combo.configure(width=57)
 		self.attenuation_temp_combo.configure(takefocus=u"")
 
-		self.save_on_close_lbl = ttk.Label(self)
+		self.save_on_close_lbl = tk.Label(self)
 		self.save_on_close_lbl.place(relx=0.038, rely=0.486, height=19
 				, width=125)
-		self.save_on_close_lbl.configure(background=u"#d9d9d9")
+		self.save_on_close_lbl.configure( background=_bgcolor)
 		self.save_on_close_lbl.configure(foreground=u"#000000")
 		self.save_on_close_lbl.configure(font=font9)
 		self.save_on_close_lbl.configure(relief=u'flat')
@@ -2562,10 +2558,10 @@ class defaults_editor(tk.Frame):
 		self.save_on_close_combo.configure(width=97)
 		self.save_on_close_combo.configure(takefocus=u"")
 
-		self.default_boil_time_lbl = ttk.Label(self)
+		self.default_boil_time_lbl = tk.Label(self)
 		self.default_boil_time_lbl.place(relx=0.038, rely=0.571, height=19
 				, width=145)
-		self.default_boil_time_lbl.configure(background=u"#d9d9d9")
+		self.default_boil_time_lbl.configure( background=_bgcolor)
 		self.default_boil_time_lbl.configure(foreground=u"#000000")
 		self.default_boil_time_lbl.configure(font=font9)
 		self.default_boil_time_lbl.configure(relief=u'flat')
@@ -2581,10 +2577,10 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_spinbox.configure(selectbackground=u"#c4c4c4")
 		self.default_boil_time_spinbox.configure(width=68)
 
-		self.default_boil_time_min_lbl = ttk.Label(self)
+		self.default_boil_time_min_lbl = tk.Label(self)
 		self.default_boil_time_min_lbl.place(relx=0.328, rely=0.571, height=19
 				, width=65)
-		self.default_boil_time_min_lbl.configure(background=u"#d9d9d9")
+		self.default_boil_time_min_lbl.configure( background=_bgcolor)
 		self.default_boil_time_min_lbl.configure(foreground=u"#000000")
 		self.default_boil_time_min_lbl.configure(font=font9)
 		self.default_boil_time_min_lbl.configure(relief=u'flat')
@@ -2598,7 +2594,7 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_ent.delete(0, tk.END)
 		self.liquor_to_grist_ent.delete(0, tk.END)
 
-		with open(u'defaults.txt', u'r') as f:
+		with open(resource_path(u'defaults.txt'), u'r') as f:
 			data = [line.strip().split(u'=') for line in f]
 			for constants in data:
 				if constants[0] == u'efficiency': self.mash_efficiency_ent.insert(0, float(constants[1])) #float(constants[1])/100
@@ -2616,7 +2612,7 @@ class defaults_editor(tk.Frame):
 					self.default_boil_time_spinbox.delete(0, tk.END)
 					self.default_boil_time_spinbox.insert(0, constants[1])
 	def save_all(self):
-		with open(u'defaults.txt', u'w') as f:
+		with open(resource_path(u'defaults.txt'), u'w') as f:
 			volume = float(self.target_vol_ent.get())
 			efficiency = float(self.mash_efficiency_ent.get())
 			evaporation = (float(self.boil_vol_ent.get())-100) #round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
@@ -2662,7 +2658,6 @@ class special_editor(tk.Frame):
 		self.refresh_add()
 
 	def widgets(self):
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -2711,128 +2706,128 @@ class special_editor(tk.Frame):
 		self.attenuation_frame.configure(text=u'''Yeast Attenuation''')
 		self.attenuation_frame.configure(width=180)
 
-		self.attenuation_low_lbl = ttk.Label(self.attenuation_frame)
+		self.attenuation_low_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_low_lbl.place(relx=0.278, rely=0.109, height=19
 				, width=28, bordermode=u'ignore')
-		self.attenuation_low_lbl.configure(background=u"#d9d9d9")
+		self.attenuation_low_lbl.configure( background=_bgcolor)
 		self.attenuation_low_lbl.configure(foreground=u"#000000")
 		self.attenuation_low_lbl.configure(font=u"TkDefaultFont")
 		self.attenuation_low_lbl.configure(relief=u'flat')
 		self.attenuation_low_lbl.configure(text=u'''Low''')
 
-		self.attenuation_62_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_62_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_62_degrees.place(relx=0.056, rely=0.182, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_62_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_62_degrees.configure( background=_bgcolor)
 		self.attenuation_62_degrees.configure(foreground=u"#000000")
 		self.attenuation_62_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_62_degrees.configure(relief=u'flat')
 		self.attenuation_62_degrees.configure(text=u'''62°C''')
 
-		self.attenuation_63_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_63_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_63_degrees.place(relx=0.056, rely=0.255, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_63_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_63_degrees.configure( background=_bgcolor)
 		self.attenuation_63_degrees.configure(foreground=u"#000000")
 		self.attenuation_63_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_63_degrees.configure(relief=u'flat')
 		self.attenuation_63_degrees.configure(text=u'''63°C''')
 
-		self.attenuation_64_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_64_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_64_degrees.place(relx=0.056, rely=0.327, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_64_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_64_degrees.configure( background=_bgcolor)
 		self.attenuation_64_degrees.configure(foreground=u"#000000")
 		self.attenuation_64_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_64_degrees.configure(relief=u'flat')
 		self.attenuation_64_degrees.configure(text=u'''64°C''')
 
-		self.attenuation_65_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_65_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_65_degrees.place(relx=0.056, rely=0.4, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_65_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_65_degrees.configure( background=_bgcolor)
 		self.attenuation_65_degrees.configure(foreground=u"#000000")
 		self.attenuation_65_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_65_degrees.configure(relief=u'flat')
 		self.attenuation_65_degrees.configure(text=u'''65°C''')
 
-		self.attenuation_66_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_66_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_66_degrees.place(relx=0.056, rely=0.473, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_66_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_66_degrees.configure( background=_bgcolor)
 		self.attenuation_66_degrees.configure(foreground=u"#000000")
 		self.attenuation_66_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_66_degrees.configure(relief=u'flat')
 		self.attenuation_66_degrees.configure(text=u'''66°C''')
 
-		self.attenuation_67_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_67_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_67_degrees.place(relx=0.056, rely=0.545, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_67_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_67_degrees.configure( background=_bgcolor)
 		self.attenuation_67_degrees.configure(foreground=u"#000000")
 		self.attenuation_67_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_67_degrees.configure(relief=u'flat')
 		self.attenuation_67_degrees.configure(text=u'''67°C''')
 
-		self.attenuation_med_lbl = ttk.Label(self.attenuation_frame)
+		self.attenuation_med_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_med_lbl.place(relx=0.5, rely=0.109, height=19, width=30
 				, bordermode=u'ignore')
-		self.attenuation_med_lbl.configure(background=u"#d9d9d9")
+		self.attenuation_med_lbl.configure( background=_bgcolor)
 		self.attenuation_med_lbl.configure(foreground=u"#000000")
 		self.attenuation_med_lbl.configure(font=u"TkDefaultFont")
 		self.attenuation_med_lbl.configure(relief=u'flat')
 		self.attenuation_med_lbl.configure(text=u'''Med''')
 
-		self.attenuation_high_lbl = ttk.Label(self.attenuation_frame)
+		self.attenuation_high_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_high_lbl.place(relx=0.722, rely=0.109, height=19
 				, width=42, bordermode=u'ignore')
-		self.attenuation_high_lbl.configure(background=u"#d9d9d9")
+		self.attenuation_high_lbl.configure( background=_bgcolor)
 		self.attenuation_high_lbl.configure(foreground=u"#000000")
 		self.attenuation_high_lbl.configure(font=u"TkDefaultFont")
 		self.attenuation_high_lbl.configure(relief=u'flat')
 		self.attenuation_high_lbl.configure(text=u'''High''')
 		self.attenuation_high_lbl.configure(width=42)
 
-		self.attenuation_68_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_68_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_68_degrees.place(relx=0.056, rely=0.618, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_68_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_68_degrees.configure( background=_bgcolor)
 		self.attenuation_68_degrees.configure(foreground=u"#000000")
 		self.attenuation_68_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_68_degrees.configure(relief=u'flat')
 		self.attenuation_68_degrees.configure(text=u'''68°C''')
 
-		self.attenuation_69_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_69_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_69_degrees.place(relx=0.056, rely=0.691, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_69_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_69_degrees.configure( background=_bgcolor)
 		self.attenuation_69_degrees.configure(foreground=u"#000000")
 		self.attenuation_69_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_69_degrees.configure(relief=u'flat')
 		self.attenuation_69_degrees.configure(text=u'''69°C''')
 
-		self.attenuation_70_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_70_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_70_degrees.place(relx=0.056, rely=0.764, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_70_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_70_degrees.configure( background=_bgcolor)
 		self.attenuation_70_degrees.configure(foreground=u"#000000")
 		self.attenuation_70_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_70_degrees.configure(relief=u'flat')
 		self.attenuation_70_degrees.configure(text=u'''70°C''')
 
-		self.attenuation_71_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_71_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_71_degrees.place(relx=0.056, rely=0.836, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_71_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_71_degrees.configure( background=_bgcolor)
 		self.attenuation_71_degrees.configure(foreground=u"#000000")
 		self.attenuation_71_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_71_degrees.configure(relief=u'flat')
 		self.attenuation_71_degrees.configure(text=u'''71°C''')
 
-		self.attenuation_72_degrees = ttk.Label(self.attenuation_frame)
+		self.attenuation_72_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_72_degrees.place(relx=0.056, rely=0.909, height=19
 				, width=34, bordermode=u'ignore')
-		self.attenuation_72_degrees.configure(background=u"#d9d9d9")
+		self.attenuation_72_degrees.configure( background=_bgcolor)
 		self.attenuation_72_degrees.configure(foreground=u"#000000")
 		self.attenuation_72_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_72_degrees.configure(relief=u'flat')
@@ -3126,7 +3121,7 @@ class special_editor(tk.Frame):
 		self.water_chem_orig_lstbx.configure(selectbackground=u"#c4c4c4")
 		self.water_chem_orig_lstbx.configure(width=10)
 
-		self.move_all_right = ttk.Button(self.water_chem_add_frame)
+		self.move_all_right = tk.Button(self.water_chem_add_frame)
 		self.move_all_right.place(relx=0.444, rely=0.218, height=28, width=53
 				, bordermode=u'ignore')
 		self.move_all_right.configure(takefocus=u"")
@@ -3134,21 +3129,21 @@ class special_editor(tk.Frame):
 		self.move_all_right.configure(width=53)
 		self.move_all_right.configure(command=self.move_all_left_right)
 
-		self.move_one_right = ttk.Button(self.water_chem_add_frame)
+		self.move_one_right = tk.Button(self.water_chem_add_frame)
 		self.move_one_right.place(relx=0.444, rely=0.364, height=28, width=53
 				, bordermode=u'ignore')
 		self.move_one_right.configure(takefocus=u"")
 		self.move_one_right.configure(text=u'''>''')
 		self.move_one_right.configure(command=self.move_one_left_right)
 
-		self.move_one_left = ttk.Button(self.water_chem_add_frame)
+		self.move_one_left = tk.Button(self.water_chem_add_frame)
 		self.move_one_left.place(relx=0.444, rely=0.509, height=28, width=53 #  relx=0.444, rely=0.655
 				, bordermode=u'ignore')
 		self.move_one_left.configure(takefocus=u"")
 		self.move_one_left.configure(text=u'''<''')
 		self.move_one_left.configure(command=self.move_one_right_left)
 
-		self.move_all_left = ttk.Button(self)
+		self.move_all_left = tk.Button(self)
 		self.move_all_left.place(relx=0.505, rely=0.402, height=28, width=53)  # , height=28, width=53  relx=0.505, rely=0.317
 		self.move_all_left.configure(takefocus=u"")
 		self.move_all_left.configure(text=u'''<<''')
@@ -3191,10 +3186,10 @@ class special_editor(tk.Frame):
 		self.water_boil_time_spinbx.delete(0, tk.END)
 		self.water_boil_time_spinbx.insert(0,brew_data.constants[u'Default Boil Time'])
 
-		self.water_boil_time_lbl = ttk.Label(self.water_boil_frame)
+		self.water_boil_time_lbl = tk.Label(self.water_boil_frame)
 		self.water_boil_time_lbl.place(relx=0.056, rely=0.4, height=17, width=65
 				, bordermode=u'ignore')
-		self.water_boil_time_lbl.configure(background=u"#d9d9d9")
+		self.water_boil_time_lbl.configure( background=_bgcolor)
 		self.water_boil_time_lbl.configure(foreground=u"#000000")
 		self.water_boil_time_lbl.configure(font=font9)
 		self.water_boil_time_lbl.configure(relief=u'flat')
@@ -3264,7 +3259,6 @@ class yeast_editor(tk.Frame):
 		self.widgets()
 
 	def widgets(self):
-		_bgcolor = u'#d9d9d9'  # X11 color: 'gray85'
 		_fgcolor = u'#000000'  # X11 color: 'black'
 		_compcolor = u'#d9d9d9' # X11 color: 'gray85'
 		_ana1color = u'#d9d9d9' # X11 color: 'gray85'
@@ -3278,14 +3272,14 @@ class yeast_editor(tk.Frame):
 		self.style.map(u'.',background=
 			[(u'selected', _compcolor), (u'active',_ana2color)])
 
-		self.TPanedwindow1 = ttk.Panedwindow(self, orient=u"horizontal")
+		self.TPanedwindow1 = tk.PanedWindow(self, orient=u"horizontal",  background=_bgcolor)
 		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
 				, relwidth=0.966)
-		self.yeast_panedwindow1 = ttk.Labelframe(width=400, text=u'Yeasts:')
+		self.yeast_panedwindow1 = tk.LabelFrame(width=400, text=u'Yeasts:',  background=_bgcolor)
 		self.TPanedwindow1.add(self.yeast_panedwindow1)
-		self.yeast_panedwindow2 = ttk.Labelframe(text=u'Modifications:')
+		self.yeast_panedwindow2 = tk.LabelFrame(text=u'Modifications:', background=_bgcolor)
 		self.TPanedwindow1.add(self.yeast_panedwindow2)
-		self.__funcid0 = self.TPanedwindow1.bind(u'<Map>', self.__adjust_sash0)
+
 
 		self.yeast_lstbx = ScrolledListBox(self.yeast_panedwindow1)
 		self.yeast_lstbx.place(relx=0.025, rely=0.043, relheight=0.887
@@ -3296,37 +3290,37 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.configure(selectbackground=u"#c4c4c4")
 		self.yeast_lstbx.configure(width=10)
 
-		self.yeast_delete_butt = ttk.Button(self.yeast_panedwindow1)
+		self.yeast_delete_butt = tk.Button(self.yeast_panedwindow1)
 		self.yeast_delete_butt.place(relx=0.025, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_delete_butt.configure(takefocus=u"")
 		self.yeast_delete_butt.configure(text=u'''Delete''')
 		self.yeast_delete_butt.configure(command=self.delete)
 
-		self.yeast_modify_butt = ttk.Button(self.yeast_panedwindow1)
+		self.yeast_modify_butt = tk.Button(self.yeast_panedwindow1)
 		self.yeast_modify_butt.place(relx=0.35, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_modify_butt.configure(takefocus=u"")
 		self.yeast_modify_butt.configure(text=u'''Modify''')
 		self.yeast_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.yeast_new_butt = ttk.Button(self.yeast_panedwindow1)
+		self.yeast_new_butt = tk.Button(self.yeast_panedwindow1)
 		self.yeast_new_butt.place(relx=0.725, rely=0.924, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_new_butt.configure(takefocus=u"")
 		self.yeast_new_butt.configure(text=u'''New''')
 		self.yeast_new_butt.configure(command=self.new)
 
-		self.yeast_name_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_name_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode=u'ignore')
-		self.yeast_name_lbl.configure(background=u"#d9d9d9")
+		self.yeast_name_lbl.configure( background=_bgcolor)
 		self.yeast_name_lbl.configure(foreground=u"#000000")
 		self.yeast_name_lbl.configure(font=font9)
 		self.yeast_name_lbl.configure(relief=u'flat')
 		self.yeast_name_lbl.configure(text=u'''Name:''')
 
-		self.yeast_name_ent = ttk.Entry(self.yeast_panedwindow2)
+		self.yeast_name_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_name_ent.place(relx=0.222, rely=0.087, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.yeast_name_ent.configure(justify=u'center')
@@ -3334,53 +3328,53 @@ class yeast_editor(tk.Frame):
 		self.yeast_name_ent.configure(takefocus=u"")
 		self.yeast_name_ent.configure(cursor=u"xterm")
 
-		self.yeast_comm_ent = ttk.Entry(self.yeast_panedwindow2)
+		self.yeast_comm_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_comm_ent.place(relx=0.028, rely=0.587, relheight=0.046
 				, relwidth=0.956, bordermode=u'ignore')
 		self.yeast_comm_ent.configure(takefocus=u"")
 		self.yeast_comm_ent.configure(cursor=u"xterm")
 
-		self.yeast_comm_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_comm_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_comm_lbl.place(relx=0.056, rely=0.543, height=19, width=99
 				, bordermode=u'ignore')
-		self.yeast_comm_lbl.configure(background=u"#d9d9d9")
+		self.yeast_comm_lbl.configure( background=_bgcolor)
 		self.yeast_comm_lbl.configure(foreground=u"#000000")
 		self.yeast_comm_lbl.configure(font=font9)
 		self.yeast_comm_lbl.configure(relief=u'flat')
 		self.yeast_comm_lbl.configure(text=u'''Comments:''')
 
-		self.yeast_cancel_butt = ttk.Button(self.yeast_panedwindow2)
+		self.yeast_cancel_butt = tk.Button(self.yeast_panedwindow2)
 		self.yeast_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_cancel_butt.configure(takefocus=u"")
 		self.yeast_cancel_butt.configure(text=u'''Cancel''')
 		self.yeast_cancel_butt.configure(command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
 
-		self.yeast_clear_butt = ttk.Button(self.yeast_panedwindow2)
+		self.yeast_clear_butt = tk.Button(self.yeast_panedwindow2)
 		self.yeast_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_clear_butt.configure(takefocus=u"")
 		self.yeast_clear_butt.configure(text=u'''Clear Form''')
 		self.yeast_clear_butt.configure(command=self.clear_form)
 
-		self.yeast_done_butt = ttk.Button(self.yeast_panedwindow2)
+		self.yeast_done_butt = tk.Button(self.yeast_panedwindow2)
 		self.yeast_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
 				, bordermode=u'ignore')
 		self.yeast_done_butt.configure(takefocus=u"")
 		self.yeast_done_butt.configure(text=u'''Done''')
 		self.yeast_done_butt.configure(command=self.done)
 
-		self.yeast_save_data_butt = ttk.Button(self.yeast_panedwindow2)
+		self.yeast_save_data_butt = tk.Button(self.yeast_panedwindow2)
 		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, height=108
 				, width=213, bordermode=u'ignore')
 		self.yeast_save_data_butt.configure(takefocus=u"")
 		self.yeast_save_data_butt.configure(text=u'''Save to Database''')
 		self.yeast_save_data_butt.configure(command=self.save)
 
-		self.yeast_type_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_type_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_type_lbl.place(relx=0.056, rely=0.152, height=19, width=50
 				, bordermode=u'ignore')
-		self.yeast_type_lbl.configure(background=u"#d9d9d9")
+		self.yeast_type_lbl.configure( background=_bgcolor)
 		self.yeast_type_lbl.configure(foreground=u"#000000")
 		self.yeast_type_lbl.configure(font=font9)
 		self.yeast_type_lbl.configure(relief=u'flat')
@@ -3395,16 +3389,16 @@ class yeast_editor(tk.Frame):
 		self.yeast_type_combo.configure(takefocus=u"")
 		self.yeast_type_combo.configure(justify=u'center')
 
-		self.yeast_lab_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_lab_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_lab_lbl.place(relx=0.056, rely=0.217, height=19, width=50
 				, bordermode=u'ignore')
-		self.yeast_lab_lbl.configure(background=u"#d9d9d9")
+		self.yeast_lab_lbl.configure( background=_bgcolor)
 		self.yeast_lab_lbl.configure(foreground=u"#000000")
 		self.yeast_lab_lbl.configure(font=font9)
 		self.yeast_lab_lbl.configure(relief=u'flat')
 		self.yeast_lab_lbl.configure(text=u'''Lab:''')
 
-		self.yeast_lab_ent = ttk.Entry(self.yeast_panedwindow2)
+		self.yeast_lab_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_lab_ent.place(relx=0.222, rely=0.217, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.yeast_lab_ent.configure(justify=u'center')
@@ -3412,10 +3406,10 @@ class yeast_editor(tk.Frame):
 		self.yeast_lab_ent.configure(takefocus=u"")
 		self.yeast_lab_ent.configure(cursor=u"xterm")
 
-		self.yeast_flocc_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_flocc_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_flocc_lbl.place(relx=0.056, rely=0.348, height=19, width=100
 				, bordermode=u'ignore')
-		self.yeast_flocc_lbl.configure(background=u"#d9d9d9")
+		self.yeast_flocc_lbl.configure( background=_bgcolor)
 		self.yeast_flocc_lbl.configure(foreground=u"#000000")
 		self.yeast_flocc_lbl.configure(font=font9)
 		self.yeast_flocc_lbl.configure(relief=u'flat')
@@ -3431,36 +3425,36 @@ class yeast_editor(tk.Frame):
 		self.yeast_flocc_combo.configure(takefocus=u"")
 		self.yeast_flocc_combo.configure(justify=u'center')
 
-		self.yeast_attenuation_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_attenuation_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_attenuation_lbl.place(relx=0.056, rely=0.413, height=19
 				, width=100, bordermode=u'ignore')
-		self.yeast_attenuation_lbl.configure(background=u"#d9d9d9")
+		self.yeast_attenuation_lbl.configure( background=_bgcolor)
 		self.yeast_attenuation_lbl.configure(foreground=u"#000000")
 		self.yeast_attenuation_lbl.configure(font=font9)
 		self.yeast_attenuation_lbl.configure(relief=u'flat')
 		self.yeast_attenuation_lbl.configure(text=u'''Attenuation:''')
 
-		self.yeast_temperature_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_temperature_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_temperature_lbl.place(relx=0.056, rely=0.478, height=19
 				, width=110, bordermode=u'ignore')
-		self.yeast_temperature_lbl.configure(background=u"#d9d9d9")
+		self.yeast_temperature_lbl.configure( background=_bgcolor)
 		self.yeast_temperature_lbl.configure(foreground=u"#000000")
 		self.yeast_temperature_lbl.configure(font=font9)
 		self.yeast_temperature_lbl.configure(relief=u'flat')
 		self.yeast_temperature_lbl.configure(text=u'''Temperature:''')
 		self.yeast_temperature_lbl.configure(width=110)
 
-		self.yeast_origin_lbl = ttk.Label(self.yeast_panedwindow2)
+		self.yeast_origin_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_origin_lbl.place(relx=0.056, rely=0.283, height=19, width=70
 				, bordermode=u'ignore')
-		self.yeast_origin_lbl.configure(background=u"#d9d9d9")
+		self.yeast_origin_lbl.configure( background=_bgcolor)
 		self.yeast_origin_lbl.configure(foreground=u"#000000")
 		self.yeast_origin_lbl.configure(font=font9)
 		self.yeast_origin_lbl.configure(relief=u'flat')
 		self.yeast_origin_lbl.configure(text=u'''Origin:''')
 		self.yeast_origin_lbl.configure(width=70)
 
-		self.yeast_origin_ent = ttk.Entry(self.yeast_panedwindow2)
+		self.yeast_origin_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_origin_ent.place(relx=0.222, rely=0.283, relheight=0.046
 				, relwidth=0.511, bordermode=u'ignore')
 		self.yeast_origin_ent.configure(justify=u'center')
@@ -3468,7 +3462,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_origin_ent.configure(takefocus=u"")
 		self.yeast_origin_ent.configure(cursor=u"xterm")
 
-		self.yeast_attenuation_ent = ttk.Entry(self.yeast_panedwindow2)
+		self.yeast_attenuation_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_attenuation_ent.place(relx=0.333, rely=0.413, relheight=0.046
 				, relwidth=0.4, bordermode=u'ignore')
 		self.yeast_attenuation_ent.configure(justify=u'center')
@@ -3628,7 +3622,7 @@ class yeast_editor(tk.Frame):
 		self.show_data(name)
 
 	def save(self):
-		with open(u'yeast_data.txt', u'w') as f:
+		with open(resource_path(u'yeast_data.txt'), u'w') as f:
 			for yeast, value in brew_data.yeast_data.items():
 				name = yeast
 				yeast_type = value[u'Type']
@@ -3789,6 +3783,7 @@ def main():
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
 	root.mainloop()
+
 
 if __name__ == u'__main__':
 	main()
