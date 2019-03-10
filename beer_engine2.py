@@ -4,12 +4,17 @@ from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
-import brew_data2 as brew_data
+import brew_data
 import platform
 import math
 import codecs
@@ -815,7 +820,6 @@ class beer_engine_mainwin(object):
 			refresh_ibu()
 		else:
 			for idx, hop in enumerate(self.hops):
-				print idx, hop
 				percent = hop[u'Values'][u'Percent']
 				amount = percent
 
@@ -827,7 +831,6 @@ class beer_engine_mainwin(object):
 					total_ibus = float(self.bitterness_ibu_ent.get())
 					vol = float(self.volume.get())
 					weight = (((total_ibus*(amount/100))*(vol*10))/util)/alpha
-					print weight
 					lb = weight/brew_data.constants[u'Conversion'][u'lb-g']
 					oz = (lb-int(lb))*16
 					self.hops[idx] = {u'Name': hop[u'Name'], u'Values': {u'Type': type, u'Alpha': alpha, u'Time': time, u'Util': 0.0, u'ibu': 0.0, u'lb:oz': (lb, oz), u'Grams': weight, u'Percent': percent}}
@@ -1527,6 +1530,7 @@ class beer_engine_mainwin(object):
 								self.is_ebufixed.set(sublist[2])
 
 		self.sixth_tab.original_additions = list(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
+		#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
 		self.fifth_tab.open_locals()
 		self.sixth_tab.refresh_all()
 		self.refresh_hop()
@@ -1557,7 +1561,7 @@ class beer_engine_mainwin(object):
 						percentage = hop[u'Values'][u'Percent']
 						f.write(u'hop\xa7{name}\t{type}\t{alpha}\t{ibu}\t{grams}\t{time}\t{percentage}\n'.format(name=hop[u'Name'], type=hop_type, alpha=alpha, ibu=ibu, grams=grams, time=time, percentage=percentage))
 					for addition in self.sixth_tab.added_additions:
-						all_chem = dict((key, value) for key, value in brew_data.water_chemistry_additions.items())
+						all_chem = brew_data.water_chemistry_additions
 						all_chem.update(brew_data.yeast_data)
 						name = addition
 						addition_type = all_chem[name]
@@ -3152,6 +3156,13 @@ class special_editor(tk.Frame):
 		self.water_chem_orig_lstbx.configure(selectbackground=u"#c4c4c4")
 		self.water_chem_orig_lstbx.configure(width=10)
 
+		self.water_chem_new = tk.Button(self.water_chem_add_frame)
+		self.water_chem_new.place(relx=0.444, rely=0.073, height=28, width=53
+				, bordermode=u'ignore')
+		self.water_chem_new.configure(takefocus=u"")
+		self.water_chem_new.configure(text=u'''+''')
+		self.water_chem_new.configure(command=self.new_water_chem)
+
 		self.move_all_right = tk.Button(self.water_chem_add_frame)
 		self.move_all_right.place(relx=0.444, rely=0.218, height=28, width=53
 				, bordermode=u'ignore')
@@ -3282,6 +3293,53 @@ class special_editor(tk.Frame):
 			self.water_boil_time_spinbx.configure(state=u"disabled")
 		else:
 			self.water_boil_time_spinbx.configure(state=u"normal")
+
+	def new_water_chem(self):
+		def on_type_change(*args):
+			if type_var.get() != u'Hop':
+				time_spnbx.configure(state=u'disabled')
+			else:
+				time_spnbx.configure(state=u'normal')
+		def done():
+			brew_data.water_chemistry_additions[name_var.get()] = {u'Values': {u'Type': type_var.get()}}
+			if type_var.get() == u'Hop': brew_data.water_chemistry_additions[name_var.get()][u'Values'][u'Time'] = float(time_var.get())
+			self.original_additions = list(list(set(sorted(brew_data.water_chemistry_additions))-set(self.added_additions)) + list((set(sorted(brew_data.yeast_data))-set(self.added_additions))))
+			self.refresh_all()
+
+		def cancel():
+			new_water_chem_win.destroy()
+
+		def save_to_database():
+			done()
+			with open(resource_path(u'water_chem_data.txt'), u'w') as f:
+				for water_chem, values in brew_data.water_chemistry_additions.items():
+					value = values[u'Values']
+					name = water_chem
+					time = value[u'Time'] if u'Time' in value else u'N/A'
+					print value
+					water_chem_type = value[u'Type']
+					f.write(u'{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
+			new_water_chem_win.destroy()
+
+		new_water_chem_win = tk.Toplevel()
+		name_var = tk.StringVar(value=u'New Item')
+		time_var = tk.IntVar()
+		type_var = tk.StringVar(value=u'Hop')
+		tk.Label(new_water_chem_win, text=u"Name: ").grid(row=0, column=0)
+		name_entry = tk.Entry(new_water_chem_win, textvariable=name_var, justify=u'center')
+		name_entry.grid(row=0, column=1, sticky=u'nsew')
+		tk.Label(new_water_chem_win, text=u"Time: ").grid(row=1, column=0)
+		time_spnbx = tk.Spinbox(new_water_chem_win, from_=0, to=1000000000, textvariable=time_var, justify=u'center')
+		time_spnbx.grid(row=1, column=1, sticky=u'nsew')
+		tk.Label(new_water_chem_win, text=u"Type: ").grid(row=2, column=0)
+		type_opt = tk.OptionMenu(new_water_chem_win, type_var, u"Hop", u"Malt", u"Yeast")
+		type_opt.grid(row=2, column=1, sticky=u'nsew')
+
+		type_var.trace(u'w', on_type_change)
+
+		tk.Button(new_water_chem_win, text=u"Cancel", command=cancel).grid(row=3, column=0)
+		tk.Button(new_water_chem_win, text=u"Done", command=done).grid(row=3, column=1, sticky=u'nsew')
+		tk.Button(new_water_chem_win, text=u"Save To Database", command=save_to_database).grid(row=4, column=0, columnspan=2, sticky=u'nsew')
 
 class yeast_editor(tk.Frame):
 	def __init__(self, parent):
