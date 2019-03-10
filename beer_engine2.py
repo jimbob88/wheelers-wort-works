@@ -19,7 +19,7 @@ import webbrowser
 import ast
 
 __mode__ = u'local'
-_bgcolor = u'#d9d9d9'
+_bgcolor = u'SystemButtonFace' if platform.system() == u'Windows' else u'#d9d9d9'
 class beer_engine_mainwin(object):
 	def __init__(self, master=None):
 
@@ -1380,7 +1380,20 @@ class beer_engine_mainwin(object):
 				start += u'<td>{description}</td>'.format(description=description)
 				start += u'</tr>'
 			except KeyError:
-				pass
+				try:
+					if brew_data.water_chemistry_additions[addition][u'Values'][u'Type'] == u'Yeast':
+						start += u'<tr>'
+						start += u'<td style="text-align:center">{name}</td>'.format(name=addition)
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td style="text-align:center">N/A</td>'
+						start += u'<td>N/A</td>'
+						start += u'</tr>'
+				except KeyError:
+					pass
 		start += u'</table>'
 
 		start += u'<p><b>Final Volume: </b>{volume}<p>'.format(volume=self.volume.get())
@@ -2686,92 +2699,39 @@ class special_editor(tk.Frame):
 		72	44	51	57
 		'''
 		self.table_dict = {
-			u'low-62': 51, u'med-62': 59, u'high-62': 66,
-			u'low-63': 52, u'med-63': 60, u'high-63': 68,
-			u'low-64': 53, u'med-64': 61, u'high-64': 69,
-			u'low-65': 53, u'med-65': 61, u'high-65': 69,
-			u'low-66': 53, u'med-66': 61, u'high-66': 69,
-			u'low-67': 53, u'med-67': 61, u'high-67': 69,
-			u'low-68': 52, u'med-68': 60, u'high-68': 67,
-			u'low-69': 51, u'med-69': 58, u'high-69': 66,
-			u'low-70': 49, u'med-70': 56, u'high-70': 63,
-			u'low-71': 47, u'med-71': 54, u'high-71': 61,
-			u'low-72': 44, u'med-72': 51, u'high-72': 57
+		  u'low-62': 51, u'med-62': 59, u'high-62': 66,
+		  u'low-63': 52, u'med-63': 60, u'high-63': 68,
+		  u'low-64': 53, u'med-64': 61, u'high-64': 69,
+		  u'low-65': 53, u'med-65': 61, u'high-65': 69,
+		  u'low-66': 53, u'med-66': 61, u'high-66': 69,
+		  u'low-67': 53, u'med-67': 61, u'high-67': 69,
+		  u'low-68': 52, u'med-68': 60, u'high-68': 67,
+		  u'low-69': 51, u'med-69': 58, u'high-69': 66,
+		  u'low-70': 49, u'med-70': 56, u'high-70': 63,
+		  u'low-71': 47, u'med-71': 54, u'high-71': 61,
+		  u'low-72': 44, u'med-72': 51, u'high-72': 57
 		}
 
-		self.attenuation_frame = ttk.Labelframe(self)
+		self.attenuation_frame = tk.LabelFrame(self)
 		self.attenuation_frame.place(relx=0.013, rely=0.021, relheight=0.591
-				, relwidth=0.227)
-		self.attenuation_frame.configure(relief=u'')
+			, relwidth=0.227)
+		#self.attenuation_frame.configure(relief='')
 		self.attenuation_frame.configure(text=u'''Yeast Attenuation''')
 		self.attenuation_frame.configure(width=180)
+		self.attenuation_frame.configure(background=_bgcolor)
 
 		self.attenuation_low_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_low_lbl.place(relx=0.278, rely=0.109, height=19
-				, width=28, bordermode=u'ignore')
+			, width=28, bordermode=u'ignore')
 		self.attenuation_low_lbl.configure( background=_bgcolor)
 		self.attenuation_low_lbl.configure(foreground=u"#000000")
 		self.attenuation_low_lbl.configure(font=u"TkDefaultFont")
 		self.attenuation_low_lbl.configure(relief=u'flat')
 		self.attenuation_low_lbl.configure(text=u'''Low''')
 
-		self.attenuation_62_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_62_degrees.place(relx=0.056, rely=0.182, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_62_degrees.configure( background=_bgcolor)
-		self.attenuation_62_degrees.configure(foreground=u"#000000")
-		self.attenuation_62_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_62_degrees.configure(relief=u'flat')
-		self.attenuation_62_degrees.configure(text=u'''62°C''')
-
-		self.attenuation_63_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_63_degrees.place(relx=0.056, rely=0.255, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_63_degrees.configure( background=_bgcolor)
-		self.attenuation_63_degrees.configure(foreground=u"#000000")
-		self.attenuation_63_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_63_degrees.configure(relief=u'flat')
-		self.attenuation_63_degrees.configure(text=u'''63°C''')
-
-		self.attenuation_64_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_64_degrees.place(relx=0.056, rely=0.327, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_64_degrees.configure( background=_bgcolor)
-		self.attenuation_64_degrees.configure(foreground=u"#000000")
-		self.attenuation_64_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_64_degrees.configure(relief=u'flat')
-		self.attenuation_64_degrees.configure(text=u'''64°C''')
-
-		self.attenuation_65_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_65_degrees.place(relx=0.056, rely=0.4, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_65_degrees.configure( background=_bgcolor)
-		self.attenuation_65_degrees.configure(foreground=u"#000000")
-		self.attenuation_65_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_65_degrees.configure(relief=u'flat')
-		self.attenuation_65_degrees.configure(text=u'''65°C''')
-
-		self.attenuation_66_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_66_degrees.place(relx=0.056, rely=0.473, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_66_degrees.configure( background=_bgcolor)
-		self.attenuation_66_degrees.configure(foreground=u"#000000")
-		self.attenuation_66_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_66_degrees.configure(relief=u'flat')
-		self.attenuation_66_degrees.configure(text=u'''66°C''')
-
-		self.attenuation_67_degrees = tk.Label(self.attenuation_frame)
-		self.attenuation_67_degrees.place(relx=0.056, rely=0.545, height=19
-				, width=34, bordermode=u'ignore')
-		self.attenuation_67_degrees.configure( background=_bgcolor)
-		self.attenuation_67_degrees.configure(foreground=u"#000000")
-		self.attenuation_67_degrees.configure(font=u"TkDefaultFont")
-		self.attenuation_67_degrees.configure(relief=u'flat')
-		self.attenuation_67_degrees.configure(text=u'''67°C''')
-
 		self.attenuation_med_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_med_lbl.place(relx=0.5, rely=0.109, height=19, width=30
-				, bordermode=u'ignore')
+			, bordermode=u'ignore')
 		self.attenuation_med_lbl.configure( background=_bgcolor)
 		self.attenuation_med_lbl.configure(foreground=u"#000000")
 		self.attenuation_med_lbl.configure(font=u"TkDefaultFont")
@@ -2780,7 +2740,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_high_lbl.place(relx=0.722, rely=0.109, height=19
-				, width=42, bordermode=u'ignore')
+			, width=42, bordermode=u'ignore')
 		self.attenuation_high_lbl.configure( background=_bgcolor)
 		self.attenuation_high_lbl.configure(foreground=u"#000000")
 		self.attenuation_high_lbl.configure(font=u"TkDefaultFont")
@@ -2788,9 +2748,65 @@ class special_editor(tk.Frame):
 		self.attenuation_high_lbl.configure(text=u'''High''')
 		self.attenuation_high_lbl.configure(width=42)
 
+
+		self.attenuation_62_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_62_degrees.place(relx=0.056, rely=0.182, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_62_degrees.configure( background=_bgcolor)
+		self.attenuation_62_degrees.configure(foreground=u"#000000")
+		self.attenuation_62_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_62_degrees.configure(relief=u'flat')
+		self.attenuation_62_degrees.configure(text=u'''62°C''')
+
+		self.attenuation_63_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_63_degrees.place(relx=0.056, rely=0.255, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_63_degrees.configure( background=_bgcolor)
+		self.attenuation_63_degrees.configure(foreground=u"#000000")
+		self.attenuation_63_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_63_degrees.configure(relief=u'flat')
+		self.attenuation_63_degrees.configure(text=u'''63°C''')
+
+		self.attenuation_64_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_64_degrees.place(relx=0.056, rely=0.327, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_64_degrees.configure( background=_bgcolor)
+		self.attenuation_64_degrees.configure(foreground=u"#000000")
+		self.attenuation_64_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_64_degrees.configure(relief=u'flat')
+		self.attenuation_64_degrees.configure(text=u'''64°C''')
+
+		self.attenuation_65_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_65_degrees.place(relx=0.056, rely=0.4, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_65_degrees.configure( background=_bgcolor)
+		self.attenuation_65_degrees.configure(foreground=u"#000000")
+		self.attenuation_65_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_65_degrees.configure(relief=u'flat')
+		self.attenuation_65_degrees.configure(text=u'''65°C''')
+
+		self.attenuation_66_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_66_degrees.place(relx=0.056, rely=0.473, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_66_degrees.configure( background=_bgcolor)
+		self.attenuation_66_degrees.configure(foreground=u"#000000")
+		self.attenuation_66_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_66_degrees.configure(relief=u'flat')
+		self.attenuation_66_degrees.configure(text=u'''66°C''')
+
+		self.attenuation_67_degrees = tk.Label(self.attenuation_frame)
+		self.attenuation_67_degrees.place(relx=0.056, rely=0.545, height=19
+			, width=34, bordermode=u'ignore')
+		self.attenuation_67_degrees.configure( background=_bgcolor)
+		self.attenuation_67_degrees.configure(foreground=u"#000000")
+		self.attenuation_67_degrees.configure(font=u"TkDefaultFont")
+		self.attenuation_67_degrees.configure(relief=u'flat')
+		self.attenuation_67_degrees.configure(text=u'''67°C''')
+
+
 		self.attenuation_68_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_68_degrees.place(relx=0.056, rely=0.618, height=19
-				, width=34, bordermode=u'ignore')
+			, width=34, bordermode=u'ignore')
 		self.attenuation_68_degrees.configure( background=_bgcolor)
 		self.attenuation_68_degrees.configure(foreground=u"#000000")
 		self.attenuation_68_degrees.configure(font=u"TkDefaultFont")
@@ -2799,7 +2815,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_69_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_69_degrees.place(relx=0.056, rely=0.691, height=19
-				, width=34, bordermode=u'ignore')
+			, width=34, bordermode=u'ignore')
 		self.attenuation_69_degrees.configure( background=_bgcolor)
 		self.attenuation_69_degrees.configure(foreground=u"#000000")
 		self.attenuation_69_degrees.configure(font=u"TkDefaultFont")
@@ -2808,7 +2824,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_70_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_70_degrees.place(relx=0.056, rely=0.764, height=19
-				, width=34, bordermode=u'ignore')
+			, width=34, bordermode=u'ignore')
 		self.attenuation_70_degrees.configure( background=_bgcolor)
 		self.attenuation_70_degrees.configure(foreground=u"#000000")
 		self.attenuation_70_degrees.configure(font=u"TkDefaultFont")
@@ -2817,7 +2833,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_71_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_71_degrees.place(relx=0.056, rely=0.836, height=19
-				, width=34, bordermode=u'ignore')
+			, width=34, bordermode=u'ignore')
 		self.attenuation_71_degrees.configure( background=_bgcolor)
 		self.attenuation_71_degrees.configure(foreground=u"#000000")
 		self.attenuation_71_degrees.configure(font=u"TkDefaultFont")
@@ -2826,23 +2842,24 @@ class special_editor(tk.Frame):
 
 		self.attenuation_72_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_72_degrees.place(relx=0.056, rely=0.909, height=19
-				, width=34, bordermode=u'ignore')
+			, width=34, bordermode=u'ignore')
 		self.attenuation_72_degrees.configure( background=_bgcolor)
 		self.attenuation_72_degrees.configure(foreground=u"#000000")
 		self.attenuation_72_degrees.configure(font=u"TkDefaultFont")
 		self.attenuation_72_degrees.configure(relief=u'flat')
 		self.attenuation_72_degrees.configure(text=u'''72°C''')
 
+		####################################### Low #######################################
 		self.attenuation_low_62 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_62.place(relx=0.278, rely=0.182, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_62.configure(justify=u'left')
 		self.attenuation_low_62.configure(value=u'low-62')
 		self.attenuation_low_62.configure(variable=self.current_attenuation)
 
 		self.attenuation_low_63 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_63.place(relx=0.278, rely=0.255, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_63.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_63.configure(justify=u'left')
 		self.attenuation_low_63.configure(value=u'low-63')
@@ -2850,7 +2867,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_64 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_64.place(relx=0.278, rely=0.327, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_64.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_64.configure(justify=u'left')
 		self.attenuation_low_64.configure(value=u'low-64')
@@ -2858,14 +2875,14 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_65 = tk.Radiobutton(self)
 		self.attenuation_low_65.place(relx=0.076, rely=0.254, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_low_65.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_65.configure(justify=u'left')
 		self.attenuation_low_65.configure(value=u'low-65')
 		self.attenuation_low_65.configure(variable=self.current_attenuation)
 		self.attenuation_low_66 = tk.Radiobutton(self)
 		self.attenuation_low_66.place(relx=0.076, rely=0.296
-				, relheight=0.049, relwidth=0.039)
+			, relheight=0.049, relwidth=0.039)
 		self.attenuation_low_66.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_66.configure(justify=u'left')
 		self.attenuation_low_66.configure(value=u'low-66')
@@ -2873,7 +2890,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_67 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_67.place(relx=0.278, rely=0.545, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_67.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_67.configure(justify=u'left')
 		self.attenuation_low_67.configure(value=u'low-67')
@@ -2881,7 +2898,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_68 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_68.place(relx=0.278, rely=0.618, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_68.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_68.configure(justify=u'left')
 		self.attenuation_low_68.configure(value=u'low-68')
@@ -2889,22 +2906,15 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_69 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_69.place(relx=0.278, rely=0.691, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_69.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_69.configure(justify=u'left')
 		self.attenuation_low_69.configure(value=u'low-69')
 		self.attenuation_low_69.configure(variable=self.current_attenuation)
 
-		#self.attenuation_low_50 = tk.Radiobutton(self.attenuation_frame)
-		#self.attenuation_low_50.place(relx=0.333, rely=0.782, relheight=0.084
-		#		, relwidth=0.172, bordermode='ignore')
-		#self.attenuation_low_50.configure(activebackground="#f9f9f9")
-		#self.attenuation_low_50.configure(justify='left')
-		#self.attenuation_low_50.configure(variable=self.current_attenuation)
-
 		self.attenuation_low_70 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_70.place(relx=0.278, rely=0.764, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_low_70.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_70.configure(justify=u'left')
 		self.attenuation_low_70.configure(value=u'low-70')
@@ -2912,7 +2922,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_71 = tk.Radiobutton(self)
 		self.attenuation_low_71.place(relx=0.076, rely=0.507, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_low_71.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_71.configure(justify=u'left')
 		self.attenuation_low_71.configure(variable=self.current_attenuation)
@@ -2920,15 +2930,16 @@ class special_editor(tk.Frame):
 
 		self.attenuation_low_72 = tk.Radiobutton(self)
 		self.attenuation_low_72.place(relx=0.076, rely=0.55, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_low_72.configure(activebackground=u"#f9f9f9")
 		self.attenuation_low_72.configure(justify=u'left')
 		self.attenuation_low_72.configure(value=u'low-72')
 		self.attenuation_low_72.configure(variable=self.current_attenuation)
+
 		####################################### MEDIUM #######################################
 		self.attenuation_med_62 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_med_62.place(relx=0.5, rely=0.182, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_med_62.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_62.configure(justify=u'left')
 		self.attenuation_med_62.configure(value=u'med-62')
@@ -2936,7 +2947,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_63 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_med_63.place(relx=0.5, rely=0.255, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_med_63.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_63.configure(justify=u'left')
 		self.attenuation_med_63.configure(value=u'med-63')
@@ -2944,7 +2955,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_64 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_med_64.place(relx=0.5, rely=0.327, relheight=0.084
-				, relwidth=0.172, bordermode=u'ignore')
+			, relwidth=0.172, bordermode=u'ignore')
 		self.attenuation_med_64.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_64.configure(justify=u'left')
 		self.attenuation_med_64.configure(value=u'med-64')
@@ -2952,7 +2963,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_65 = tk.Radiobutton(self)
 		self.attenuation_med_65.place(relx=0.126, rely=0.254, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_65.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_65.configure(justify=u'left')
 		self.attenuation_med_65.configure(value=u'med-65')
@@ -2960,7 +2971,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_66 = tk.Radiobutton(self)
 		self.attenuation_med_66.place(relx=0.126, rely=0.296, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_66.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_66.configure(justify=u'left')
 		self.attenuation_med_66.configure(value=u'med-66')
@@ -2968,7 +2979,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_67 = tk.Radiobutton(self)
 		self.attenuation_med_67.place(relx=0.126, rely=0.338, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_67.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_67.configure(justify=u'left')
 		self.attenuation_med_67.configure(value=u'med-67')
@@ -2976,7 +2987,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_68 = tk.Radiobutton(self)
 		self.attenuation_med_68.place(relx=0.126, rely=0.381, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_68.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_68.configure(justify=u'left')
 		self.attenuation_med_68.configure(value=u'med-68')
@@ -2984,7 +2995,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_69 = tk.Radiobutton(self)
 		self.attenuation_med_69.place(relx=0.126, rely=0.423, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_69.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_69.configure(justify=u'left')
 		self.attenuation_med_69.configure(value=u'med-69')
@@ -2992,7 +3003,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_70 = tk.Radiobutton(self)
 		self.attenuation_med_70.place(relx=0.126, rely=0.465, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_70.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_70.configure(justify=u'left')
 		self.attenuation_med_70.configure(value=u'med-70')
@@ -3000,7 +3011,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_71 = tk.Radiobutton(self)
 		self.attenuation_med_71.place(relx=0.126, rely=0.507, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_71.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_71.configure(justify=u'left')
 		self.attenuation_med_71.configure(value=u'med-71')
@@ -3008,7 +3019,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_med_72 = tk.Radiobutton(self)
 		self.attenuation_med_72.place(relx=0.126, rely=0.55, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_med_72.configure(activebackground=u"#f9f9f9")
 		self.attenuation_med_72.configure(justify=u'left')
 		self.attenuation_med_72.configure(value=u'med-72')
@@ -3017,7 +3028,7 @@ class special_editor(tk.Frame):
 		####################################### HIGH #######################################
 		self.attenuation_high_62 = tk.Radiobutton(self)
 		self.attenuation_high_62.place(relx=0.177, rely=0.127, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_62.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_62.configure(justify=u'left')
 		self.attenuation_high_62.configure(value=u'high-62')
@@ -3025,7 +3036,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_63 = tk.Radiobutton(self)
 		self.attenuation_high_63.place(relx=0.177, rely=0.169, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_63.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_63.configure(justify=u'left')
 		self.attenuation_high_63.configure(value=u'high-63')
@@ -3033,7 +3044,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_64 = tk.Radiobutton(self)
 		self.attenuation_high_64.place(relx=0.177, rely=0.211, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_64.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_64.configure(justify=u'left')
 		self.attenuation_high_64.configure(value=u'high-64')
@@ -3041,7 +3052,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_65 = tk.Radiobutton(self)
 		self.attenuation_high_65.place(relx=0.177, rely=0.254, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_65.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_65.configure(justify=u'left')
 		self.attenuation_high_65.configure(value=u'high-65')
@@ -3049,7 +3060,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_66 = tk.Radiobutton(self)
 		self.attenuation_high_66.place(relx=0.177, rely=0.296, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_66.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_66.configure(justify=u'left')
 		self.attenuation_high_66.configure(value=u'high-66')
@@ -3057,7 +3068,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_67 = tk.Radiobutton(self)
 		self.attenuation_high_67.place(relx=0.177, rely=0.338, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_67.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_67.configure(justify=u'left')
 		self.attenuation_high_67.configure(value=u'high-67')
@@ -3065,7 +3076,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_68 = tk.Radiobutton(self)
 		self.attenuation_high_68.place(relx=0.177, rely=0.381, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_68.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_68.configure(justify=u'left')
 		self.attenuation_high_68.configure(value=u'high-68')
@@ -3073,7 +3084,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_69 = tk.Radiobutton(self)
 		self.attenuation_high_69.place(relx=0.177, rely=0.423, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_69.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_69.configure(justify=u'left')
 		self.attenuation_high_69.configure(value=u'high-69')
@@ -3081,7 +3092,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_70 = tk.Radiobutton(self)
 		self.attenuation_high_70.place(relx=0.177, rely=0.465, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_70.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_70.configure(justify=u'left')
 		self.attenuation_high_70.configure(value=u'high-70')
@@ -3089,7 +3100,7 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_71 = tk.Radiobutton(self)
 		self.attenuation_high_71.place(relx=0.177, rely=0.507, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_71.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_71.configure(justify=u'left')
 		self.attenuation_high_71.configure(value=u'high-71')
@@ -3097,11 +3108,12 @@ class special_editor(tk.Frame):
 
 		self.attenuation_high_72 = tk.Radiobutton(self)
 		self.attenuation_high_72.place(relx=0.177, rely=0.55, relheight=0.049
-				, relwidth=0.039)
+			, relwidth=0.039)
 		self.attenuation_high_72.configure(activebackground=u"#f9f9f9")
 		self.attenuation_high_72.configure(justify=u'left')
 		self.attenuation_high_72.configure(value=u'high-72')
 		self.attenuation_high_72.configure(variable=self.current_attenuation)
+
 
 		########################################### Water Chemistry ###########################################
 
