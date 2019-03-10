@@ -18,6 +18,8 @@ If Python isn't installed follow [this handy guide](https://realpython.com/insta
 
 After you have python installed either Double-Click the `main.py` file found in `wheelers-wort-works-master`, if this fails Right-Click and edit with Idle, then press `F5`, you should be greeted by the Beer Engine Screen.
 
+If you're running on windows it is recommended to change the variable `_bgcolor` to `"SystemButtonFace"` so as to have nicer looking menus and buttons.
+
 ## Linux
 ### Ubuntu or Debian
 If you're running Ubuntu (or an Ubuntu Variant i.e. Xubuntu, Lubuntu, Kubuntu) or Debian it is recommended to install the  latest _.deb_ file.  Then open a terminal (typically with `Ctrl+Alt+T`).
