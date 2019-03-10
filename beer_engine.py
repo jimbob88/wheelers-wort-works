@@ -107,6 +107,25 @@ class beer_engine_mainwin:
 					description = yeast[7]
 					brew_data.yeast_data[name] = {'Type': yeast_type, 'Lab': lab, 'Flocculation': flocculation, 'Attenuation': attenuation, 'Temperature': temperature, 'Description': description, 'Origin': origin}
 
+		if not os.path.isfile(resource_path('water_chem_data.txt')):
+			with open(resource_path('water_chem_data.txt'), 'w') as f:
+				for water_chem, values in brew_data.water_chemistry_additions.items():
+					value = values['Values']
+					name = water_chem
+					time = value['Time'] if 'Time' in value else 'N/A'
+					print(value)
+					water_chem_type = value['Type']
+					f.write('{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
+		else:
+			with open(resource_path('water_chem_data.txt'), 'r') as f:
+				data = [line.strip().split('\t') for line in f]
+				for water_chem in data:
+					name = water_chem[0]
+					time = water_chem[1]
+					water_chem_type = water_chem[2]
+					brew_data.water_chemistry_additions[name] = {'Values': {'Type': water_chem_type}}
+					if time != 'N/A': brew_data.water_chemistry_additions[name]['Values']['Time'] = time
+
 		if not os.path.isfile(resource_path('defaults.txt')):
 			with open(resource_path('defaults.txt'), 'w') as f:
 				volume = brew_data.constants['Volume']
