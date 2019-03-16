@@ -9,7 +9,7 @@ def update():
     for file, url in files.items():
         print('Updating {file} from {url}'.format(file=file, url=url))
         if sys.version_info >= (3, 0):
-            with urlopen(url) as response, open(file, 'wb') as out_file:
+            with urlopen(url) as response, open(resource_path(file), 'wb') as out_file:
                 data = response.read()
                 out_file.write(data)
         else:

@@ -10,11 +10,27 @@ else:
     import beer_engine2 as beer_engine
     from urllib2 import urlopen
 
+def resource_path(relative_path):
+	u""" Get absolute path to resource, works for dev and for PyInstaller """
+	if __mode__ in [u'pyinstaller', u'local']:
+		try:
+			# PyInstaller creates a temp folder and stores path in _MEIPASS
+			base_path = sys._MEIPASS
+		except Exception:
+			base_path = os.path.abspath(u".")
+
+		return os.path.join(base_path, relative_path)
+	elif __mode__ == u'deb':
+		if os.path.basename(relative_path) == u'logo.png':
+			return u'/usr/include/wheelers-wort-works/logo.png'
+		else:
+			return os.path.join(os.path.expanduser(u'/usr/include/wheelers-wort-works'), relative_path)
+
 __mode__ = u'local'
 if __name__ == u'__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == u'--update':
-            with open(u'update.py', u'r') as f:
+            with open(resource_path(u'update.py'), u'r') as f:
                 exec(f.read())
             update()
         elif sys.argv[1] == u'--coreupdate':
