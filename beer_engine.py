@@ -113,7 +113,7 @@ class beer_engine_mainwin:
 					value = values['Values']
 					name = water_chem
 					time = value['Time'] if 'Time' in value else 'N/A'
-					print(value)
+					#print(value)
 					water_chem_type = value['Type']
 					f.write('{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
 		else:
@@ -593,8 +593,6 @@ class beer_engine_mainwin:
 		self.frame_hops.grid_columnconfigure(0, weight=1)
 		self.frame_hops.place(relx=0.013, rely=0.55, relheight=0.273
 				, relwidth=0.657)
-		self.scrolled_tree_hops = ScrolledTreeView(self.frame_hops)
-		self.scrolled_tree_hops.grid(row=0, column=0, sticky=tk.N+tk.S+tk.W+tk.E)
 
 		self.hops = [] # [{'Name': 'Nelson Sauvin', 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
 
@@ -670,26 +668,29 @@ class beer_engine_mainwin:
 
 	def refresh_grist(self):
 		def make_treeview():
-			self.scrolled_tree_ingredient = ScrolledTreeView(self.frame_ingredients, style="mystyle.Treeview")
-			self.scrolled_tree_ingredient.grid(row=0,column=0, sticky=tk.N+tk.S+tk.W+tk.E)
-			self.ingredient_columns = ("Ebc", "Grav", "lb:oz", "Grams", "%")
-			self.scrolled_tree_ingredient.configure(columns=self.ingredient_columns)
-			self.scrolled_tree_ingredient.heading("#0",text="Fermentable Ingredient", command=lambda c="Fermentable Ingredient": self.sort_by_grist(c))
-			self.scrolled_tree_ingredient.column("#0",width="170",minwidth="20",stretch="1")
-			for column in self.ingredient_columns:
-				self.scrolled_tree_ingredient.heading(column, text=column, command=lambda c=column: self.sort_by_grist(c))
-				self.scrolled_tree_ingredient.column(column, anchor="center")
-				if column != 'lb:oz' and column != '%' and column != 'EBC':
-					self.scrolled_tree_ingredient.column(column, width=40)
-				elif column == 'lb:oz':
-					if len(self.ingredients) > 0:
-						self.scrolled_tree_ingredient.column('lb:oz', width=max([len('{lb}:{oz}'.format(lb=int(ingredient['Values']['lb:oz'][0]), oz=round(ingredient['Values']['lb:oz'][1], 1))) for ingredient in self.ingredients])*7)
-					else:
+			if 'scrolled_tree_ingredient' in vars(self):
+				self.scrolled_tree_ingredient.delete(*self.scrolled_tree_ingredient.get_children())
+			else:
+				self.scrolled_tree_ingredient = ScrolledTreeView(self.frame_ingredients, style="mystyle.Treeview")
+				self.scrolled_tree_ingredient.grid(row=0,column=0, sticky='nsew')
+				self.ingredient_columns = ("Ebc", "Grav", "lb:oz", "Grams", "%")
+				self.scrolled_tree_ingredient.configure(columns=self.ingredient_columns)
+				self.scrolled_tree_ingredient.heading("#0",text="Fermentable Ingredient", command=lambda c="Fermentable Ingredient": self.sort_by_grist(c))
+				self.scrolled_tree_ingredient.column("#0",width="170",minwidth="20",stretch="1")
+				for column in self.ingredient_columns:
+					self.scrolled_tree_ingredient.heading(column, text=column, command=lambda c=column: self.sort_by_grist(c))
+					self.scrolled_tree_ingredient.column(column, anchor="center")
+					if column != 'lb:oz' and column != '%' and column != 'EBC':
 						self.scrolled_tree_ingredient.column(column, width=40)
-				elif column == 'EBC':
-					self.scrolled_tree_ingredient.column(column, width=28)
-				elif column == '%':
-					self.scrolled_tree_ingredient.column(column, width=35)
+					elif column == 'lb:oz':
+						if len(self.ingredients) > 0:
+							self.scrolled_tree_ingredient.column('lb:oz', width=max([len('{lb}:{oz}'.format(lb=int(ingredient['Values']['lb:oz'][0]), oz=round(ingredient['Values']['lb:oz'][1], 1))) for ingredient in self.ingredients])*7)
+						else:
+							self.scrolled_tree_ingredient.column(column, width=40)
+					elif column == 'EBC':
+						self.scrolled_tree_ingredient.column(column, width=28)
+					elif column == '%':
+						self.scrolled_tree_ingredient.column(column, width=35)
 
 		def refresh_percentage():
 			total_weight = sum([ingredient['Values']['Grams'] for ingredient in self.ingredients])
@@ -715,9 +716,6 @@ class beer_engine_mainwin:
 				points = brew_data.grist_data[ingredient['Name']]['Extract']*(ingredient['Values']['Grams'])/1000
 				grav = ((points * (1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency']))/volume)
 				ingredient['Values']['Grav'] = grav
-
-		for widget in self.frame_ingredients.winfo_children():
-			widget.destroy()
 
 		make_treeview()
 		if not self.is_ogfixed.get():
@@ -745,24 +743,27 @@ class beer_engine_mainwin:
 
 	def refresh_hop(self):
 		def make_treeview():
-			self.scrolled_tree_hops = ScrolledTreeView(self.frame_hops, style="mystyle.Treeview")
-			self.scrolled_tree_hops.grid(row=0, column=0, sticky=tk.N+tk.S+tk.W+tk.E)
-			self.hop_columns = ("Type", "Alpha", "Time", "% Util", "IBU", "lb:oz", "Grams", "%")
-			self.scrolled_tree_hops.configure(columns=self.hop_columns)
-			self.scrolled_tree_hops.heading("#0",text="Hop Variety", command=lambda: self.sort_by_hop("Hop Variety"))
-			self.scrolled_tree_hops.column("#0",width="90", anchor="w",minwidth="20",stretch="1")
+			if 'scrolled_tree_hops' in vars(self):
+				self.scrolled_tree_hops.delete(*self.scrolled_tree_hops.get_children())
+			else:
+				self.scrolled_tree_hops = ScrolledTreeView(self.frame_hops, style="mystyle.Treeview")
+				self.scrolled_tree_hops.grid(row=0, column=0, sticky='nsew')
+				self.hop_columns = ("Type", "Alpha", "Time", "% Util", "IBU", "lb:oz", "Grams", "%")
+				self.scrolled_tree_hops.configure(columns=self.hop_columns)
+				self.scrolled_tree_hops.heading("#0",text="Hop Variety", command=lambda: self.sort_by_hop("Hop Variety"))
+				self.scrolled_tree_hops.column("#0",width="90", anchor="w",minwidth="20",stretch="1")
 
-			for column in self.hop_columns:
-				self.scrolled_tree_hops.heading(column, text=column, command=lambda: self.sort_by_hop(column))
-				if column != 'lb:oz' and column != '%':
-					self.scrolled_tree_hops.column(column, width=40, anchor="center")
-				elif column == 'lb:oz':
-					if len(self.hops) > 0:
-						self.scrolled_tree_hops.column(column, width=max([len('{lb}:{oz}'.format(lb=int(hop['Values']['lb:oz'][0]), oz=round(hop['Values']['lb:oz'][1], 1))) for hop in self.hops])*7, anchor="center")
-					else:
+				for column in self.hop_columns:
+					self.scrolled_tree_hops.heading(column, text=column, command=lambda: self.sort_by_hop(column))
+					if column != 'lb:oz' and column != '%':
 						self.scrolled_tree_hops.column(column, width=40, anchor="center")
-				elif column == '%' or column == '% Util':
-					self.scrolled_tree_hops.column(column, width=35, anchor="center")
+					elif column == 'lb:oz':
+						if len(self.hops) > 0:
+							self.scrolled_tree_hops.column(column, width=max([len('{lb}:{oz}'.format(lb=int(hop['Values']['lb:oz'][0]), oz=round(hop['Values']['lb:oz'][1], 1))) for hop in self.hops])*7, anchor="center")
+						else:
+							self.scrolled_tree_hops.column(column, width=40, anchor="center")
+					elif column == '%' or column == '% Util':
+						self.scrolled_tree_hops.column(column, width=35, anchor="center")
 
 		def refresh_percentage():
 			total_weight = sum([hop['Values']['Grams'] for hop in self.hops])
@@ -807,8 +808,7 @@ class beer_engine_mainwin:
 				ibu = (hop['Values']['Grams'] * hop['Values']['Alpha'] * hop['Values']['Util']) / (float(self.volume.get())*10)
 				hop['Values']['ibu'] = ibu
 
-		for widget in self.frame_hops.winfo_children():
-			widget.destroy()
+
 
 		make_treeview()
 		if not self.is_ebufixed.get():
@@ -935,6 +935,7 @@ class beer_engine_mainwin:
 		try:
 			selection = self.scrolled_tree_ingredient.selection()[0]
 			id = int(str(selection)[1:], 16)
+			#print(id, selection)
 			grams = self.ingredients[id-1]['Values']['Grams']+weight
 			if grams < 0: grams=0
 			lb = grams/brew_data.constants['Conversion']['lb-g']
@@ -3312,7 +3313,7 @@ class special_editor(tk.Frame):
 					value = values['Values']
 					name = water_chem
 					time = value['Time'] if 'Time' in value else 'N/A'
-					print(value)
+					#print(value)
 					water_chem_type = value['Type']
 					f.write('{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
 			new_water_chem_win.destroy()
@@ -3724,6 +3725,8 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.delete(0, tk.END)
 		for yeast in sorted(brew_data.yeast_data):
 			self.yeast_lstbx.insert(tk.END, yeast)
+
+
 class AutoScroll(object):
 	'''Configure the scrollbars for a widget.'''
 
@@ -3798,6 +3801,18 @@ class ScrolledTreeView(AutoScroll, ttk.Treeview):
 	def __init__(self, master, **kw):
 		ttk.Treeview.__init__(self, master, **kw)
 		AutoScroll.__init__(self, master)
+
+	def insert(self, parent, index, iid=None, **kw):
+		opts = ttk._format_optdict(kw)
+		if iid is not None:
+			res = self.tk.call(self._w, "insert", parent, index,
+				"-id", iid, *opts)
+		else:
+			iid = 'I{iid}'.format(iid=format(len(self.get_children())+1, '03x')) #hex(len(self.get_children())).split('x')[-1]
+			res = self.tk.call(self._w, "insert", parent, index,
+				"-id", iid, *opts)
+		return res
+
 class ScrolledListBox(AutoScroll, tk.Listbox):
 	'''A standard Tkinter Text widget with scrollbars that will
 	automatically show/hide as needed.'''
@@ -3805,6 +3820,8 @@ class ScrolledListBox(AutoScroll, tk.Listbox):
 	def __init__(self, master, **kw):
 		tk.Listbox.__init__(self, master, **kw)
 		AutoScroll.__init__(self, master)
+
+
 
 def _bound_to_mousewheel(event, widget):
 	child = widget.winfo_children()[0]
