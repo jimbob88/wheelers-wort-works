@@ -10,7 +10,7 @@ else:
     import beer_engine2 as beer_engine
     from urllib2 import urlopen
 
-
+__mode__ = u'local'
 if __name__ == u'__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == u'--update':
@@ -24,4 +24,5 @@ if __name__ == u'__main__':
         else:
             print(u'Run --update to update the current install, or run --coreupdate to update the updater script')
             exit()
+    beer_engine.__mode__ = __mode__
     beer_engine.main()
