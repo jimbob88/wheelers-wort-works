@@ -24,10 +24,10 @@ If you're running on windows it is recommended to change the variable `_bgcolor`
 ### Ubuntu or Debian
 If you're running Ubuntu (or an Ubuntu Variant i.e. Xubuntu, Lubuntu, Kubuntu) or Debian it is recommended to install the  latest _.deb_ file.  Then open a terminal (typically with `Ctrl+Alt+T`).
 
-Download the file, navigate to your download folder typically `~/Downloads/` by running the command `cd ~/Downloads`. Then run the command `sudo apt-get install ./wheelers-wort-works_2.1a_all.deb`.
+Download the file, navigate to your download folder typically `~/Downloads/` by running the command `cd ~/Downloads`. Then run the command `sudo apt-get install ./wheelers-wort-works_2.3_all.deb`.
 If this command fails, attempt to install the file with:
 ```
-sudo dpkg -i wheelers-wort-works_2.1a_all.deb
+sudo dpkg -i wheelers-wort-works_2.3_all.deb
 sudo apt-get install -f
 ```
 
