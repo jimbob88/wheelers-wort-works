@@ -1,4 +1,3 @@
-import os
 def update():
     files = {
         'beer_engine.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/beer_engine.py',

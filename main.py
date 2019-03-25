@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import sys
 import os
 from io import open
-import os
 if sys.version_info >= (3, 0):
     import beer_engine
     from urllib.request import urlopen
