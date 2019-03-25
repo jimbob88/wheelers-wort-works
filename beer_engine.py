@@ -1425,7 +1425,7 @@ class beer_engine_mainwin:
 		start += '</body>'
 		start += '</html>'
 
-		text_file_name = '{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get())
+		text_file_name = resource_path('{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get()))
 		with open(text_file_name, 'w') as hs:
 			hs.write(start)
 		webbrowser.open('file://' + os.path.realpath(text_file_name), new=1)

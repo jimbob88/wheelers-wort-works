@@ -1424,7 +1424,7 @@ class beer_engine_mainwin(object):
 		start += u'</body>'
 		start += u'</html>'
 
-		text_file_name = u'{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get())
+		text_file_name = resource_path(u'{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get()))
 		with open(text_file_name, u'w') as hs:
 			hs.write(start)
 		webbrowser.open(u'file://' + os.path.realpath(text_file_name), new=1)
