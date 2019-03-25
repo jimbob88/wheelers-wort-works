@@ -1547,7 +1547,7 @@ class beer_engine_mainwin:
 						fermentability = brew_data.grist_data[ingredient['Name']]['Fermentability']
 						grams = ingredient['Values']['Grams']
 						percentage = ingredient['Values']['Percent']
-						f.write('grain\xa7{name}\t{ebc}\t{type}\t{units}\t{moisture}\t{fermentability}\t{grams}\t{percentage}\n'.format(name=ingredient['Name'], ebc=ebc, type=ingred_type, units=units, moisture=moisture, fermentability=fermentability, grams=grams, percentage=percentage).encode('utf8'))
+						f.write('grain\xa7{name}\t{ebc}\t{type}\t{units}\t{moisture}\t{fermentability}\t{grams}\t{percentage}\n'.format(name=ingredient['Name'], ebc=ebc, type=ingred_type, units=units, moisture=moisture, fermentability=fermentability, grams=grams, percentage=percentage))
 					for hop in self.hops:
 						# 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}
 						hop_type = hop['Values']['Type']

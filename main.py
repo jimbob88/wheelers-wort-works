@@ -2,6 +2,7 @@
 from __future__ import with_statement
 from __future__ import absolute_import
 import sys
+import os
 from io import open
 if sys.version_info >= (3, 0):
     import beer_engine
@@ -35,8 +36,14 @@ if __name__ == u'__main__':
             update()
         elif sys.argv[1] == u'--coreupdate':
             with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
-                exec(response.read().decode(u'utf-8'))
+                update_text = response.read().decode(u'utf-8')
+                exec(update_text)
             update()
+            if len(sys.argv) > 2:
+                if sys.argv[2] == u'save':
+                    print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
+                    with open(resource_path('update.py'), 'w') as f:
+                        f.write(update_text)
         else:
             print(u'Run --update to update the current install, or run --coreupdate to update the updater script')
             exit()

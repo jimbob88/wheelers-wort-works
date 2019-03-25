@@ -3,7 +3,6 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-from io import open
 import Tkinter as tk
 import ttk
 import tkFileDialog as filedialog
@@ -17,6 +16,7 @@ import string
 import os
 import webbrowser
 import ast
+from io import open
 
 __mode__ = u'local'
 _bgcolor = u'SystemButtonFace' if platform.system() == u'Windows' else u'#d9d9d9'
@@ -1546,7 +1546,7 @@ class beer_engine_mainwin(object):
 						fermentability = brew_data.grist_data[ingredient[u'Name']][u'Fermentability']
 						grams = ingredient[u'Values'][u'Grams']
 						percentage = ingredient[u'Values'][u'Percent']
-						f.write(u'grain\xa7{name}\t{ebc}\t{type}\t{units}\t{moisture}\t{fermentability}\t{grams}\t{percentage}\n'.format(name=ingredient[u'Name'], ebc=ebc, type=ingred_type, units=units, moisture=moisture, fermentability=fermentability, grams=grams, percentage=percentage).encode(u'utf8'))
+						f.write(u'grain\xa7{name}\t{ebc}\t{type}\t{units}\t{moisture}\t{fermentability}\t{grams}\t{percentage}\n'.format(name=ingredient[u'Name'], ebc=ebc, type=ingred_type, units=units, moisture=moisture, fermentability=fermentability, grams=grams, percentage=percentage))
 					for hop in self.hops:
 						# 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}
 						hop_type = hop[u'Values'][u'Type']
