@@ -44,6 +44,7 @@ grist_data = {
 	 'Imperial Malt': {'EBC': 50.0, 'Type': 2.0, 'Extract': 300.0, 'Description': 'No Description', 'Moisture': 3.5, 'Fermentability': 200.0},
 	 'Wheat Malt': {'EBC': 3.5, 'Type': 1.0, 'Extract': 279.0, 'Description': 'No Description', 'Moisture': 4.0, 'Fermentability': 200.0},
 	 'Rice': {'EBC': 0.0, 'Type': 3.0, 'Extract': 323.0, 'Description': 'No Description', 'Moisture': 0.0, 'Fermentability': 200.0},
+	 'Rye Malt': {'EBC': 6.0, 'Type': 2.0, 'Extract': 242.0, 'Description': 'No Description', 'Moisture': 3.0, 'Fermentability': 200.0},
 	 'Chocolate Malt Low Colour': {'EBC': 500.0, 'Type': 2.0, 'Extract': 265.0, 'Description': 'No Description', 'Moisture': 3.0, 'Fermentability': 15.0},
 	 'Dried Malt Extract Pale': {'EBC': 10.0, 'Type': 5.0, 'Extract': 350.0, 'Description': 'No Description', 'Moisture': 5.5, 'Fermentability': 63.0},
 	 'Oat Flakes': {'EBC': 2.5, 'Type': 3.0, 'Extract': 260.0, 'Description': 'No Description', 'Moisture': 8.0, 'Fermentability': 200.0},
