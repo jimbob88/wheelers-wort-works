@@ -47,5 +47,6 @@ if __name__ == u'__main__':
         else:
             print(u'Run --update to update the current install, or run --coreupdate to update the updater script')
             exit()
-    beer_engine.__mode__ = __mode__
-    beer_engine.main()
+    else:
+        beer_engine.__mode__ = __mode__
+        beer_engine.main()
