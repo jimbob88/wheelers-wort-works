@@ -3,12 +3,13 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
+from io import open
 import Tkinter as tk
 import ttk
 import tkFileDialog as filedialog
 import tkMessageBox as messagebox
 import sys
-import brew_data
+import brew_data2 as brew_data
 import platform
 import math
 import codecs
@@ -16,7 +17,6 @@ import string
 import os
 import webbrowser
 import ast
-from io import open
 
 __mode__ = u'local'
 _bgcolor = u'SystemButtonFace' if platform.system() == u'Windows' else u'#d9d9d9'
@@ -343,7 +343,7 @@ class beer_engine_mainwin(object):
 		self.calculation_frame.configure(width=120)
 
 		self.calc_lbl = tk.Message(self.calculation_frame)
-		self.calc_lbl.place(relx=0.083, rely=0.108, height=137, width=103 #97
+		self.calc_lbl.place(relx=0.083, rely=0.108, height=150, width=103 #97
 				, bordermode=u'ignore')
 		self.calc_lbl.configure( background=_bgcolor)
 		self.calc_lbl.configure(foreground=u"#000000")
@@ -354,7 +354,8 @@ class beer_engine_mainwin(object):
 		Final Gravity: {final_gravity}
 		Alcohol (ABV): {abv}
 		Colour: {colour}EBC
-		Mash Liquor: {mash_liquor}L'''.format(efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0))
+		Mash Liquor: {mash_liquor}L
+		IBU:GU: {ibu_gu}'''.format(efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0))
 		self.calc_lbl.configure(width=97)
 
 		self.hop_add_new_butt = tk.Button(self.first_tab)
@@ -1086,11 +1087,16 @@ class beer_engine_mainwin(object):
 		self.fg = final_gravity()
 		self.og = float(self.original_gravity_ent.get())
 		self.abv = alcohol_by_volume(self.og/1000, self.fg/1000)
+		self.ibu_gu = float(self.bitterness_ibu_ent.get()) / (1000 - self.og) if (1000 - self.og) != 0 else 0
 		self.calc_lbl.configure(text=u'''Efficiency: {efficiency}%
 		Final Gravity: {final_gravity}
 		Alcohol(ABV): {abv}%
 		Colour: {colour} EBC
-		Mash Liquor: {mash_liquor}L'''.format(efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=round(self.fg, 1), abv=round(self.abv, 1), colour=round(self.colour,1), mash_liquor=round(mash_liquor(),1)))
+		Mash Liquor: {mash_liquor}L
+		IBU:GU: {ibu_gu}'''.format(
+			efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=round(self.fg, 1),
+			abv=round(self.abv, 1), colour=round(self.colour,1), mash_liquor=round(mash_liquor(),1),
+			ibu_gu=round(self.ibu_gu, 2)))
 		self.refresh_hop()
 		self.refresh_grist()
 
