@@ -8,7 +8,7 @@ import ttk
 import tkFileDialog as filedialog
 import tkMessageBox as messagebox
 import sys
-import brew_data2 as brew_data
+import brew_data
 import platform
 import math
 import codecs
@@ -120,7 +120,7 @@ class beer_engine_mainwin(object):
 				data = [line.strip().split(u'\t') for line in f]
 				for water_chem in data:
 					name = water_chem[0]
-					time = water_chem[1]
+					time = float(water_chem[1]) if water_chem[1] != u'N/A' else water_chem[1]
 					water_chem_type = water_chem[2]
 					brew_data.water_chemistry_additions[name] = {u'Values': {u'Type': water_chem_type}}
 					if time != u'N/A': brew_data.water_chemistry_additions[name][u'Values'][u'Time'] = time
@@ -1332,7 +1332,7 @@ class beer_engine_mainwin(object):
 
 		start += u'<table style="width:800px"><tr><th>Hop Variety</th><th>Type</th><th>Alpha</th><th>Time</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
 		#temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
-		temp_hop = self.hops
+		temp_hop = self.hops[:]
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.water_chemistry_additions[addition][u'Values'][u'Type'] == u'Hop':
@@ -1557,7 +1557,7 @@ class beer_engine_mainwin(object):
 						percentage = hop[u'Values'][u'Percent']
 						f.write(u'hop\xa7{name}\t{type}\t{alpha}\t{ibu}\t{grams}\t{time}\t{percentage}\n'.format(name=hop[u'Name'], type=hop_type, alpha=alpha, ibu=ibu, grams=grams, time=time, percentage=percentage))
 					for addition in self.sixth_tab.added_additions:
-						all_chem = brew_data.water_chemistry_additions
+						all_chem = dict(brew_data.water_chemistry_additions)
 						all_chem.update(brew_data.yeast_data)
 						name = addition
 						addition_type = all_chem[name]
@@ -1578,7 +1578,7 @@ class beer_engine_mainwin(object):
 						# 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}
 						f.write(u'hop\xa7{name}\t{data}\n'.format(name=hop[u'Name'], data=hop[u'Values']))
 					for addition in self.sixth_tab.added_additions:
-						all_chem = dict((key, value) for key, value in brew_data.water_chemistry_additions.items())
+						all_chem = dict(brew_data.water_chemistry_additions)
 						all_chem.update(brew_data.yeast_data)
 						name = addition
 						addition_type = all_chem[name]
