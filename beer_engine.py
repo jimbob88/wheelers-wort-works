@@ -848,44 +848,47 @@ class beer_engine_mainwin:
 
 	def add_grist(self):
 		def insert():
-			EBC = int(brew_data.grist_data[grist_options.get(tk.ACTIVE)]['EBC'])
-			self.ingredients.append({'Name': grist_options.get(tk.ACTIVE), 'Values': {'EBC': EBC, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0, 'Percent': 0.0}})
+			name = grist_options.item(grist_options.focus())['text']
+			EBC = int(brew_data.grist_data[name]['EBC'])
+			self.ingredients.append({'Name': name, 'Values': {'EBC': EBC, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0, 'Percent': 0.0}})
 			self.refresh_grist()
 
-		def bound(event, listbox, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
+		def bound(event, treeview, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
 			key=event.keysym
 			if len(key)<=1:
 				if key in string.ascii_lowercase:
 					try:
-						start_n=int(listbox.curselection()[0])
+						start_n= int(treeview.focus()[1:], 16)
 					except IndexError:
 						start_n=-1
 					## clear the selection.
-					listbox.selection_clear(0, 'end')
+					treeview.selection_clear()
 					## start from previous selection +1
 					for n in range(start_n+1, len(list_data)):
 						item=list_data[n]
 						if item[0].lower()==key.lower():
-							listbox.selection_set(first=n)
-							listbox.yview(n)
+							treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+							treeview.yview(n)
 							return
-						listbox.yview(n)
+						treeview.yview(n)
 					else:
 						# has not found it so loop from top
 						for n in range(len(list_data)):
 							item=list_data[n]
 							if item[0].lower()==key.lower():
-								listbox.yview(n)
-								listbox.selection_set(first=n)
+								treeview.yview(n)
+								treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
 								return
-						listbox.yview(n)
+						treeview.yview(n)
 
 		add_grist_gui = tk.Toplevel()
 		add_grist_gui.resizable(0, 0)
-		grist_options = ScrolledListBox(add_grist_gui)
+		grist_options = ScrolledTreeView(add_grist_gui, show="tree", columns=("EBC"))
+		grist_options.column(column="EBC",width=80)
 		grist_options.grid(row=1,column=0)
 		for grist in sorted(brew_data.grist_data):
-			grist_options.insert(tk.END, (grist))
+			ebc = str(brew_data.grist_data[grist]['EBC']) + ' EBC'
+			grist_options.insert('', tk.END, text=(grist), values=(ebc,))
 		grist_add_new = tk.Button(add_grist_gui, text='Add New', command = insert)
 		grist_add_new.grid(row=1,column=1)
 		add_grist_gui.bind('<Any-Key>', lambda evt: bound(evt, grist_options, sorted(brew_data.grist_data)))
@@ -893,44 +896,46 @@ class beer_engine_mainwin:
 
 	def add_hop(self):
 		def insert():
-			alpha =  brew_data.hop_data[hop_options.get(tk.ACTIVE)]['Alpha']
-			type = brew_data.hop_data[hop_options.get(tk.ACTIVE)]['Form']
+			name = hop_options.item(hop_options.focus())['text']
+			alpha =  brew_data.hop_data[name]['Alpha']
+			type = brew_data.hop_data[name]['Form']
 			time = brew_data.constants['Hop Time']
-			self.hops.append({'Name': hop_options.get(tk.ACTIVE), 'Values': {'Type': type, 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0, 'Percent': 0.0}})
+			self.hops.append({'Name': name, 'Values': {'Type': type, 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0, 'Percent': 0.0}})
 			self.refresh_hop()
-		def bound(event, listbox, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
+		def bound(event, treeview, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
 			key=event.keysym
 			if len(key)<=1:
 				if key in string.ascii_lowercase:
 					try:
-						start_n=int(listbox.curselection()[0])
+						start_n= int(treeview.focus()[1:], 16)
 					except IndexError:
 						start_n=-1
 					## clear the selection.
-					listbox.selection_clear(0, 'end')
+					treeview.selection_clear()
 					## start from previous selection +1
 					for n in range(start_n+1, len(list_data)):
 						item=list_data[n]
 						if item[0].lower()==key.lower():
-							listbox.selection_set(first=n)
-							listbox.yview(n)
+							treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+							treeview.yview(n)
 							return
-						listbox.yview(n)
+						treeview.yview(n)
 					else:
 						# has not found it so loop from top
 						for n in range(len(list_data)):
 							item=list_data[n]
 							if item[0].lower()==key.lower():
-								listbox.yview(n)
-								listbox.selection_set(first=n)
+								treeview.yview(n)
+								treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
 								return
-						listbox.yview(n)
+						treeview.yview(n)
 		add_hop_gui = tk.Toplevel()
 		add_hop_gui.resizable(0, 0)
-		hop_options = ScrolledListBox(add_hop_gui)
+		hop_options = ScrolledTreeView(add_hop_gui, show="tree", columns=("Form"))
+		hop_options.column(column="Form",width=80)
 		hop_options.grid(row=1, column=0)
 		for hop in sorted(brew_data.hop_data):
-			hop_options.insert(tk.END, (hop))
+			hop_options.insert('',tk.END, text=(hop), values=(brew_data.hop_data[hop]['Form'],))
 		hop_add_new = tk.Button(add_hop_gui, text='Add New', command = insert)
 		hop_add_new.grid(row=1,column=1)
 		add_hop_gui.bind('<Any-Key>', lambda evt: bound(evt, hop_options, sorted(brew_data.hop_data)))
