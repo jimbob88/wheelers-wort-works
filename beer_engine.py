@@ -52,7 +52,7 @@ class beer_engine_mainwin:
 					origin = hop[2]
 					alpha = float(hop[3])
 					use = hop[4]
-					description = hop[5] if len(hop) >= 6 else ''
+					description = hop[5] if len(hop) >= 6 else 'No Description'
 					brew_data.hop_data[name] = {'Form': hop_type, 'Origin': origin, 'Alpha': alpha, 'Use': use, 'Description': description}
 				#print('hop_data =', brew_data.hop_data)
 		if not os.path.isfile(resource_path('grain_data.txt')):
@@ -2013,7 +2013,7 @@ class hops_editor(tk.Frame):
 		self.hop_lstbx.delete(self.hop_lstbx.curselection())
 
 	def new(self):
-		name = 'New Hop'
+		name = 'New Hop {num}'.format(num=sum('New Hop' in s for s in brew_data.hop_data))
 		self.hop_lstbx.insert(tk.END, name)
 		try:
 			brew_data.hop_data[name] = brew_data.hop_data[self.hop_lstbx.get(self.hop_lstbx.curselection())]
@@ -2285,11 +2285,10 @@ class grist_editor(tk.Frame):
 				, relwidth=0.547, bordermode='ignore')
 		self.grist_type_combo.configure(width=197)
 		self.grist_type_combo.configure(takefocus="")
-		self.grist_type_combo_values = set(['Primary Malt', 'Secondary Malt', 'Mash Tun Adjunct', 'Can Be Steeped', 'Malt Extract', 'Copper Sugar'])
+		self.grist_type_combo_values = ['Primary Malt', 'Secondary Malt', 'Mash Tun Adjunct', 'Can Be Steeped', 'Malt Extract', 'Copper Sugar']
 		#print([vals['Type'] for (grist, vals) in brew_data.grist_data.items()])
 		#print([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
-		self.grist_type_combo_values.update([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
-		self.grist_type_combo_values = list(self.grist_type_combo_values)
+		self.grist_type_combo_values.append([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
 		self.grist_type_combo.configure(values=self.grist_type_combo_values)
 
 		self.input_state(0)
@@ -2370,7 +2369,7 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.delete(self.grist_lstbx.curselection())
 
 	def new(self):
-		name = 'New Grist'
+		name = 'New Grist {num}'.format(num=sum('New Grist' in s for s in brew_data.grist_data))
 		self.grist_lstbx.insert(tk.END, name)
 		try:
 			brew_data.grist_data[name] = brew_data.grist_data[self.grist_lstbx.get(self.grist_lstbx.curselection())]
@@ -2404,7 +2403,7 @@ class grist_editor(tk.Frame):
 		moisture = float(self.grist_moisture_ent.get())
 		fermentability = float(self.grist_ferment_ent.get())
 		description = self.grist_comm_ent.get()
-		type = self.grist_type_combo_values.index(self.grist_type_combo.get())
+		type = self.grist_type_combo_values.index(self.grist_type_combo.get()) + 1
 		brew_data.grist_data[name] = {'EBC': colour, 'Type': type, 'Extract': extract, 'Description': description, 'Moisture': moisture, 'Fermentability': fermentability}
 		#print(brew_data.grist_data[name])
 		idx = list(sorted(brew_data.grist_data.keys())).index(name)
@@ -3325,7 +3324,7 @@ class special_editor(tk.Frame):
 			new_water_chem_win.destroy()
 
 		new_water_chem_win = tk.Toplevel()
-		name_var = tk.StringVar(value='New Item')
+		name_var = tk.StringVar(value='New Item {num}'.format(num=sum('New Item' in s for s in brew_data.water_chemistry_additions)))
 		time_var = tk.IntVar()
 		type_var = tk.StringVar(value='Hop')
 		tk.Label(new_water_chem_win, text="Name: ").grid(row=0, column=0)
@@ -3676,7 +3675,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.delete(self.yeast_lstbx.curselection())
 
 	def new(self):
-		name = 'New Yeast'
+		name = 'New Yeast {num}'.format(num=sum('New Yeast' in s for s in brew_data.yeast_data))
 		self.yeast_lstbx.insert(tk.END, name)
 		try:
 			brew_data.yeast_data[name] = brew_data.yeast_data[self.yeast_lstbx.get(self.yeast_lstbx.curselection())]
