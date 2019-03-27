@@ -18,6 +18,10 @@ import string
 import os
 import webbrowser
 import ast
+try:
+	import bs4
+except ImportError:
+	pass
 
 __mode__ = 'local'
 _bgcolor = 'SystemButtonFace' if platform.system() == 'Windows' else '#d9d9d9'
@@ -1431,6 +1435,7 @@ class beer_engine_mainwin:
 		start += '</body>'
 		start += '</html>'
 
+		start = bs4.BeautifulSoup(start, features="html.parser").prettify() if 'bs4' in sys.modules else start
 		text_file_name = resource_path('{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get()))
 		with open(text_file_name, 'w') as hs:
 			hs.write(start)
