@@ -1536,7 +1536,7 @@ class beer_engine_mainwin(object):
 							elif sublist[1] == u'ebufixed':
 								self.is_ebufixed.set(sublist[2])
 
-		self.sixth_tab.original_additions = list(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
+		self.sixth_tab.original_additions = list(set(self.sixth_tab.original_additions, key=self.sixth_tab.original_additions.index) - set(self.sixth_tab.added_additions))
 		#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
 		self.fifth_tab.open_locals()
 		self.sixth_tab.refresh_all()
@@ -3278,7 +3278,7 @@ class special_editor(tk.Frame):
 
 	def move_all_left_right(self):
 		for _ in xrange(len(self.original_additions)):
-			self.added_additions.append(self.original_additions.pop(-1))
+			self.added_additions.append(self.original_additions.pop(0))
 		self.refresh_all()
 
 	def move_one_right_left(self):
@@ -3291,7 +3291,7 @@ class special_editor(tk.Frame):
 
 	def move_all_right_left(self):
 		for _ in xrange(len(self.added_additions)):
-			self.original_additions.append(self.added_additions.pop(-1))
+			self.original_additions.append(self.added_additions.pop(0))
 		self.refresh_all()
 
 	def water_boil_check(self):
@@ -3309,7 +3309,7 @@ class special_editor(tk.Frame):
 		def done():
 			brew_data.water_chemistry_additions[name_var.get()] = {u'Values': {u'Type': type_var.get()}}
 			if type_var.get() == u'Hop': brew_data.water_chemistry_additions[name_var.get()][u'Values'][u'Time'] = float(time_var.get())
-			self.original_additions = list(list(set(sorted(brew_data.water_chemistry_additions))-set(self.added_additions)) + list((set(sorted(brew_data.yeast_data))-set(self.added_additions))))
+			self.original_additions = list(set(sorted(brew_data.water_chemistry_additions))-set(self.added_additions)) + list((set(sorted(brew_data.yeast_data))-set(self.added_additions)))
 			self.refresh_all()
 
 		def cancel():
