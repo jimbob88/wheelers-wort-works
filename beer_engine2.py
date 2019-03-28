@@ -528,29 +528,29 @@ class beer_engine_mainwin(object):
 				command=self.quit)
 
 		self.add_time_butt_1 = tk.Button(self.first_tab)
-		self.add_time_butt_1.place(relx=0.417, rely=0.825, height=28
-				, width=72)
+		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28
+				, width=78)
 		self.add_time_butt_1.configure(activebackground=u"#f9f9f9")
 		self.add_time_butt_1.configure(text=u'''Time +1''')
 		self.add_time_butt_1.configure(command=lambda: self.add_time(1))
 
 		self.rem_time_butt_1 = tk.Button(self.first_tab)
-		self.rem_time_butt_1.place(relx=0.417, rely=0.888, height=28
-				, width=72)
+		self.rem_time_butt_1.place(relx=0.426, rely=0.888, height=28
+				, width=78)
 		self.rem_time_butt_1.configure(activebackground=u"#f9f9f9")
 		self.rem_time_butt_1.configure(text=u'''Time -1''')
 		self.rem_time_butt_1.configure(command=lambda: self.add_time(-1))
 
 		self.add_time_butt_10 = tk.Button(self.first_tab)
 		self.add_time_butt_10.place(relx=0.328, rely=0.825, height=28
-				, width=72)
+				, width=78)
 		self.add_time_butt_10.configure(activebackground=u"#f9f9f9")
 		self.add_time_butt_10.configure(text=u'''Time +10''')
 		self.add_time_butt_10.configure(command=lambda: self.add_time(10))
 
 		self.rem_time_butt_10 = tk.Button(self.first_tab)
 		self.rem_time_butt_10.place(relx=0.328, rely=0.888, height=28
-				, width=72)
+				, width=78)
 		self.rem_time_butt_10.configure(activebackground=u"#f9f9f9")
 		self.rem_time_butt_10.configure(text=u'''Time -10''')
 		self.rem_time_butt_10.configure(command=lambda: self.add_time(-10))
@@ -578,11 +578,12 @@ class beer_engine_mainwin(object):
 		self.add_alpha_butt_1.configure(command=lambda: self.add_alpha(1))
 
 		self.rem_alpha_butt_1 = tk.Button(self.first_tab)
-		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, height=29
+		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, height=28
 				, width=76)
 		self.rem_alpha_butt_1.configure(activebackground=u"#f9f9f9")
 		self.rem_alpha_butt_1.configure(text=u'''Alpha -1''')
 		self.rem_alpha_butt_1.configure(command=lambda: self.add_alpha(-1))
+
 		self.style.configure(u'Treeview.Heading',  font=u"TkDefaultFont")
 		self.style.configure(u"mystyle.Treeview", highlightthickness=0, bd=0, font=(u'Deja Vu Sans Mono', 9)) #Calibri
 		self.frame_ingredients = tk.Frame(self.first_tab, width=600)
