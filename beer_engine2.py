@@ -481,7 +481,7 @@ class beer_engine_mainwin(object):
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Open",
-				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), title = u"Select file", filetypes = ((u"BERF",u"*.berf *.berfx"), (u"all files",u"*.*")))))
+				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == u'deb' else u'.'), title = u"Select file", filetypes = ((u"BERF",u"*.berf *.berfx"), (u"all files",u"*.*")))))
 		self.sub_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
 				 background=_bgcolor,
@@ -502,7 +502,7 @@ class beer_engine_mainwin(object):
 				font=u"TkMenuFont",
 				foreground=u"#000000",
 				label=u"Save As",
-				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'),title = u"Select file", defaultextension=u".berf", initialfile=u'{0}.berf'.format(self.recipe_name_ent.get()))))
+				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == u'deb' else u'.'),title = u"Select file", defaultextension=u".berf", initialfile=u'{0}.berf'.format(self.recipe_name_ent.get()))))
 		self.sub_menu.add_cascade(menu=self.sub_menu1,
 				activebackground=u"#ececec",
 				activeforeground=u"#000000",
@@ -3893,6 +3893,8 @@ def resource_path(relative_path):
 	elif __mode__ == u'deb':
 		if os.path.basename(relative_path) == u'logo.png':
 			return u'/usr/include/wheelers-wort-works/logo.png'
+		elif os.path.splitext(os.path.basename(relative_path))[1] == u'.html':
+			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/html'), relative_path)
 		else:
 			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), relative_path)
 def main():
