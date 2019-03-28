@@ -1541,7 +1541,7 @@ class beer_engine_mainwin(object):
 							elif sublist[1] == u'ebufixed':
 								self.is_ebufixed.set(sublist[2])
 
-		self.sixth_tab.original_additions = list(set(self.sixth_tab.original_additions, key=self.sixth_tab.original_additions.index) - set(self.sixth_tab.added_additions))
+		self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
 		#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
 		self.fifth_tab.open_locals()
 		self.sixth_tab.refresh_all()
