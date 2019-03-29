@@ -1507,6 +1507,9 @@ class beer_engine_mainwin:
 
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
+				self.ingredients = []
+				self.hops = []
+				self.current_file = file
 				with open(file, 'r') as f:
 					#data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
 					data = [line.replace('\xa7', '\t').strip().split('\t') for line in f]
