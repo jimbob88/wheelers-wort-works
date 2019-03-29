@@ -1616,7 +1616,7 @@ class beer_engine_mainwin:
 		if self.current_file != '':
 			self.save_file(self.current_file)
 		else:
-		 	self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get())))
+		 	self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get())))
 
 	def save_all(self):
 		self.save()
