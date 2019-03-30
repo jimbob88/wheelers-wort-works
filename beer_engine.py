@@ -106,9 +106,9 @@ class beer_engine_mainwin:
 					ebc = float(ingredient[1])
 					grain_type = float(ingredient[2])
 					extract = float(ingredient[3])
-					description = ingredient[6]
 					moisture = float(ingredient[4])
 					fermentability = float(ingredient[5])
+					description = ingredient[6]
 					brew_data.grist_data[name] = {'EBC': ebc, 'Type': grain_type, 'Extract': extract, 'Description': description, 'Moisture': moisture, 'Fermentability': fermentability}
 				#print('grist_data =', brew_data.grist_data)
 
@@ -507,8 +507,8 @@ class beer_engine_mainwin:
 		self.menubar = tk.Menu(self.master,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
 		self.master.configure(menu = self.menubar)
 
-		self.sub_menu = tk.Menu(self.master,tearoff=0)
-		self.menubar.add_cascade(menu=self.sub_menu,
+		self.file_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.file_menu,
 				activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
@@ -516,35 +516,35 @@ class beer_engine_mainwin:
 				foreground="#000000",
 				label="File")
 		self.sub_menu1 = tk.Menu(self.master,tearoff=0)
-		self.sub_menu.add_command(activebackground="#ececec",
+		self.file_menu.add_command(activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Open",
 				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))))
-		self.sub_menu.add_command(activebackground="#ececec",
+		self.file_menu.add_command(activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save",
 				command=self.save)
-		self.sub_menu.add_command(activebackground="#ececec",
+		self.file_menu.add_command(activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save All",
 				command=self.save_all)
-		self.sub_menu.add_command(activebackground="#ececec",
+		self.file_menu.add_command(activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save As",
 				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
-		self.sub_menu.add_cascade(menu=self.sub_menu1,
+		self.file_menu.add_cascade(menu=self.sub_menu1,
 				activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
@@ -557,9 +557,17 @@ class beer_engine_mainwin:
 				 background=_bgcolor,
 				font="TkMenuFont",
 				foreground="#000000",
-				label="to browser",
+				label="Simple HTML",
 				command=self.create_html)
-		self.sub_menu.add_command(
+		self.sub_menu1.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Complex HTML",
+				command=self.create_complex_html)
+		self.file_menu.add_command(
 				activebackground="#ececec",
 				activeforeground="#000000",
 				 background=_bgcolor,
@@ -567,6 +575,23 @@ class beer_engine_mainwin:
 				foreground="#000000",
 				label="Quit",
 				command=self.quit)
+
+		self.help_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.help_menu,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Help")
+		self.help_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Wheeler's Wort Works Help",
+				command=lambda: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
 
 		self.add_time_butt_1 = tk.Button(self.first_tab)
 		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28
@@ -1367,11 +1392,18 @@ class beer_engine_mainwin:
 			self.hops.reverse()
 		self.refresh_hop()
 
-	def create_html(self):
+	def create_html(self, start='', open_browser=True, use_sorttable=False):
 		self.recalculate()
-		start = '''<html><head><style>table, td, th {border: 1px solid black;}table {border-collapse: collapse;width: 100%;}th {height: 50px;}</style></head><body>'''
+		if use_sorttable: start += '<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
+		start += '<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get(), logo=resource_path('logo.png'))
+		start += '<style>table, td, th {border: 1px solid black;}table {border-collapse: collapse;width: 100%;}th {height: 50px;} <style>#sortable {  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;  border-collapse: collapse;  width: 100%;}#sortable td, #sortable th {  border: 1px solid #ddd;  padding: 8px;}#sortable tr:nth-child(even){background-color: #f2f2f2;}#sortable tr:hover {background-color: #ddd;}#sortable th {  padding-top: 12px;  padding-bottom: 12px;  text-align: left;  background-color: #4CAF50;  color: white;}</style>'
+		start += '</head><body>'
 		start += '<h2>{name}</h2>'.format(name=self.recipe_name_ent.get())
-		start += '<table style="width:800px"><tr><th>Fermentable</th><th>Colour</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
+		if use_sorttable:
+			start += '<table style="width:800px" class="sortable" id="sortable">'
+		else:
+			start += '<table style="width:800px">'
+		start += '<tr><th>Fermentable</th><th>Colour</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
 
 		for addition in self.sixth_tab.added_additions:
 			try:
@@ -1399,7 +1431,11 @@ class beer_engine_mainwin:
 		if self.sixth_tab.water_boil_is_disabled.get() == 1:
 			start += '<p><b>Boil Time: </b>{boil_time}</p>'.format(boil_time=self.sixth_tab.water_boil_time_spinbx.get())
 
-		start += '<table style="width:800px"><tr><th>Hop Variety</th><th>Type</th><th>Alpha</th><th>Time</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
+		if use_sorttable:
+			start += '<table style="width:800px" class="sortable" id="sortable">'
+		else:
+			start += '<table style="width:800px">'
+		start += '<tr><th>Hop Variety</th><th>Type</th><th>Alpha</th><th>Time</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
 		#temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
 		temp_hop = self.hops[:]
 		for addition in self.sixth_tab.added_additions:
@@ -1435,7 +1471,11 @@ class beer_engine_mainwin:
 				start += '</tr>'
 		start += '</table><br>'
 
-		start += '<table style="width:1200px"><tr><th>Yeast</th><th>Lab</th><th>Origin</th><th>Type</th><th>Flocculation</th><th>Attenuation</th><th>Temperature</th><th>Description</th></tr>'
+		if use_sorttable:
+			start += '<table style="width:1500px" class="sortable" id="sortable">'
+		else:
+			start += '<table style="width:1500px">'
+		start += '<tr><th>Yeast</th><th>Lab</th><th>Origin</th><th>Type</th><th>Flocculation</th><th>Attenuation</th><th>Temperature</th><th>Description</th></tr>'
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.yeast_data[addition]['Type'] == 'D':
@@ -1497,7 +1537,10 @@ class beer_engine_mainwin:
 		text_file_name = resource_path('{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get()))
 		with open(text_file_name, 'w') as hs:
 			hs.write(start)
-		webbrowser.open('file://' + os.path.realpath(text_file_name), new=1)
+		if open_browser: webbrowser.open('file://' + os.path.realpath(text_file_name), new=1)
+
+	def create_complex_html(self):
+		self.create_html(use_sorttable=True)
 
 	def open_file(self, file):
 		if file != '' and file != None:
