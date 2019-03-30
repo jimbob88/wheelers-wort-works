@@ -1395,35 +1395,62 @@ class beer_engine_mainwin(object):
 		self.recalculate()
 		if use_sorttable: start += u'<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
 		start += u'<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'), logo=resource_path(u'logo.png'))
-		start += u'<style>table, td, th {border: 1px solid black;}table {border-collapse: collapse;width: 100%;}th {height: 50px;} <style>#sortable {  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;  border-collapse: collapse;  width: 100%;}#sortable td, #sortable th {  border: 1px solid #ddd;  padding: 8px;}#sortable tr:nth-child(even){background-color: #f2f2f2;}#sortable tr:hover {background-color: #ddd;}#sortable th {  padding-top: 12px;  padding-bottom: 12px;  text-align: left;  background-color: #4CAF50;  color: white;}</style>'
+		start += u'''
+		<!--Extracted From Graham Wheeler's Beer Engine recipe.html-->
+		<!--Yeast Section added by jimbob88-->
+		<style>
+		body {text-align: left; margin-left: 30; margin-top: 15px; background: #FFFFFF; font-family: Helvetica,Verdana,Tahoma,Sans-serif; font-size: 10pt; color: #000000}
+		table {border-spacing:0}
+		td {text-align:left;font-family: Helvetica,Verdana,Tahoma,Sans-serif; font-size: 10pt; color: #000000;padding:0px;border-bottom: 1px solid  #000000;border-left: 1px solid  #000000;}
+		td.ing1 {width:200; text-align:left;background-color: #FFFFFF;padding:4px}
+		td.ing2 {width:70; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.ing3 {width:90; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.ing4 {width:40; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
+		td.hop1 {width:152; text-align:left; background-color: #FFFFFF;padding:4px}
+		td.hop2 {width:60; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.hop3 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.hop4 {width:60; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.hop5 {width:80; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.hop6 {width:40; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
+		td.yst1 {width:200; text-align:left;background-color: #FFFFFF;padding:4px}
+		td.yst2 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.yst3 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.yst4 {width:40; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.yst5 {width:40; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.yst6 {width:20; text-align:right; background-color: #FFFFFF;padding:4px}
+		td.yst7 {width:10; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
+		span.bold {font-weight: bold}
+		td.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;}
+		td.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-right: 1px solid #000000;}
+		</style>'''
 		start += u'</head><body>'
 		start += u'<h2>{name}</h2>'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'))
 		if use_sorttable:
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += u'<table style="width:800px">'
-		start += u'<tr><th>Fermentable</th><th>Colour</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
+		start += u'<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
 
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.water_chemistry_additions[addition][u'Values'][u'Type'] == u'Malt':
 					start += u'<tr>'
-					start += u'<td style="text-align:center">{name}</td>'.format(name=addition)
-					start += u'<td style="text-align:center">N/A</td>'
-					start += u'<td style="text-align:center">N/A</td>'
-					start += u'<td style="text-align:center">N/A</td>'
-					start += u'<td style="text-align:center">N/A</td>'
+					start += u'<td class="ing1">{name}</td>'.format(name=addition)
+					start += u'<td class="ing2">N/A</td>'
+					start += u'<td class="ing3">N/A</td>'
+					start += u'<td class="ing3">N/A</td>'
+					start += u'<td class="ing4">N/A</td>'
 					start += u'</tr>'
 			except KeyError:
 				pass
 
 		for ingredient in self.ingredients:
 			start += u'<tr>'
-			start += u'<td style="text-align:center">{name}</td>'.format(name=ingredient[u'Name'])
-			start += u'<td style="text-align:center">{colour}</td>'.format(colour=ingredient[u'Values'][u'EBC'])
-			start += u'<td style="text-align:center">{lb}:{oz}</td>'.format(lb=int(ingredient[u'Values'][u'lb:oz'][0]), oz=round(ingredient[u'Values'][u'lb:oz'][1], 1))
-			start += u'<td style="text-align:center">{grams}</td>'.format(grams=round(ingredient[u'Values'][u'Grams'], 1))
-			start += u'<td style="text-align:center">{percentage}%</td>'.format(percentage=ingredient[u'Values'][u'Percent'])
+			start += u'<td class="ing1">{name}</td>'.format(name=ingredient[u'Name'])
+			start += u'<td class="ing2">{colour}</td>'.format(colour=ingredient[u'Values'][u'EBC'])
+			start += u'<td class="ing3">{lb}:{oz}</td>'.format(lb=int(ingredient[u'Values'][u'lb:oz'][0]), oz=round(ingredient[u'Values'][u'lb:oz'][1], 1))
+			start += u'<td class="ing3">{grams}</td>'.format(grams=round(ingredient[u'Values'][u'Grams'], 1))
+			start += u'<td class="ing4">{percentage}%</td>'.format(percentage=ingredient[u'Values'][u'Percent'])
 			start += u'</tr>'
 		start += u'</table><br>'
 
@@ -1434,7 +1461,7 @@ class beer_engine_mainwin(object):
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += u'<table style="width:800px">'
-		start += u'<tr><th>Hop Variety</th><th>Type</th><th>Alpha</th><th>Time</th><th>lb:oz</th><th>Grams</th><th>Ratio</th></tr>'
+		start += u'<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
 		#temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
 		temp_hop = self.hops[:]
 		for addition in self.sixth_tab.added_additions:
@@ -1450,31 +1477,31 @@ class beer_engine_mainwin(object):
 		for hop in reversed(temp_hop):
 			if hop[u'Values'][u'Type'] != u'Hop':
 				start += u'<tr>'
-				start += u'<td style="text-align:center">{name}</td>'.format(name=hop[u'Name'])
-				start += u'<td style="text-align:center">{type}</td>'.format(type=hop[u'Values'][u'Type'])
-				start += u'<td style="text-align:center">{alpha}</td>'.format(alpha=hop[u'Values'][u'Alpha'])
-				start += u'<td style="text-align:center">{time}</td>'.format(time=hop[u'Values'][u'Time'])
-				start += u'<td style="text-align:center">{lb}:{oz}</td>'.format(lb=int(hop[u'Values'][u'lb:oz'][0]), oz=round(hop[u'Values'][u'lb:oz'][1], 1))
-				start += u'<td style="text-align:center">{grams}</td>'.format(grams=round(hop[u'Values'][u'Grams'], 1))
-				start += u'<td style="text-align:center">{percentage}%</td>'.format(percentage=hop[u'Values'][u'Percent'])
+				start += u'<td class="hop1">{name}</td>'.format(name=hop[u'Name'])
+				start += u'<td class="hop2">{type}</td>'.format(type=hop[u'Values'][u'Type'])
+				start += u'<td class="hop3">{alpha}</td>'.format(alpha=hop[u'Values'][u'Alpha'])
+				start += u'<td class="hop4">{time}</td>'.format(time=hop[u'Values'][u'Time'])
+				start += u'<td class="hop5">{lb}:{oz}</td>'.format(lb=int(hop[u'Values'][u'lb:oz'][0]), oz=round(hop[u'Values'][u'lb:oz'][1], 1))
+				start += u'<td class="hop5">{grams}</td>'.format(grams=round(hop[u'Values'][u'Grams'], 1))
+				start += u'<td class="hop6">{percentage}%</td>'.format(percentage=hop[u'Values'][u'Percent'])
 				start += u'</tr>'
 			else:
 				start += u'<tr>'
-				start += u'<td style="text-align:center">{name}</td>'.format(name=hop[u'Name'])
-				start += u'<td style="text-align:center">N/A</td>'
-				start += u'<td style="text-align:center">N/A</td>'
-				start += u'<td style="text-align:center">{time}</td>'.format(time=hop[u'Values'][u'Time'])
-				start += u'<td style="text-align:center">N/A</td>'
-				start += u'<td style="text-align:center">N/A</td>'
-				start += u'<td style="text-align:center">N/A</td>'
+				start += u'<td class="hop1">{name}</td>'.format(name=hop[u'Name'])
+				start += u'<td class="hop2">N/A</td>'
+				start += u'<td class="hop3">N/A</td>'
+				start += u'<td class="hop4">{time}</td>'.format(time=hop[u'Values'][u'Time'])
+				start += u'<td class="hop5">N/A</td>'
+				start += u'<td class="hop5">N/A</td>'
+				start += u'<td class="hop6">N/A</td>'
 				start += u'</tr>'
 		start += u'</table><br>'
 
 		if use_sorttable:
-			start += u'<table style="width:1500px" class="sortable" id="sortable">'
+			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
-			start += u'<table style="width:1500px">'
-		start += u'<tr><th>Yeast</th><th>Lab</th><th>Origin</th><th>Type</th><th>Flocculation</th><th>Attenuation</th><th>Temperature</th><th>Description</th></tr>'
+			start += u'<table style="width:800px">'
+		start += u'<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr>'
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.yeast_data[addition][u'Type'] == u'D':
@@ -1493,36 +1520,33 @@ class beer_engine_mainwin(object):
 					temperature += u'-' + brew_data.yeast_data[addition][u'Temperature'].replace(u'°', u'').split(u'-')[1]
 				else:
 					temperature = temperature
-				description = brew_data.yeast_data[addition][u'Description']
 
 				start += u'<tr>'
-				start += u'<td style="text-align:center">{name}</td>'.format(name=addition)
-				start += u'<td style="text-align:center">{lab}</td>'.format(lab=lab)
-				start += u'<td style="text-align:center">{origin}</td>'.format(origin=origin)
-				start += u'<td style="text-align:center">{yeast_type}</td>'.format(yeast_type=yeast_type)
-				start += u'<td style="text-align:center">{flocculation}</td>'.format(flocculation=flocculation)
-				start += u'<td style="text-align:center">{attenuation}</td>'.format(attenuation=attenuation)
-				start += u'<td style="text-align:center">{temperature}</td>'.format(temperature=temperature)
-				start += u'<td>{description}</td>'.format(description=description)
+				start += u'<td class="yst1">{name}</td>'.format(name=addition)
+				start += u'<td class="yst2">{lab}</td>'.format(lab=lab)
+				start += u'<td class="yst3">{origin}</td>'.format(origin=origin)
+				start += u'<td class="yst4">{yeast_type}</td>'.format(yeast_type=yeast_type)
+				start += u'<td class="yst5">{flocculation}</td>'.format(flocculation=flocculation)
+				start += u'<td class="yst6">{attenuation}</td>'.format(attenuation=attenuation)
+				start += u'<td class="yst7">{temperature}</td>'.format(temperature=temperature)
 				start += u'</tr>'
 			except KeyError:
 				try:
 					if brew_data.water_chemistry_additions[addition][u'Values'][u'Type'] == u'Yeast':
 						start += u'<tr>'
-						start += u'<td style="text-align:center">{name}</td>'.format(name=addition)
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td style="text-align:center">N/A</td>'
-						start += u'<td>N/A</td>'
+						start += u'<td class="yst1">{name}</td>'.format(name=addition)
+						start += u'<td class="yst2">N/A</td>'
+						start += u'<td class="yst3">N/A</td>'
+						start += u'<td class="yst4">N/A</td>'
+						start += u'<td class="yst5">N/A</td>'
+						start += u'<td class="yst6">N/A</td>'
+						start += u'<td class="yst7">N/A</td>'
 						start += u'</tr>'
 				except KeyError:
 					pass
 		start += u'</table>'
 
-		start += u'<p><b>Final Volume: </b>{volume}<p>'.format(volume=self.volume.get())
+		start += u'<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
 		start += u'<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))
 		start += u'<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
 		start += u'<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
