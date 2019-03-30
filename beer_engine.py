@@ -797,27 +797,29 @@ class beer_engine_mainwin:
 			volume = float(self.volume.get())
 			for ingredient in self.ingredients:
 				points = brew_data.grist_data[ingredient['Name']]['Extract']*(ingredient['Values']['Grams'])/1000
-				grav = ((points * (1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency']))/volume)
+				eff = (1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency'])
+				grav = ((points * eff)/volume)
 				ingredient['Values']['Grav'] = grav
+				#print(grav)
 
 		make_treeview()
 		if not self.is_ogfixed.get():
 			refresh_orig_grav()
 			refresh_percentage()
 		else:
+			non_mashables = [6.0, 5.0]
+			factor = sum([ingredient['Values']['Percent']*brew_data.grist_data[ingredient['Name']]['Extract']*(1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency']) for idx, ingredient in enumerate(self.ingredients)])
+
 			for idx, ingredient in enumerate(self.ingredients):
-				non_mashables = [6.0, 5.0]
-				percent = ingredient['Values']['Percent']
-				amount = percent
 				EBC = int(brew_data.grist_data[ingredient['Name']]['EBC'])
+				percent = ingredient['Values']['Percent']
 				orig_grav = float(self.original_gravity_ent.get())-1000
 				vol = float(self.volume.get())
-				eff = (1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency'])
-				ex = brew_data.grist_data[ingredient['Name']]['Extract']
-				weight = (((((orig_grav*(amount/100))*vol)/eff)/ex)*1000)
+				weight = percent*((orig_grav*vol)/factor)*1000
 				lb = weight/brew_data.constants['Conversion']['lb-g']
 				oz = (lb-int(lb))*16
 				self.ingredients[idx] = {'Name': ingredient['Name'], 'Values': {'EBC': EBC, 'Grav': 0.0, 'lb:oz': (lb,oz), 'Grams': weight, 'Percent': percent}}
+			refresh_percentage()
 
 		refresh_indiv_grav()
 		for ingredient in self.ingredients:
@@ -898,9 +900,10 @@ class beer_engine_mainwin:
 			refresh_percentage()
 			refresh_ibu()
 		else:
+			factor = sum([hop['Values']['Percent']*hop['Values']['Alpha']*hop['Values']['Util'] for idx, hop in enumerate(self.hops)])
+
 			for idx, hop in enumerate(self.hops):
 				percent = hop['Values']['Percent']
-				amount = percent
 
 				alpha =  hop['Values']['Alpha']
 				type = brew_data.hop_data[hop['Name']]['Form']
@@ -909,10 +912,11 @@ class beer_engine_mainwin:
 				if util > 0 and alpha > 0:
 					total_ibus = float(self.bitterness_ibu_ent.get())
 					vol = float(self.volume.get())
-					weight = (((total_ibus*(amount/100))*(vol*10))/util)/alpha
+					weight = percent*((total_ibus*vol*10)/factor) #(((total_ibus*(percent/100))*(vol*10))/util)/alpha
 					lb = weight/brew_data.constants['Conversion']['lb-g']
 					oz = (lb-int(lb))*16
 					self.hops[idx] = {'Name': hop['Name'], 'Values': {'Type': type, 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (lb, oz), 'Grams': weight, 'Percent': percent}}
+			refresh_percentage()
 		refresh_util()
 		refresh_indiv_ibu()
 		for hop in self.hops:
@@ -1572,6 +1576,8 @@ class beer_engine_mainwin:
 			self.sixth_tab.added_additions = []
 			self.sixth_tab.refresh_all()
 			examples = ['1920s Bitter', 'Bog-Standard Bitter', 'Black-Country Mild', 'Irish Stout', '1920s Mild', '1920s Porter', '1920s Stock Ale', '1920s Stout']
+			is_ogfixed = 0
+			is_ebufixed = 0
 			if file.lower()[-5:] == '.berf' or file.split('/')[-1] in examples:
 				self.current_file = file
 				self.ingredients = []
@@ -1588,7 +1594,6 @@ class beer_engine_mainwin:
 							percent = float(sublist[8])
 							EBC = float(sublist[2])
 							self.ingredients.append({'Name': sublist[1], 'Values': {'EBC': EBC, 'Grav': 0, 'lb:oz': (lb,oz), 'Grams': grams, 'Percent': percent}})
-							self.refresh_grist()
 						elif sublist[0] == 'hop':
 							alpha = float(sublist[3])
 							grams = float(sublist[5])
@@ -1597,7 +1602,6 @@ class beer_engine_mainwin:
 							time = float(sublist[6])
 							percent = float(sublist[7])
 							self.hops.append({'Name': sublist[1], 'Values': {'Type': sublist[2], 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (lb,oz), 'Grams': grams, 'Percent': percent}})
-							self.refresh_hop()
 						elif sublist[0] == 'add':
 							name = sublist[1]
 							dictionary = ast.literal_eval(sublist[2])
@@ -1620,9 +1624,9 @@ class beer_engine_mainwin:
 							brew_data.constants['Efficiency'] = float(sublist[2])/100
 						elif sublist[0] == 'miscel':
 							if sublist[1] == 'ogfixed':
-								self.is_ogfixed.set(sublist[2])
+								is_ogfixed = sublist[2]
 							elif sublist[1] == 'ebufixed':
-								self.is_ebufixed.set(sublist[2])
+								is_ebufixed = sublist[2]
 
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
@@ -1661,17 +1665,21 @@ class beer_engine_mainwin:
 									brew_data.constants[constant] = value
 						elif sublist[0] == 'miscel':
 							if sublist[1] == 'ogfixed':
-								self.is_ogfixed.set(sublist[2])
+								is_ogfixed = sublist[2]
 							elif sublist[1] == 'ebufixed':
-								self.is_ebufixed.set(sublist[2])
+								is_ebufixed = sublist[2]
 
+		self.refresh_hop()
+		self.refresh_grist()
 		self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
 		#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
 		self.fifth_tab.open_locals()
 		self.sixth_tab.refresh_all()
-		self.refresh_hop()
-		self.refresh_grist()
 		self.recalculate()
+		self.is_ogfixed.set(is_ogfixed)
+		self.recalculate()
+		#self.is_ebufixed.set(is_ebufixed)
+
 
 	def save_file(self, file):
 		if file != '' and type(file) == str:
