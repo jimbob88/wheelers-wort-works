@@ -1734,6 +1734,7 @@ class beer_engine_mainwin:
 
 					f.write('miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
+					f.write('miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
 
 					for key, grist in brew_data.grist_data.items(): f.write('database\xa7grist\xa7{name}\t{data}\n'.format(name=key, data=grist))
 					for key, hop in brew_data.hop_data.items(): f.write('database\xa7hop\xa7{name}\t{data}\n'.format(name=key, data=hop))
