@@ -1417,13 +1417,13 @@ class beer_engine_mainwin:
 		td.hop4 {width:60; text-align:right; background-color: #FFFFFF;padding:4px}
 		td.hop5 {width:80; text-align:right; background-color: #FFFFFF;padding:4px}
 		td.hop6 {width:40; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
-		td.yst1 {width:200; text-align:left;background-color: #FFFFFF;padding:4px}
-		td.yst2 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.yst3 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.yst4 {width:40; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.yst5 {width:40; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.yst6 {width:20; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.yst7 {width:10; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
+		td.yst1 {width:300; text-align:left;background-color: #FFFFFF;padding:4px}
+		td.yst2 {width:100; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.yst3 {width:100; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.yst4 {width:40; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.yst5 {width:40; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.yst6 {width:20; text-align:center; background-color: #FFFFFF;padding:4px}
+		td.yst7 {width:10; text-align:center; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
 		span.bold {font-weight: bold}
 		td.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;}
 		td.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-right: 1px solid #000000;}
