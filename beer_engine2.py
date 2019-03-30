@@ -1394,10 +1394,10 @@ class beer_engine_mainwin(object):
 	def create_html(self, start=u'', open_browser=True, use_sorttable=False):
 		self.recalculate()
 		if use_sorttable: start += u'<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
-		start += u'<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get(), logo=resource_path(u'logo.png'))
+		start += u'<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'), logo=resource_path(u'logo.png'))
 		start += u'<style>table, td, th {border: 1px solid black;}table {border-collapse: collapse;width: 100%;}th {height: 50px;} <style>#sortable {  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;  border-collapse: collapse;  width: 100%;}#sortable td, #sortable th {  border: 1px solid #ddd;  padding: 8px;}#sortable tr:nth-child(even){background-color: #f2f2f2;}#sortable tr:hover {background-color: #ddd;}#sortable th {  padding-top: 12px;  padding-bottom: 12px;  text-align: left;  background-color: #4CAF50;  color: white;}</style>'
 		start += u'</head><body>'
-		start += u'<h2>{name}</h2>'.format(name=self.recipe_name_ent.get())
+		start += u'<h2>{name}</h2>'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'))
 		if use_sorttable:
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
