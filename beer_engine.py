@@ -1534,7 +1534,7 @@ class beer_engine_mainwin:
 		start += '</html>'
 
 		start = bs4.BeautifulSoup(start, features="html.parser").prettify() if 'bs4' in sys.modules else start
-		text_file_name = resource_path('{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get()))
+		text_file_name = resource_path('{recipe_name}.html'.format(recipe_name=self.recipe_name_ent.get().replace('/', '⁄')))
 		with open(text_file_name, 'w') as hs:
 			hs.write(start)
 		if open_browser: webbrowser.open('file://' + os.path.realpath(text_file_name), new=1)
