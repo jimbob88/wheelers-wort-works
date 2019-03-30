@@ -1668,6 +1668,9 @@ class beer_engine_mainwin:
 								is_ogfixed = sublist[2]
 							elif sublist[1] == 'ebufixed':
 								is_ebufixed = sublist[2]
+							elif sublist[1] == 'recipename':
+								self.recipe_name_ent.delete(0, tk.END)
+								self.recipe_name_ent.insert(0, sublist[2])
 
 		self.refresh_hop()
 		self.refresh_grist()

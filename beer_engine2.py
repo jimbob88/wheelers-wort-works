@@ -3,12 +3,18 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+from io import open
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
-import brew_data2 as brew_data
+import brew_data
 import platform
 import math
 import codecs
@@ -16,7 +22,6 @@ import string
 import os
 import webbrowser
 import ast
-from io import open
 try:
 	import bs4
 except ImportError:
@@ -1667,6 +1672,9 @@ class beer_engine_mainwin(object):
 								is_ogfixed = sublist[2]
 							elif sublist[1] == u'ebufixed':
 								is_ebufixed = sublist[2]
+							elif sublist[1] == u'recipename':
+								self.recipe_name_ent.delete(0, tk.END)
+								self.recipe_name_ent.insert(0, sublist[2])
 
 		self.refresh_hop()
 		self.refresh_grist()
