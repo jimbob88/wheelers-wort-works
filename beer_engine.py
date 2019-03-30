@@ -198,11 +198,13 @@ class beer_engine_mainwin:
 		self.recipe_name_lbl = tk.Label(self.first_tab)
 		self.recipe_name_lbl.place(relx=0.013, rely=0.021, height=18, width=90)
 		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
+		self.recipe_name_lbl.configure(background=_bgcolor)
 		self.recipe_name_lbl.configure(text='''Recipe Name:''')
 
 		self.volume_lbl = tk.Label(self.first_tab)
 		self.volume_lbl.place(relx=0.417, rely=0.021, height=18, width=53)
 		self.volume_lbl.configure(activebackground="#f9f9f9")
+		self.volume_lbl.configure(background=_bgcolor)
 		self.volume_lbl.configure(text='''Volume:''')
 
 		self.volume = tk.StringVar()
@@ -221,6 +223,7 @@ class beer_engine_mainwin:
 		self.boil_volume_lbl = tk.Label(self.first_tab)
 		self.boil_volume_lbl.place(relx=0.571, rely=0.021, height=18, width=85)
 		self.boil_volume_lbl.configure(text='''Boil Volume:''')
+		self.boil_volume_lbl.configure(background=_bgcolor)
 
 		self.boil_vol = tk.StringVar()
 		self.boil_volume_ent = tk.Entry(self.first_tab)
@@ -235,6 +238,7 @@ class beer_engine_mainwin:
 		self.ingredient_rem_butt.place(relx=0.013, rely=0.402, height=29
 				, width=76)
 		self.ingredient_rem_butt.configure(activebackground="#f9f9f9")
+		self.ingredient_rem_butt.configure(background=_bgcolor)
 		self.ingredient_rem_butt.configure(cursor="X_cursor")
 		self.ingredient_rem_butt.configure(text='''Remove''')
 		self.ingredient_rem_butt.configure(command=self.delete_ingredient)
@@ -243,6 +247,7 @@ class beer_engine_mainwin:
 		self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, height=28
 				, width=82)
 		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9")
+		self.ingredient_add_new_butt.configure(background=_bgcolor)
 		self.ingredient_add_new_butt.configure(text='''Add New''')
 		self.ingredient_add_new_butt.configure(command=self.add_grist)
 
@@ -250,6 +255,7 @@ class beer_engine_mainwin:
 		self.adjust_weight_ing_lbl.place(relx=0.606, rely=0.169, height=14
 				, width=91)
 		self.adjust_weight_ing_lbl.configure(activebackground="#f9f9f9")
+		self.adjust_weight_ing_lbl.configure(background=_bgcolor)
 		self.adjust_weight_ing_lbl.configure(font=font9)
 		self.adjust_weight_ing_lbl.configure(text='''Adjust Weight''')
 
@@ -257,6 +263,7 @@ class beer_engine_mainwin:
 		self.add_1000g_ing_butt.place(relx=0.606, rely=0.211, height=28
 				, width=45)
 		self.add_1000g_ing_butt.configure(activebackground="#f9f9f9")
+		self.add_1000g_ing_butt.configure(background=_bgcolor)
 		self.add_1000g_ing_butt.configure(text='''+1Kg''')
 		self.add_1000g_ing_butt.configure(command=lambda: self.add_weight_ingredients(1000))
 		self.add_1000g_ing_butt.configure(font="TkFixedFont")
@@ -264,6 +271,7 @@ class beer_engine_mainwin:
 		self.add_100g_ing_butt = tk.Button(self.first_tab)
 		self.add_100g_ing_butt.place(relx=0.606, rely=0.275, height=28, width=45)
 		self.add_100g_ing_butt.configure(activebackground="#f9f9f9")
+		self.add_100g_ing_butt.configure(background=_bgcolor)
 		self.add_100g_ing_butt.configure(text='''+100g''')
 		self.add_100g_ing_butt.configure(command=lambda: self.add_weight_ingredients(100))
 		self.add_100g_ing_butt.configure(font="TkFixedFont")
@@ -272,6 +280,7 @@ class beer_engine_mainwin:
 		self.rem_1000g_ing_butt.place(relx=0.669, rely=0.211, height=28
 				, width=45)
 		self.rem_1000g_ing_butt.configure(activebackground="#f9f9f9")
+		self.rem_1000g_ing_butt.configure(background=_bgcolor)
 		self.rem_1000g_ing_butt.configure(text='''-1Kg''')
 		self.rem_1000g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-1000))
 		self.rem_1000g_ing_butt.configure(font="TkFixedFont")
@@ -279,6 +288,7 @@ class beer_engine_mainwin:
 		self.rem_100g_ing_butt = tk.Button(self.first_tab)
 		self.rem_100g_ing_butt.place(relx=0.669, rely=0.275, height=28, width=45)
 		self.rem_100g_ing_butt.configure(activebackground="#f9f9f9")
+		self.rem_100g_ing_butt.configure(background=_bgcolor)
 		self.rem_100g_ing_butt.configure(text='''-100g''')
 		self.rem_100g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-100))
 		self.rem_100g_ing_butt.configure(font="TkFixedFont")
@@ -286,6 +296,7 @@ class beer_engine_mainwin:
 		self.add_10g_ing_butt = tk.Button(self.first_tab)
 		self.add_10g_ing_butt.place(relx=0.606, rely=0.338, height=28, width=45)
 		self.add_10g_ing_butt.configure(activebackground="#f9f9f9")
+		self.add_10g_ing_butt.configure(background=_bgcolor)
 		self.add_10g_ing_butt.configure(text='''+10g''')
 		self.add_10g_ing_butt.configure(command=lambda: self.add_weight_ingredients(10))
 		self.add_10g_ing_butt.configure(font="TkFixedFont")
@@ -293,6 +304,7 @@ class beer_engine_mainwin:
 		self.rem_10g_ing_butt = tk.Button(self.first_tab)
 		self.rem_10g_ing_butt.place(relx=0.669, rely=0.338, height=28, width=45)
 		self.rem_10g_ing_butt.configure(activebackground="#f9f9f9")
+		self.rem_10g_ing_butt.configure(background=_bgcolor)
 		self.rem_10g_ing_butt.configure(text='''-10g''')
 		self.rem_10g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-10))
 		self.rem_10g_ing_butt.configure(font="TkFixedFont")
@@ -300,6 +312,7 @@ class beer_engine_mainwin:
 		self.add_1g_ing_butt = tk.Button(self.first_tab)
 		self.add_1g_ing_butt.place(relx=0.606, rely=0.402, height=28, width=45)
 		self.add_1g_ing_butt.configure(activebackground="#f9f9f9")
+		self.add_1g_ing_butt.configure(background=_bgcolor)
 		self.add_1g_ing_butt.configure(text='''+1g''')
 		self.add_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(1))
 		self.add_1g_ing_butt.configure(font="TkFixedFont")
@@ -307,6 +320,7 @@ class beer_engine_mainwin:
 		self.rem_1g_ing_butt = tk.Button(self.first_tab)
 		self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, height=28, width=45)
 		self.rem_1g_ing_butt.configure(activebackground="#f9f9f9")
+		self.rem_1g_ing_butt.configure(background=_bgcolor)
 		self.rem_1g_ing_butt.configure(text='''-1g''')
 		self.rem_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-1))
 		self.rem_1g_ing_butt.configure(font="TkFixedFont")
@@ -315,6 +329,7 @@ class beer_engine_mainwin:
 		self.original_gravity_lbl.place(relx=0.72, rely=0.085, height=14
 				, width=79)
 		self.original_gravity_lbl.configure(activebackground="#f9f9f9")
+		self.original_gravity_lbl.configure(background=_bgcolor)
 		self.original_gravity_lbl.configure(font=font9)
 		self.original_gravity_lbl.configure(text='''Original Gravity''')
 
@@ -329,12 +344,14 @@ class beer_engine_mainwin:
 		self.ingredient_zero_butt.place(relx=0.745, rely=0.211, height=29
 				, width=55)
 		self.ingredient_zero_butt.configure(activebackground="#f9f9f9")
+		self.ingredient_zero_butt.configure(background=_bgcolor)
 		self.ingredient_zero_butt.configure(text='''Zero''')
 		self.ingredient_zero_butt.configure(command=self.zero_ingredients)
 
 		self.recalc_butt = tk.Button(self.first_tab)
 		self.recalc_butt.place(relx=0.859, rely=0.042, height=29, width=97)
 		self.recalc_butt.configure(activebackground="#f9f9f9")
+		self.recalc_butt.configure(background=_bgcolor)
 		self.recalc_butt.configure(text='''Recalculate''')
 		self.recalc_butt.configure(command=self.recalculate)
 
@@ -350,7 +367,7 @@ class beer_engine_mainwin:
 		self.calc_lbl = tk.Message(self.calculation_frame)
 		self.calc_lbl.place(relx=0.083, rely=0.108, height=150, width=103 #97
 				, bordermode='ignore')
-		self.calc_lbl.configure( background=_bgcolor)
+		self.calc_lbl.configure(background=_bgcolor)
 		self.calc_lbl.configure(foreground="#000000")
 		self.calc_lbl.configure(font=(None, 7), pady=5,padx=5)
 		self.calc_lbl.configure(relief='flat')
@@ -366,6 +383,7 @@ class beer_engine_mainwin:
 		self.hop_add_new_butt = tk.Button(self.first_tab)
 		self.hop_add_new_butt.place(relx=0.707, rely=0.507, height=29, width=80)
 		self.hop_add_new_butt.configure(activebackground="#f9f9f9")
+		self.hop_add_new_butt.configure(background=_bgcolor)
 		self.hop_add_new_butt.configure(text='''Add Hop''')
 		self.hop_add_new_butt.configure(command=self.add_hop)
 
@@ -373,12 +391,14 @@ class beer_engine_mainwin:
 		self.adjust_weight_hop_lbl.place(relx=0.72, rely=0.592, height=14
 				, width=91)
 		self.adjust_weight_hop_lbl.configure(activebackground="#f9f9f9")
+		self.adjust_weight_hop_lbl.configure(background=_bgcolor)
 		self.adjust_weight_hop_lbl.configure(font=font9)
 		self.adjust_weight_hop_lbl.configure(text='''Adjust Weight''')
 
 		self.add_100g_hop_butt = tk.Button(self.first_tab)
 		self.add_100g_hop_butt.place(relx=0.72, rely=0.634, height=28, width=45)
 		self.add_100g_hop_butt.configure(activebackground="#f9f9f9")
+		self.add_100g_hop_butt.configure(background=_bgcolor)
 		self.add_100g_hop_butt.configure(text='''+100g''')
 		self.add_100g_hop_butt.configure(command=lambda: self.add_weight_hops(100))
 		self.add_100g_hop_butt.configure(font="TkFixedFont")
@@ -386,6 +406,7 @@ class beer_engine_mainwin:
 		self.rem_100g_hop_butt = tk.Button(self.first_tab)
 		self.rem_100g_hop_butt.place(relx=0.783, rely=0.634, height=28, width=45)
 		self.rem_100g_hop_butt.configure(activebackground="#f9f9f9")
+		self.rem_100g_hop_butt.configure(background=_bgcolor)
 		self.rem_100g_hop_butt.configure(text='''-100g''')
 		self.rem_100g_hop_butt.configure(command=lambda: self.add_weight_hops(-100))
 		self.rem_100g_hop_butt.configure(font="TkFixedFont")
@@ -393,6 +414,7 @@ class beer_engine_mainwin:
 		self.add_25g_hop_butt = tk.Button(self.first_tab)
 		self.add_25g_hop_butt.place(relx=0.72, rely=0.698, height=28, width=45)
 		self.add_25g_hop_butt.configure(activebackground="#f9f9f9")
+		self.add_25g_hop_butt.configure(background=_bgcolor)
 		self.add_25g_hop_butt.configure(text='''+25g''')
 		self.add_25g_hop_butt.configure(command=lambda: self.add_weight_hops(25))
 		self.add_25g_hop_butt.configure(font="TkFixedFont")
@@ -400,6 +422,7 @@ class beer_engine_mainwin:
 		self.rem_25g_hop_butt = tk.Button(self.first_tab)
 		self.rem_25g_hop_butt.place(relx=0.783, rely=0.698, height=28, width=45)
 		self.rem_25g_hop_butt.configure(activebackground="#f9f9f9")
+		self.rem_25g_hop_butt.configure(background=_bgcolor)
 		self.rem_25g_hop_butt.configure(text='''-25g''')
 		self.rem_25g_hop_butt.configure(command=lambda: self.add_weight_hops(-25))
 		self.rem_25g_hop_butt.configure(font="TkFixedFont")
@@ -407,6 +430,7 @@ class beer_engine_mainwin:
 		self.add_10g_hop_butt = tk.Button(self.first_tab)
 		self.add_10g_hop_butt.place(relx=0.72, rely=0.761, height=28, width=45)
 		self.add_10g_hop_butt.configure(activebackground="#f9f9f9")
+		self.add_10g_hop_butt.configure(background=_bgcolor)
 		self.add_10g_hop_butt.configure(text='''+10g''')
 		self.add_10g_hop_butt.configure(command=lambda: self.add_weight_hops(10))
 		self.add_10g_hop_butt.configure(font="TkFixedFont")
@@ -414,6 +438,7 @@ class beer_engine_mainwin:
 		self.rem_10g_hop_butt = tk.Button(self.first_tab)
 		self.rem_10g_hop_butt.place(relx=0.783, rely=0.761, height=28, width=45)
 		self.rem_10g_hop_butt.configure(activebackground="#f9f9f9")
+		self.rem_10g_hop_butt.configure(background=_bgcolor)
 		self.rem_10g_hop_butt.configure(text='''-10g''')
 		self.rem_10g_hop_butt.configure(command=lambda: self.add_weight_hops(-10))
 		self.rem_10g_hop_butt.configure(font="TkFixedFont")
@@ -421,6 +446,7 @@ class beer_engine_mainwin:
 		self.add_1g_hop_butt = tk.Button(self.first_tab)
 		self.add_1g_hop_butt.place(relx=0.72, rely=0.825, height=28, width=45)
 		self.add_1g_hop_butt.configure(activebackground="#f9f9f9")
+		self.add_1g_hop_butt.configure(background=_bgcolor)
 		self.add_1g_hop_butt.configure(text='''+1g''')
 		self.add_1g_hop_butt.configure(command=lambda: self.add_weight_hops(1))
 		self.add_1g_hop_butt.configure(font="TkFixedFont")
@@ -428,6 +454,7 @@ class beer_engine_mainwin:
 		self.rem_1g_hop_butt = tk.Button(self.first_tab)
 		self.rem_1g_hop_butt.place(relx=0.783, rely=0.825, height=28, width=45)
 		self.rem_1g_hop_butt.configure(activebackground="#f9f9f9")
+		self.rem_1g_hop_butt.configure(background=_bgcolor)
 		self.rem_1g_hop_butt.configure(text='''-1g''')
 		self.rem_1g_hop_butt.configure(command=lambda: self.add_weight_hops(-1))
 		self.rem_1g_hop_butt.configure(font="TkFixedFont")
@@ -435,6 +462,7 @@ class beer_engine_mainwin:
 		self.hop_zero_butt = tk.Button(self.first_tab)
 		self.hop_zero_butt.place(relx=0.859, rely=0.634, height=28, width=55)
 		self.hop_zero_butt.configure(activebackground="#f9f9f9")
+		self.hop_zero_butt.configure(background=_bgcolor)
 		self.hop_zero_butt.configure(text='''Zero''')
 		self.hop_zero_butt.configure(command=self.zero_hops)
 
@@ -442,6 +470,7 @@ class beer_engine_mainwin:
 		self.bitterness_ibu_lbl.place(relx=0.846, rely=0.507, height=14
 				, width=79)
 		self.bitterness_ibu_lbl.configure(activebackground="#f9f9f9")
+		self.bitterness_ibu_lbl.configure(background=_bgcolor)
 		self.bitterness_ibu_lbl.configure(font=font9)
 		self.bitterness_ibu_lbl.configure(text='''Bitterness IBU''')
 
@@ -456,12 +485,15 @@ class beer_engine_mainwin:
 		self.hop_rem_butt = tk.Button(self.first_tab)
 		self.hop_rem_butt.place(relx=0.013, rely=0.825, height=28, width=76)
 		self.hop_rem_butt.configure(activebackground="#f9f9f9")
+		self.hop_rem_butt.configure(background=_bgcolor)
 		self.hop_rem_butt.configure(cursor="X_cursor")
 		self.hop_rem_butt.configure(text='''Remove''')
 		self.hop_rem_butt.configure(command=self.delete_hop)
+
 		self.quit_btt = tk.Button(self.first_tab)
 		self.quit_btt.place(relx=0.922, rely=0.93, height=29, width=53)
 		self.quit_btt.configure(activebackground="#f9f9f9")
+		self.quit_btt.configure(background=_bgcolor)
 		self.quit_btt.configure(text='''Quit''')
 		self.quit_btt.configure(command=self.quit)
 		self.menubar = tk.Menu(self.master,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
@@ -532,6 +564,7 @@ class beer_engine_mainwin:
 		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28
 				, width=78)
 		self.add_time_butt_1.configure(activebackground="#f9f9f9")
+		self.add_time_butt_1.configure(background=_bgcolor)
 		self.add_time_butt_1.configure(text='''Time +1''')
 		self.add_time_butt_1.configure(command=lambda: self.add_time(1))
 
@@ -539,6 +572,7 @@ class beer_engine_mainwin:
 		self.rem_time_butt_1.place(relx=0.426, rely=0.888, height=28
 				, width=78)
 		self.rem_time_butt_1.configure(activebackground="#f9f9f9")
+		self.rem_time_butt_1.configure(background=_bgcolor)
 		self.rem_time_butt_1.configure(text='''Time -1''')
 		self.rem_time_butt_1.configure(command=lambda: self.add_time(-1))
 
@@ -546,6 +580,7 @@ class beer_engine_mainwin:
 		self.add_time_butt_10.place(relx=0.328, rely=0.825, height=28
 				, width=78)
 		self.add_time_butt_10.configure(activebackground="#f9f9f9")
+		self.add_time_butt_10.configure(background=_bgcolor)
 		self.add_time_butt_10.configure(text='''Time +10''')
 		self.add_time_butt_10.configure(command=lambda: self.add_time(10))
 
@@ -553,6 +588,7 @@ class beer_engine_mainwin:
 		self.rem_time_butt_10.place(relx=0.328, rely=0.888, height=28
 				, width=78)
 		self.rem_time_butt_10.configure(activebackground="#f9f9f9")
+		self.rem_time_butt_10.configure(background=_bgcolor)
 		self.rem_time_butt_10.configure(text='''Time -10''')
 		self.rem_time_butt_10.configure(command=lambda: self.add_time(-10))
 
@@ -560,6 +596,7 @@ class beer_engine_mainwin:
 		self.add_alpha_butt_pt1.place(relx=0.129, rely=0.825, height=29
 				, width=78)
 		self.add_alpha_butt_pt1.configure(activebackground="#f9f9f9")
+		self.add_alpha_butt_pt1.configure(background=_bgcolor)
 		self.add_alpha_butt_pt1.configure(text='''Alpha +0.1''')
 		self.add_alpha_butt_pt1.configure(command=lambda: self.add_alpha(0.1))
 
@@ -567,6 +604,7 @@ class beer_engine_mainwin:
 		self.rem_alpha_butt_pt1.place(relx=0.129, rely=0.888, height=28
 				, width=78)
 		self.rem_alpha_butt_pt1.configure(activebackground="#f9f9f9")
+		self.rem_alpha_butt_pt1.configure(background=_bgcolor)
 		self.rem_alpha_butt_pt1.configure(text='''Alpha -0.1''')
 		self.rem_alpha_butt_pt1.configure(command=lambda: self.add_alpha(-0.1))
 
@@ -574,6 +612,7 @@ class beer_engine_mainwin:
 		self.add_alpha_butt_1.place(relx=0.227, rely=0.825, height=29
 				, width=76)
 		self.add_alpha_butt_1.configure(activebackground="#f9f9f9")
+		self.add_alpha_butt_1.configure(background=_bgcolor)
 		self.add_alpha_butt_1.configure(text='''Alpha +1''')
 		self.add_alpha_butt_1.configure(width=76)
 		self.add_alpha_butt_1.configure(command=lambda: self.add_alpha(1))
@@ -582,6 +621,7 @@ class beer_engine_mainwin:
 		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, height=28
 				, width=76)
 		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9")
+		self.rem_alpha_butt_1.configure(background=_bgcolor)
 		self.rem_alpha_butt_1.configure(text='''Alpha -1''')
 		self.rem_alpha_butt_1.configure(command=lambda: self.add_alpha(-1))
 
@@ -607,6 +647,7 @@ class beer_engine_mainwin:
 				, relheight=0.044, relwidth=0.149)
 		self.is_imperial_ingredient = tk.IntVar()
 		self.ingredients_imperial_chk_butt.configure(text='''Imperial Units''')
+		self.ingredients_imperial_chk_butt.configure(background=_bgcolor)
 		self.ingredients_imperial_chk_butt.configure(command=self.ingredient_to_imperial)
 		self.ingredients_imperial_chk_butt.configure(variable=self.is_imperial_ingredient)
 
@@ -615,6 +656,7 @@ class beer_engine_mainwin:
 			, relwidth=0.149)
 		self.is_imperial_hop = tk.IntVar()
 		self.hops_imperial_chk_butt.configure(text='''Imperial Units''')
+		self.hops_imperial_chk_butt.configure(background=_bgcolor)
 		self.hops_imperial_chk_butt.configure(command=self.hop_to_imperial)
 		self.hops_imperial_chk_butt.configure(variable=self.is_imperial_hop)
 
@@ -623,6 +665,7 @@ class beer_engine_mainwin:
 		self.ogfixed_chkbutton.place(relx=0.71, rely=0.127, relheight=0.044
 				, relwidth=0.033)
 		self.ogfixed_chkbutton.configure(activebackground="#f9f9f9")
+		self.ogfixed_chkbutton.configure(background=_bgcolor)
 		self.ogfixed_chkbutton.configure(justify='left')
 		self.ogfixed_chkbutton.configure(variable=self.is_ogfixed)
 		self.ogfixed_chkbutton.configure(command=self.og_fixed)
@@ -632,6 +675,7 @@ class beer_engine_mainwin:
 		self.ebufixed_chkbutton.place(relx=0.821, rely=0.55, relheight=0.044
 				, relwidth=0.033)
 		self.ebufixed_chkbutton.configure(activebackground="#f9f9f9")
+		self.ebufixed_chkbutton.configure(background=_bgcolor)
 		self.ebufixed_chkbutton.configure(justify='left')
 		self.ebufixed_chkbutton.configure(variable=self.is_ebufixed)
 		self.ebufixed_chkbutton.configure(command=self.ebu_fixed)
@@ -1801,7 +1845,7 @@ class hops_editor(tk.Frame):
 		self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode='ignore')
-		self.hop_name_lbl.configure( background=_bgcolor)
+		self.hop_name_lbl.configure(background=_bgcolor)
 		self.hop_name_lbl.configure(foreground="#000000")
 		self.hop_name_lbl.configure(font=font9)
 		self.hop_name_lbl.configure(relief='flat')
@@ -1810,7 +1854,7 @@ class hops_editor(tk.Frame):
 		self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_form_lbl.place(relx=0.056, rely=0.152, height=19, width=49
 				, bordermode='ignore')
-		self.hop_form_lbl.configure( background=_bgcolor)
+		self.hop_form_lbl.configure(background=_bgcolor)
 		self.hop_form_lbl.configure(foreground="#000000")
 		self.hop_form_lbl.configure(font=font9)
 		self.hop_form_lbl.configure(relief='flat')
@@ -1819,7 +1863,7 @@ class hops_editor(tk.Frame):
 		self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_alpha_lbl.place(relx=0.056, rely=0.283, height=19, width=49
 				, bordermode='ignore')
-		self.hop_alpha_lbl.configure( background=_bgcolor)
+		self.hop_alpha_lbl.configure(background=_bgcolor)
 		self.hop_alpha_lbl.configure(foreground="#000000")
 		self.hop_alpha_lbl.configure(font=font9)
 		self.hop_alpha_lbl.configure(relief='flat')
@@ -1828,7 +1872,7 @@ class hops_editor(tk.Frame):
 		self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_origin_lbl.place(relx=0.056, rely=0.217, height=19, width=54
 				, bordermode='ignore')
-		self.hop_origin_lbl.configure( background=_bgcolor)
+		self.hop_origin_lbl.configure(background=_bgcolor)
 		self.hop_origin_lbl.configure(foreground="#000000")
 		self.hop_origin_lbl.configure(font=font9)
 		self.hop_origin_lbl.configure(relief='flat')
@@ -1837,7 +1881,7 @@ class hops_editor(tk.Frame):
 		self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_use_lbl.place(relx=0.056, rely=0.348, height=19, width=49
 				, bordermode='ignore')
-		self.hop_use_lbl.configure( background=_bgcolor)
+		self.hop_use_lbl.configure(background=_bgcolor)
 		self.hop_use_lbl.configure(foreground="#000000")
 		self.hop_use_lbl.configure(font=font9)
 		self.hop_use_lbl.configure(relief='flat')
@@ -1879,7 +1923,7 @@ class hops_editor(tk.Frame):
 		self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
 		self.hop_alpha_percent.place(relx=0.694, rely=0.283, height=19, width=15
 				, bordermode='ignore')
-		self.hop_alpha_percent.configure( background=_bgcolor)
+		self.hop_alpha_percent.configure(background=_bgcolor)
 		self.hop_alpha_percent.configure(foreground="#000000")
 		self.hop_alpha_percent.configure(font=font9)
 		self.hop_alpha_percent.configure(relief='flat')
@@ -1902,7 +1946,7 @@ class hops_editor(tk.Frame):
 		self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
 				, bordermode='ignore')
-		self.hop_comm_lbl.configure( background=_bgcolor)
+		self.hop_comm_lbl.configure(background=_bgcolor)
 		self.hop_comm_lbl.configure(foreground="#000000")
 		self.hop_comm_lbl.configure(font=font9)
 		self.hop_comm_lbl.configure(relief='flat')
@@ -2123,7 +2167,7 @@ class grist_editor(tk.Frame):
 		self.grist_name_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode='ignore')
-		self.grist_name_lbl.configure( background=_bgcolor)
+		self.grist_name_lbl.configure(background=_bgcolor)
 		self.grist_name_lbl.configure(foreground="#000000")
 		self.grist_name_lbl.configure(font=font10)
 		self.grist_name_lbl.configure(relief='flat')
@@ -2154,7 +2198,7 @@ class grist_editor(tk.Frame):
 		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
 				, bordermode='ignore')
-		self.grist_comm_lbl.configure( background=_bgcolor)
+		self.grist_comm_lbl.configure(background=_bgcolor)
 		self.grist_comm_lbl.configure(foreground="#000000")
 		self.grist_comm_lbl.configure(font=font10)
 		self.grist_comm_lbl.configure(relief='flat')
@@ -2191,7 +2235,7 @@ class grist_editor(tk.Frame):
 		self.grist_colour_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_colour_lbl.place(relx=0.056, rely=0.152, height=19, width=60
 				, bordermode='ignore')
-		self.grist_colour_lbl.configure( background=_bgcolor)
+		self.grist_colour_lbl.configure(background=_bgcolor)
 		self.grist_colour_lbl.configure(foreground="#000000")
 		self.grist_colour_lbl.configure(font=font10)
 		self.grist_colour_lbl.configure(relief='flat')
@@ -2200,7 +2244,7 @@ class grist_editor(tk.Frame):
 		self.grist_extract_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_extract_lbl.place(relx=0.056, rely=0.217, height=19, width=60
 				, bordermode='ignore')
-		self.grist_extract_lbl.configure( background=_bgcolor)
+		self.grist_extract_lbl.configure(background=_bgcolor)
 		self.grist_extract_lbl.configure(foreground="#000000")
 		self.grist_extract_lbl.configure(font=font10)
 		self.grist_extract_lbl.configure(relief='flat')
@@ -2209,7 +2253,7 @@ class grist_editor(tk.Frame):
 		self.grist_moisture_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_moisture_lbl.place(relx=0.056, rely=0.283, height=19, width=80
 				, bordermode='ignore')
-		self.grist_moisture_lbl.configure( background=_bgcolor)
+		self.grist_moisture_lbl.configure(background=_bgcolor)
 		self.grist_moisture_lbl.configure(foreground="#000000")
 		self.grist_moisture_lbl.configure(font=font10)
 		self.grist_moisture_lbl.configure(relief='flat')
@@ -2218,7 +2262,7 @@ class grist_editor(tk.Frame):
 		self.grist_ferment_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_ferment_lbl.place(relx=0.056, rely=0.348, height=19, width=107
 				, bordermode='ignore')
-		self.grist_ferment_lbl.configure( background=_bgcolor)
+		self.grist_ferment_lbl.configure(background=_bgcolor)
 		self.grist_ferment_lbl.configure(foreground="#000000")
 		self.grist_ferment_lbl.configure(font=font9)
 		self.grist_ferment_lbl.configure(relief='flat')
@@ -2251,7 +2295,7 @@ class grist_editor(tk.Frame):
 		self.grist_colour_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_colour_percent.place(relx=0.75, rely=0.152, height=19, width=40
 				, bordermode='ignore')
-		self.grist_colour_percent.configure( background=_bgcolor)
+		self.grist_colour_percent.configure(background=_bgcolor)
 		self.grist_colour_percent.configure(foreground="#000000")
 		self.grist_colour_percent.configure(font=font10)
 		self.grist_colour_percent.configure(relief='flat')
@@ -2260,7 +2304,7 @@ class grist_editor(tk.Frame):
 		self.grist_extract_ldk = tk.Label(self.grist_panedwindow2)
 		self.grist_extract_ldk.place(relx=0.75, rely=0.217, height=19, width=60
 				, bordermode='ignore')
-		self.grist_extract_ldk.configure( background=_bgcolor)
+		self.grist_extract_ldk.configure(background=_bgcolor)
 		self.grist_extract_ldk.configure(foreground="#000000")
 		self.grist_extract_ldk.configure(font=font10)
 		self.grist_extract_ldk.configure(relief='flat')
@@ -2269,7 +2313,7 @@ class grist_editor(tk.Frame):
 		self.grist_moisture_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_moisture_percent.place(relx=0.75, rely=0.283, height=19, width=20
 				, bordermode='ignore')
-		self.grist_moisture_percent.configure( background=_bgcolor)
+		self.grist_moisture_percent.configure(background=_bgcolor)
 		self.grist_moisture_percent.configure(foreground="#000000")
 		self.grist_moisture_percent.configure(font=font10)
 		self.grist_moisture_percent.configure(relief='flat')
@@ -2278,7 +2322,7 @@ class grist_editor(tk.Frame):
 		self.grist_ferment_percent = tk.Label(self.grist_panedwindow2)
 		self.grist_ferment_percent.place(relx=0.75, rely=0.348, height=19, width=20
 				, bordermode='ignore')
-		self.grist_ferment_percent.configure( background=_bgcolor)
+		self.grist_ferment_percent.configure(background=_bgcolor)
 		self.grist_ferment_percent.configure(foreground="#000000")
 		self.grist_ferment_percent.configure(font=font10)
 		self.grist_ferment_percent.configure(relief='flat')
@@ -2287,7 +2331,7 @@ class grist_editor(tk.Frame):
 		self.grist_type_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_type_lbl.place(relx=0.056, rely=0.413, height=19, width=50
 				, bordermode='ignore')
-		self.grist_type_lbl.configure( background=_bgcolor)
+		self.grist_type_lbl.configure(background=_bgcolor)
 		self.grist_type_lbl.configure(foreground="#000000")
 		self.grist_type_lbl.configure(font=font10)
 		self.grist_type_lbl.configure(relief='flat')
@@ -2431,7 +2475,7 @@ class grist_editor(tk.Frame):
 
 class defaults_editor(tk.Frame):
 	def __init__(self, parent):
-		tk.Frame.__init__(self, parent)
+		tk.Frame.__init__(self, parent, background=_bgcolor)
 
 		self.widgets()
 		self.reset_to_defaults()
@@ -2452,7 +2496,7 @@ class defaults_editor(tk.Frame):
 
 		self.target_vol_lbl = tk.Label(self)
 		self.target_vol_lbl.place(relx=0.038, rely=0.063, height=19, width=118)
-		self.target_vol_lbl.configure( background=_bgcolor)
+		self.target_vol_lbl.configure(background=_bgcolor)
 		self.target_vol_lbl.configure(foreground="#000000")
 		self.target_vol_lbl.configure(font=font9)
 		self.target_vol_lbl.configure(relief='flat')
@@ -2460,7 +2504,7 @@ class defaults_editor(tk.Frame):
 
 		self.boil_vol_lbl = tk.Label(self)
 		self.boil_vol_lbl.place(relx=0.038, rely=0.148, height=19, width=143)
-		self.boil_vol_lbl.configure( background=_bgcolor)
+		self.boil_vol_lbl.configure(background=_bgcolor)
 		self.boil_vol_lbl.configure(foreground="#000000")
 		self.boil_vol_lbl.configure(font=font9)
 		self.boil_vol_lbl.configure(relief='flat')
@@ -2469,7 +2513,7 @@ class defaults_editor(tk.Frame):
 		self.liquor_to_grist_lbl = tk.Label(self)
 		self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317, height=19
 				, width=165)
-		self.liquor_to_grist_lbl.configure( background=_bgcolor)
+		self.liquor_to_grist_lbl.configure(background=_bgcolor)
 		self.liquor_to_grist_lbl.configure(foreground="#000000")
 		self.liquor_to_grist_lbl.configure(font=font9)
 		self.liquor_to_grist_lbl.configure(relief='flat')
@@ -2500,7 +2544,7 @@ class defaults_editor(tk.Frame):
 		self.target_vol_litres_lbl = tk.Label(self)
 		self.target_vol_litres_lbl.place(relx=0.316, rely=0.063, height=19
 				, width=46)
-		self.target_vol_litres_lbl.configure( background=_bgcolor)
+		self.target_vol_litres_lbl.configure(background=_bgcolor)
 		self.target_vol_litres_lbl.configure(foreground="#000000")
 		self.target_vol_litres_lbl.configure(font=font9)
 		self.target_vol_litres_lbl.configure(relief='flat')
@@ -2509,7 +2553,7 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_lbl = tk.Label(self)
 		self.mash_efficiency_lbl.place(relx=0.038, rely=0.233, height=19
 				, width=125)
-		self.mash_efficiency_lbl.configure( background=_bgcolor)
+		self.mash_efficiency_lbl.configure(background=_bgcolor)
 		self.mash_efficiency_lbl.configure(foreground="#000000")
 		self.mash_efficiency_lbl.configure(font=font9)
 		self.mash_efficiency_lbl.configure(relief='flat')
@@ -2525,7 +2569,7 @@ class defaults_editor(tk.Frame):
 		self.boil_vol_percent_lbl = tk.Label(self)
 		self.boil_vol_percent_lbl.place(relx=0.341, rely=0.148, height=19
 				, width=15)
-		self.boil_vol_percent_lbl.configure( background=_bgcolor)
+		self.boil_vol_percent_lbl.configure(background=_bgcolor)
 		self.boil_vol_percent_lbl.configure(foreground="#000000")
 		self.boil_vol_percent_lbl.configure(font=font9)
 		self.boil_vol_percent_lbl.configure(relief='flat')
@@ -2534,7 +2578,7 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_percent_lbl = tk.Label(self)
 		self.mash_efficiency_percent_lbl.place(relx=0.328, rely=0.233, height=19
 				, width=15)
-		self.mash_efficiency_percent_lbl.configure( background=_bgcolor)
+		self.mash_efficiency_percent_lbl.configure(background=_bgcolor)
 		self.mash_efficiency_percent_lbl.configure(foreground="#000000")
 		self.mash_efficiency_percent_lbl.configure(font=font9)
 		self.mash_efficiency_percent_lbl.configure(relief='flat')
@@ -2543,7 +2587,7 @@ class defaults_editor(tk.Frame):
 		self.liquor_to_grist_lperkg_lbl = tk.Label(self)
 		self.liquor_to_grist_lperkg_lbl.place(relx=0.366, rely=0.317, height=19
 				, width=35)
-		self.liquor_to_grist_lperkg_lbl.configure( background=_bgcolor)
+		self.liquor_to_grist_lperkg_lbl.configure(background=_bgcolor)
 		self.liquor_to_grist_lperkg_lbl.configure(foreground="#000000")
 		self.liquor_to_grist_lperkg_lbl.configure(font=font9)
 		self.liquor_to_grist_lperkg_lbl.configure(relief='flat')
@@ -2570,7 +2614,7 @@ class defaults_editor(tk.Frame):
 		self.attenuation_defaults_lbl= tk.Label(self)
 		self.attenuation_defaults_lbl.place(relx=0.038, rely=0.402, height=19
 				, width=155)
-		self.attenuation_defaults_lbl.configure( background=_bgcolor)
+		self.attenuation_defaults_lbl.configure(background=_bgcolor)
 		self.attenuation_defaults_lbl.configure(foreground="#000000")
 		self.attenuation_defaults_lbl.configure(font=font9)
 		self.attenuation_defaults_lbl.configure(relief='flat')
@@ -2596,7 +2640,7 @@ class defaults_editor(tk.Frame):
 		self.save_on_close_lbl = tk.Label(self)
 		self.save_on_close_lbl.place(relx=0.038, rely=0.486, height=19
 				, width=125)
-		self.save_on_close_lbl.configure( background=_bgcolor)
+		self.save_on_close_lbl.configure(background=_bgcolor)
 		self.save_on_close_lbl.configure(foreground="#000000")
 		self.save_on_close_lbl.configure(font=font9)
 		self.save_on_close_lbl.configure(relief='flat')
@@ -2613,7 +2657,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_lbl = tk.Label(self)
 		self.default_boil_time_lbl.place(relx=0.038, rely=0.571, height=19
 				, width=145)
-		self.default_boil_time_lbl.configure( background=_bgcolor)
+		self.default_boil_time_lbl.configure(background=_bgcolor)
 		self.default_boil_time_lbl.configure(foreground="#000000")
 		self.default_boil_time_lbl.configure(font=font9)
 		self.default_boil_time_lbl.configure(relief='flat')
@@ -2632,7 +2676,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_min_lbl = tk.Label(self)
 		self.default_boil_time_min_lbl.place(relx=0.328, rely=0.571, height=19
 				, width=65)
-		self.default_boil_time_min_lbl.configure( background=_bgcolor)
+		self.default_boil_time_min_lbl.configure(background=_bgcolor)
 		self.default_boil_time_min_lbl.configure(foreground="#000000")
 		self.default_boil_time_min_lbl.configure(font=font9)
 		self.default_boil_time_min_lbl.configure(relief='flat')
@@ -2699,7 +2743,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_spinbox.insert(0, brew_data.constants['Default Boil Time'])
 class special_editor(tk.Frame):
 	def __init__(self, parent):
-		tk.Frame.__init__(self, parent)
+		tk.Frame.__init__(self, parent, background=_bgcolor)
 		self.current_attenuation = tk.StringVar()
 		self.widgets()
 		#self.attenuation_frame.bind('<Button-1>', lambda evt: print(self.current_attenuation.get()))
@@ -2762,7 +2806,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_low_lbl.place(relx=0.278, rely=0.109, height=19
 			, width=28, bordermode='ignore')
-		self.attenuation_low_lbl.configure( background=_bgcolor)
+		self.attenuation_low_lbl.configure(background=_bgcolor)
 		self.attenuation_low_lbl.configure(foreground="#000000")
 		self.attenuation_low_lbl.configure(font="TkDefaultFont")
 		self.attenuation_low_lbl.configure(relief='flat')
@@ -2771,7 +2815,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_med_lbl.place(relx=0.5, rely=0.109, height=19, width=30
 			, bordermode='ignore')
-		self.attenuation_med_lbl.configure( background=_bgcolor)
+		self.attenuation_med_lbl.configure(background=_bgcolor)
 		self.attenuation_med_lbl.configure(foreground="#000000")
 		self.attenuation_med_lbl.configure(font="TkDefaultFont")
 		self.attenuation_med_lbl.configure(relief='flat')
@@ -2780,7 +2824,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_lbl = tk.Label(self.attenuation_frame)
 		self.attenuation_high_lbl.place(relx=0.722, rely=0.109, height=19
 			, width=42, bordermode='ignore')
-		self.attenuation_high_lbl.configure( background=_bgcolor)
+		self.attenuation_high_lbl.configure(background=_bgcolor)
 		self.attenuation_high_lbl.configure(foreground="#000000")
 		self.attenuation_high_lbl.configure(font="TkDefaultFont")
 		self.attenuation_high_lbl.configure(relief='flat')
@@ -2791,7 +2835,7 @@ class special_editor(tk.Frame):
 		self.attenuation_62_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_62_degrees.place(relx=0.056, rely=0.182, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_62_degrees.configure( background=_bgcolor)
+		self.attenuation_62_degrees.configure(background=_bgcolor)
 		self.attenuation_62_degrees.configure(foreground="#000000")
 		self.attenuation_62_degrees.configure(font="TkDefaultFont")
 		self.attenuation_62_degrees.configure(relief='flat')
@@ -2800,7 +2844,7 @@ class special_editor(tk.Frame):
 		self.attenuation_63_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_63_degrees.place(relx=0.056, rely=0.255, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_63_degrees.configure( background=_bgcolor)
+		self.attenuation_63_degrees.configure(background=_bgcolor)
 		self.attenuation_63_degrees.configure(foreground="#000000")
 		self.attenuation_63_degrees.configure(font="TkDefaultFont")
 		self.attenuation_63_degrees.configure(relief='flat')
@@ -2809,7 +2853,7 @@ class special_editor(tk.Frame):
 		self.attenuation_64_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_64_degrees.place(relx=0.056, rely=0.327, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_64_degrees.configure( background=_bgcolor)
+		self.attenuation_64_degrees.configure(background=_bgcolor)
 		self.attenuation_64_degrees.configure(foreground="#000000")
 		self.attenuation_64_degrees.configure(font="TkDefaultFont")
 		self.attenuation_64_degrees.configure(relief='flat')
@@ -2818,7 +2862,7 @@ class special_editor(tk.Frame):
 		self.attenuation_65_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_65_degrees.place(relx=0.056, rely=0.4, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_65_degrees.configure( background=_bgcolor)
+		self.attenuation_65_degrees.configure(background=_bgcolor)
 		self.attenuation_65_degrees.configure(foreground="#000000")
 		self.attenuation_65_degrees.configure(font="TkDefaultFont")
 		self.attenuation_65_degrees.configure(relief='flat')
@@ -2827,7 +2871,7 @@ class special_editor(tk.Frame):
 		self.attenuation_66_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_66_degrees.place(relx=0.056, rely=0.473, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_66_degrees.configure( background=_bgcolor)
+		self.attenuation_66_degrees.configure(background=_bgcolor)
 		self.attenuation_66_degrees.configure(foreground="#000000")
 		self.attenuation_66_degrees.configure(font="TkDefaultFont")
 		self.attenuation_66_degrees.configure(relief='flat')
@@ -2836,7 +2880,7 @@ class special_editor(tk.Frame):
 		self.attenuation_67_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_67_degrees.place(relx=0.056, rely=0.545, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_67_degrees.configure( background=_bgcolor)
+		self.attenuation_67_degrees.configure(background=_bgcolor)
 		self.attenuation_67_degrees.configure(foreground="#000000")
 		self.attenuation_67_degrees.configure(font="TkDefaultFont")
 		self.attenuation_67_degrees.configure(relief='flat')
@@ -2846,7 +2890,7 @@ class special_editor(tk.Frame):
 		self.attenuation_68_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_68_degrees.place(relx=0.056, rely=0.618, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_68_degrees.configure( background=_bgcolor)
+		self.attenuation_68_degrees.configure(background=_bgcolor)
 		self.attenuation_68_degrees.configure(foreground="#000000")
 		self.attenuation_68_degrees.configure(font="TkDefaultFont")
 		self.attenuation_68_degrees.configure(relief='flat')
@@ -2855,7 +2899,7 @@ class special_editor(tk.Frame):
 		self.attenuation_69_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_69_degrees.place(relx=0.056, rely=0.691, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_69_degrees.configure( background=_bgcolor)
+		self.attenuation_69_degrees.configure(background=_bgcolor)
 		self.attenuation_69_degrees.configure(foreground="#000000")
 		self.attenuation_69_degrees.configure(font="TkDefaultFont")
 		self.attenuation_69_degrees.configure(relief='flat')
@@ -2864,7 +2908,7 @@ class special_editor(tk.Frame):
 		self.attenuation_70_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_70_degrees.place(relx=0.056, rely=0.764, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_70_degrees.configure( background=_bgcolor)
+		self.attenuation_70_degrees.configure(background=_bgcolor)
 		self.attenuation_70_degrees.configure(foreground="#000000")
 		self.attenuation_70_degrees.configure(font="TkDefaultFont")
 		self.attenuation_70_degrees.configure(relief='flat')
@@ -2873,7 +2917,7 @@ class special_editor(tk.Frame):
 		self.attenuation_71_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_71_degrees.place(relx=0.056, rely=0.836, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_71_degrees.configure( background=_bgcolor)
+		self.attenuation_71_degrees.configure(background=_bgcolor)
 		self.attenuation_71_degrees.configure(foreground="#000000")
 		self.attenuation_71_degrees.configure(font="TkDefaultFont")
 		self.attenuation_71_degrees.configure(relief='flat')
@@ -2882,7 +2926,7 @@ class special_editor(tk.Frame):
 		self.attenuation_72_degrees = tk.Label(self.attenuation_frame)
 		self.attenuation_72_degrees.place(relx=0.056, rely=0.909, height=19
 			, width=34, bordermode='ignore')
-		self.attenuation_72_degrees.configure( background=_bgcolor)
+		self.attenuation_72_degrees.configure(background=_bgcolor)
 		self.attenuation_72_degrees.configure(foreground="#000000")
 		self.attenuation_72_degrees.configure(font="TkDefaultFont")
 		self.attenuation_72_degrees.configure(relief='flat')
@@ -2894,12 +2938,15 @@ class special_editor(tk.Frame):
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_62.configure(justify='left')
 		self.attenuation_low_62.configure(value='low-62')
+		self.attenuation_low_62.configure(activebackground="#f9f9f9")
+		self.attenuation_low_62.configure(background=_bgcolor)
 		self.attenuation_low_62.configure(variable=self.current_attenuation)
 
 		self.attenuation_low_63 = tk.Radiobutton(self.attenuation_frame)
 		self.attenuation_low_63.place(relx=0.278, rely=0.255, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_63.configure(activebackground="#f9f9f9")
+		self.attenuation_low_63.configure(background=_bgcolor)
 		self.attenuation_low_63.configure(justify='left')
 		self.attenuation_low_63.configure(value='low-63')
 		self.attenuation_low_63.configure(variable=self.current_attenuation)
@@ -2908,6 +2955,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_64.place(relx=0.278, rely=0.327, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_64.configure(activebackground="#f9f9f9")
+		self.attenuation_low_64.configure(background=_bgcolor)
 		self.attenuation_low_64.configure(justify='left')
 		self.attenuation_low_64.configure(value='low-64')
 		self.attenuation_low_64.configure(variable=self.current_attenuation)
@@ -2916,6 +2964,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_65.place(relx=0.076, rely=0.254, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_low_65.configure(activebackground="#f9f9f9")
+		self.attenuation_low_65.configure(background=_bgcolor)
 		self.attenuation_low_65.configure(justify='left')
 		self.attenuation_low_65.configure(value='low-65')
 		self.attenuation_low_65.configure(variable=self.current_attenuation)
@@ -2923,6 +2972,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_66.place(relx=0.076, rely=0.296
 			, relheight=0.049, relwidth=0.039)
 		self.attenuation_low_66.configure(activebackground="#f9f9f9")
+		self.attenuation_low_66.configure(background=_bgcolor)
 		self.attenuation_low_66.configure(justify='left')
 		self.attenuation_low_66.configure(value='low-66')
 		self.attenuation_low_66.configure(variable=self.current_attenuation)
@@ -2931,6 +2981,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_67.place(relx=0.278, rely=0.545, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_67.configure(activebackground="#f9f9f9")
+		self.attenuation_low_67.configure(background=_bgcolor)
 		self.attenuation_low_67.configure(justify='left')
 		self.attenuation_low_67.configure(value='low-67')
 		self.attenuation_low_67.configure(variable=self.current_attenuation)
@@ -2939,6 +2990,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_68.place(relx=0.278, rely=0.618, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_68.configure(activebackground="#f9f9f9")
+		self.attenuation_low_68.configure(background=_bgcolor)
 		self.attenuation_low_68.configure(justify='left')
 		self.attenuation_low_68.configure(value='low-68')
 		self.attenuation_low_68.configure(variable=self.current_attenuation)
@@ -2947,6 +2999,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_69.place(relx=0.278, rely=0.691, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_69.configure(activebackground="#f9f9f9")
+		self.attenuation_low_69.configure(background=_bgcolor)
 		self.attenuation_low_69.configure(justify='left')
 		self.attenuation_low_69.configure(value='low-69')
 		self.attenuation_low_69.configure(variable=self.current_attenuation)
@@ -2955,6 +3008,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_70.place(relx=0.278, rely=0.764, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_low_70.configure(activebackground="#f9f9f9")
+		self.attenuation_low_70.configure(background=_bgcolor)
 		self.attenuation_low_70.configure(justify='left')
 		self.attenuation_low_70.configure(value='low-70')
 		self.attenuation_low_70.configure(variable=self.current_attenuation)
@@ -2963,6 +3017,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_71.place(relx=0.076, rely=0.507, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_low_71.configure(activebackground="#f9f9f9")
+		self.attenuation_low_71.configure(background=_bgcolor)
 		self.attenuation_low_71.configure(justify='left')
 		self.attenuation_low_71.configure(variable=self.current_attenuation)
 		self.attenuation_low_71.configure(value='low-71')
@@ -2971,6 +3026,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_72.place(relx=0.076, rely=0.55, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_low_72.configure(activebackground="#f9f9f9")
+		self.attenuation_low_72.configure(background=_bgcolor)
 		self.attenuation_low_72.configure(justify='left')
 		self.attenuation_low_72.configure(value='low-72')
 		self.attenuation_low_72.configure(variable=self.current_attenuation)
@@ -2980,6 +3036,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_62.place(relx=0.5, rely=0.182, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_med_62.configure(activebackground="#f9f9f9")
+		self.attenuation_med_62.configure(background=_bgcolor)
 		self.attenuation_med_62.configure(justify='left')
 		self.attenuation_med_62.configure(value='med-62')
 		self.attenuation_med_62.configure(variable=self.current_attenuation)
@@ -2988,6 +3045,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_63.place(relx=0.5, rely=0.255, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_med_63.configure(activebackground="#f9f9f9")
+		self.attenuation_med_63.configure(background=_bgcolor)
 		self.attenuation_med_63.configure(justify='left')
 		self.attenuation_med_63.configure(value='med-63')
 		self.attenuation_med_63.configure(variable=self.current_attenuation)
@@ -2996,6 +3054,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_64.place(relx=0.5, rely=0.327, relheight=0.084
 			, relwidth=0.172, bordermode='ignore')
 		self.attenuation_med_64.configure(activebackground="#f9f9f9")
+		self.attenuation_med_64.configure(background=_bgcolor)
 		self.attenuation_med_64.configure(justify='left')
 		self.attenuation_med_64.configure(value='med-64')
 		self.attenuation_med_64.configure(variable=self.current_attenuation)
@@ -3004,6 +3063,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_65.place(relx=0.126, rely=0.254, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_65.configure(activebackground="#f9f9f9")
+		self.attenuation_med_65.configure(background=_bgcolor)
 		self.attenuation_med_65.configure(justify='left')
 		self.attenuation_med_65.configure(value='med-65')
 		self.attenuation_med_65.configure(variable=self.current_attenuation)
@@ -3012,6 +3072,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_66.place(relx=0.126, rely=0.296, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_66.configure(activebackground="#f9f9f9")
+		self.attenuation_med_66.configure(background=_bgcolor)
 		self.attenuation_med_66.configure(justify='left')
 		self.attenuation_med_66.configure(value='med-66')
 		self.attenuation_med_66.configure(variable=self.current_attenuation)
@@ -3020,6 +3081,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_67.place(relx=0.126, rely=0.338, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_67.configure(activebackground="#f9f9f9")
+		self.attenuation_med_67.configure(background=_bgcolor)
 		self.attenuation_med_67.configure(justify='left')
 		self.attenuation_med_67.configure(value='med-67')
 		self.attenuation_med_67.configure(variable=self.current_attenuation)
@@ -3028,6 +3090,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_68.place(relx=0.126, rely=0.381, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_68.configure(activebackground="#f9f9f9")
+		self.attenuation_med_68.configure(background=_bgcolor)
 		self.attenuation_med_68.configure(justify='left')
 		self.attenuation_med_68.configure(value='med-68')
 		self.attenuation_med_68.configure(variable=self.current_attenuation)
@@ -3036,6 +3099,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_69.place(relx=0.126, rely=0.423, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_69.configure(activebackground="#f9f9f9")
+		self.attenuation_med_69.configure(background=_bgcolor)
 		self.attenuation_med_69.configure(justify='left')
 		self.attenuation_med_69.configure(value='med-69')
 		self.attenuation_med_69.configure(variable=self.current_attenuation)
@@ -3044,6 +3108,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_70.place(relx=0.126, rely=0.465, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_70.configure(activebackground="#f9f9f9")
+		self.attenuation_med_70.configure(background=_bgcolor)
 		self.attenuation_med_70.configure(justify='left')
 		self.attenuation_med_70.configure(value='med-70')
 		self.attenuation_med_70.configure(variable=self.current_attenuation)
@@ -3052,6 +3117,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_71.place(relx=0.126, rely=0.507, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_71.configure(activebackground="#f9f9f9")
+		self.attenuation_med_71.configure(background=_bgcolor)
 		self.attenuation_med_71.configure(justify='left')
 		self.attenuation_med_71.configure(value='med-71')
 		self.attenuation_med_71.configure(variable=self.current_attenuation)
@@ -3060,6 +3126,7 @@ class special_editor(tk.Frame):
 		self.attenuation_med_72.place(relx=0.126, rely=0.55, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_med_72.configure(activebackground="#f9f9f9")
+		self.attenuation_med_72.configure(background=_bgcolor)
 		self.attenuation_med_72.configure(justify='left')
 		self.attenuation_med_72.configure(value='med-72')
 		self.attenuation_med_72.configure(variable=self.current_attenuation)
@@ -3069,6 +3136,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_62.place(relx=0.177, rely=0.127, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_62.configure(activebackground="#f9f9f9")
+		self.attenuation_high_62.configure(background=_bgcolor)
 		self.attenuation_high_62.configure(justify='left')
 		self.attenuation_high_62.configure(value='high-62')
 		self.attenuation_high_62.configure(variable=self.current_attenuation)
@@ -3077,6 +3145,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_63.place(relx=0.177, rely=0.169, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_63.configure(activebackground="#f9f9f9")
+		self.attenuation_high_63.configure(background=_bgcolor)
 		self.attenuation_high_63.configure(justify='left')
 		self.attenuation_high_63.configure(value='high-63')
 		self.attenuation_high_63.configure(variable=self.current_attenuation)
@@ -3085,6 +3154,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_64.place(relx=0.177, rely=0.211, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_64.configure(activebackground="#f9f9f9")
+		self.attenuation_high_64.configure(background=_bgcolor)
 		self.attenuation_high_64.configure(justify='left')
 		self.attenuation_high_64.configure(value='high-64')
 		self.attenuation_high_64.configure(variable=self.current_attenuation)
@@ -3093,6 +3163,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_65.place(relx=0.177, rely=0.254, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_65.configure(activebackground="#f9f9f9")
+		self.attenuation_high_65.configure(background=_bgcolor)
 		self.attenuation_high_65.configure(justify='left')
 		self.attenuation_high_65.configure(value='high-65')
 		self.attenuation_high_65.configure(variable=self.current_attenuation)
@@ -3101,6 +3172,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_66.place(relx=0.177, rely=0.296, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_66.configure(activebackground="#f9f9f9")
+		self.attenuation_high_66.configure(background=_bgcolor)
 		self.attenuation_high_66.configure(justify='left')
 		self.attenuation_high_66.configure(value='high-66')
 		self.attenuation_high_66.configure(variable=self.current_attenuation)
@@ -3109,6 +3181,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_67.place(relx=0.177, rely=0.338, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_67.configure(activebackground="#f9f9f9")
+		self.attenuation_high_67.configure(background=_bgcolor)
 		self.attenuation_high_67.configure(justify='left')
 		self.attenuation_high_67.configure(value='high-67')
 		self.attenuation_high_67.configure(variable=self.current_attenuation)
@@ -3117,6 +3190,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_68.place(relx=0.177, rely=0.381, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_68.configure(activebackground="#f9f9f9")
+		self.attenuation_high_68.configure(background=_bgcolor)
 		self.attenuation_high_68.configure(justify='left')
 		self.attenuation_high_68.configure(value='high-68')
 		self.attenuation_high_68.configure(variable=self.current_attenuation)
@@ -3125,6 +3199,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_69.place(relx=0.177, rely=0.423, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_69.configure(activebackground="#f9f9f9")
+		self.attenuation_high_69.configure(background=_bgcolor)
 		self.attenuation_high_69.configure(justify='left')
 		self.attenuation_high_69.configure(value='high-69')
 		self.attenuation_high_69.configure(variable=self.current_attenuation)
@@ -3133,6 +3208,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_70.place(relx=0.177, rely=0.465, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_70.configure(activebackground="#f9f9f9")
+		self.attenuation_high_70.configure(background=_bgcolor)
 		self.attenuation_high_70.configure(justify='left')
 		self.attenuation_high_70.configure(value='high-70')
 		self.attenuation_high_70.configure(variable=self.current_attenuation)
@@ -3141,6 +3217,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_71.place(relx=0.177, rely=0.507, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_71.configure(activebackground="#f9f9f9")
+		self.attenuation_high_71.configure(background=_bgcolor)
 		self.attenuation_high_71.configure(justify='left')
 		self.attenuation_high_71.configure(value='high-71')
 		self.attenuation_high_71.configure(variable=self.current_attenuation)
@@ -3149,6 +3226,7 @@ class special_editor(tk.Frame):
 		self.attenuation_high_72.place(relx=0.177, rely=0.55, relheight=0.049
 			, relwidth=0.039)
 		self.attenuation_high_72.configure(activebackground="#f9f9f9")
+		self.attenuation_high_72.configure(background=_bgcolor)
 		self.attenuation_high_72.configure(justify='left')
 		self.attenuation_high_72.configure(value='high-72')
 		self.attenuation_high_72.configure(variable=self.current_attenuation)
@@ -3247,7 +3325,7 @@ class special_editor(tk.Frame):
 		self.water_boil_time_lbl = tk.Label(self.water_boil_frame)
 		self.water_boil_time_lbl.place(relx=0.056, rely=0.4, height=17, width=65
 				, bordermode='ignore')
-		self.water_boil_time_lbl.configure( background=_bgcolor)
+		self.water_boil_time_lbl.configure(background=_bgcolor)
 		self.water_boil_time_lbl.configure(foreground="#000000")
 		self.water_boil_time_lbl.configure(font=font9)
 		self.water_boil_time_lbl.configure(relief='flat')
@@ -3419,7 +3497,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_name_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode='ignore')
-		self.yeast_name_lbl.configure( background=_bgcolor)
+		self.yeast_name_lbl.configure(background=_bgcolor)
 		self.yeast_name_lbl.configure(foreground="#000000")
 		self.yeast_name_lbl.configure(font=font9)
 		self.yeast_name_lbl.configure(relief='flat')
@@ -3442,7 +3520,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_comm_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_comm_lbl.place(relx=0.056, rely=0.543, height=19, width=99
 				, bordermode='ignore')
-		self.yeast_comm_lbl.configure( background=_bgcolor)
+		self.yeast_comm_lbl.configure(background=_bgcolor)
 		self.yeast_comm_lbl.configure(foreground="#000000")
 		self.yeast_comm_lbl.configure(font=font9)
 		self.yeast_comm_lbl.configure(relief='flat')
@@ -3479,7 +3557,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_type_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_type_lbl.place(relx=0.056, rely=0.152, height=19, width=50
 				, bordermode='ignore')
-		self.yeast_type_lbl.configure( background=_bgcolor)
+		self.yeast_type_lbl.configure(background=_bgcolor)
 		self.yeast_type_lbl.configure(foreground="#000000")
 		self.yeast_type_lbl.configure(font=font9)
 		self.yeast_type_lbl.configure(relief='flat')
@@ -3497,7 +3575,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_lab_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_lab_lbl.place(relx=0.056, rely=0.217, height=19, width=50
 				, bordermode='ignore')
-		self.yeast_lab_lbl.configure( background=_bgcolor)
+		self.yeast_lab_lbl.configure(background=_bgcolor)
 		self.yeast_lab_lbl.configure(foreground="#000000")
 		self.yeast_lab_lbl.configure(font=font9)
 		self.yeast_lab_lbl.configure(relief='flat')
@@ -3514,7 +3592,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_flocc_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_flocc_lbl.place(relx=0.056, rely=0.348, height=19, width=100
 				, bordermode='ignore')
-		self.yeast_flocc_lbl.configure( background=_bgcolor)
+		self.yeast_flocc_lbl.configure(background=_bgcolor)
 		self.yeast_flocc_lbl.configure(foreground="#000000")
 		self.yeast_flocc_lbl.configure(font=font9)
 		self.yeast_flocc_lbl.configure(relief='flat')
@@ -3533,7 +3611,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_attenuation_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_attenuation_lbl.place(relx=0.056, rely=0.413, height=19
 				, width=100, bordermode='ignore')
-		self.yeast_attenuation_lbl.configure( background=_bgcolor)
+		self.yeast_attenuation_lbl.configure(background=_bgcolor)
 		self.yeast_attenuation_lbl.configure(foreground="#000000")
 		self.yeast_attenuation_lbl.configure(font=font9)
 		self.yeast_attenuation_lbl.configure(relief='flat')
@@ -3542,7 +3620,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_temperature_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_temperature_lbl.place(relx=0.056, rely=0.478, height=19
 				, width=110, bordermode='ignore')
-		self.yeast_temperature_lbl.configure( background=_bgcolor)
+		self.yeast_temperature_lbl.configure(background=_bgcolor)
 		self.yeast_temperature_lbl.configure(foreground="#000000")
 		self.yeast_temperature_lbl.configure(font=font9)
 		self.yeast_temperature_lbl.configure(relief='flat')
@@ -3552,7 +3630,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_origin_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_origin_lbl.place(relx=0.056, rely=0.283, height=19, width=70
 				, bordermode='ignore')
-		self.yeast_origin_lbl.configure( background=_bgcolor)
+		self.yeast_origin_lbl.configure(background=_bgcolor)
 		self.yeast_origin_lbl.configure(foreground="#000000")
 		self.yeast_origin_lbl.configure(font=font9)
 		self.yeast_origin_lbl.configure(relief='flat')
