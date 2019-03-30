@@ -1174,7 +1174,7 @@ class beer_engine_mainwin(object):
 		self.fg = final_gravity()
 		self.og = float(self.original_gravity_ent.get())
 		self.abv = alcohol_by_volume(self.og/1000, self.fg/1000)
-		self.ibu_gu = float(self.bitterness_ibu_ent.get()) / (1000 - self.og) if (1000 - self.og) != 0 else 0
+		self.ibu_gu = float(self.bitterness_ibu_ent.get()) / (self.og - 1000) if (self.og - 1000) != 0 else 0
 		self.calc_lbl.configure(text=u'''Efficiency: {efficiency}%
 		Final Gravity: {final_gravity}
 		Alcohol(ABV): {abv}%
