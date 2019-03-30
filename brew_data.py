@@ -378,5 +378,6 @@ constants = {
 	'Liquor To Grist Ratio': 2.5,
 	'Attenuation Default': 'med-66',
 	'Save On Close': True,
-	'Default Boil Time': 90
+	'Default Boil Time': 90,
+	'Replace Defaults': False
 }

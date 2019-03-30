@@ -36,6 +36,31 @@ class beer_engine_mainwin:
 			"roman -underline 0 -overstrike 0"
 		self.style = ttk.Style()
 
+		if not os.path.isfile(resource_path('defaults.txt')):
+			with open(resource_path('defaults.txt'), 'w') as f:
+				volume = brew_data.constants['Volume']
+				efficiency = brew_data.constants['Efficiency']*100
+				evaporation = round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
+				LGratio = brew_data.constants['Liquor To Grist Ratio']
+				attenuation = brew_data.constants['Attenuation Default']
+				save_close = brew_data.constants['Save On Close']
+				boil_time = brew_data.constants['Default Boil Time']
+				replace_defaults = brew_data.constants['Replace Defaults']
+				f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}\nreplace_defaults={replace_defaults}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio,
+																																																										attenuation=attenuation, save_close=save_close, boil_time=boil_time, replace_defaults=replace_defaults))
+		else:
+			with open(resource_path('defaults.txt'), 'r') as f:
+				data = [line.strip().split('=') for line in f]
+				for constants in data:
+					if constants[0] == 'efficiency': brew_data.constants['Efficiency'] = float(constants[1])/100
+					elif constants[0] == 'volume': brew_data.constants['Volume'] = float(constants[1])
+					elif constants[0] == 'evaporation': brew_data.constants['Boil Volume Scale'] = (float(constants[1])/100)+1
+					elif constants[0] == 'LGratio': brew_data.constants['Liquor To Grist Ratio'] = float(constants[1])
+					elif constants[0] == 'attenuation': brew_data.constants['Attenuation Default'] = constants[1]
+					elif constants[0] == 'save_close': brew_data.constants['Save On Close'] = True if constants[1] == 'True' else False
+					elif constants[0] == 'boil_time': brew_data.constants['Default Boil Time'] = int(constants[1])
+					elif constants[0] == 'replace_defaults': brew_data.constants['Replace Defaults'] = True if constants[1] == 'True' else False
+
 		if not os.path.isfile(resource_path('hop_data.txt')):
 			with open(resource_path('hop_data.txt'), 'w') as f:
 				for hop, value in brew_data.hop_data.items():
@@ -48,6 +73,7 @@ class beer_engine_mainwin:
 					f.write('{name}\t{hop_type}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(name=name, hop_type=hop_type, origin=origin, alpha=alpha, use=use, description=description))
 		else:
 			with open(resource_path('hop_data.txt'), 'r') as f:
+				if brew_data.constants['Replace Defaults']: brew_data.hop_data = {}
 				data = [line.strip().split('\t') for line in f]
 				for hop in data:
 					# 'Nelson Sauvin': {'Form': 'Whole', 'Origin': 'New Zeland', 'Description': '', 'Use': 'General Purpose', 'Alpha': 12.7}
@@ -72,6 +98,7 @@ class beer_engine_mainwin:
 					f.write('{name}\t{ebc}\t{grain_type}\t{extract}\t{moisture}\t{fermentability}\t{description}\n'.format(name=name, ebc=ebc, grain_type=grain_type, extract=extract, moisture=moisture, fermentability=fermentability, description=description))
 		else:
 			with open(resource_path('grain_data.txt'), 'r') as f:
+				if brew_data.constants['Replace Defaults']: brew_data.grain_data = {}
 				data = [line.strip().split('\t') for line in f]
 				for ingredient in data:
 					# {'Wheat Flour': {'EBC': 0.0, 'Type': 3.0, 'Extract': 304.0, 'Description': 'No Description', 'Moisture': 11.0, 'Fermentability': 62.0}}
@@ -87,6 +114,7 @@ class beer_engine_mainwin:
 
 		if not os.path.isfile(resource_path('yeast_data.txt')):
 			with open(resource_path('yeast_data.txt'), 'w') as f:
+				if brew_data.constants['Replace Defaults']: brew_data.yeast_data = {}
 				for yeast, value in brew_data.yeast_data.items():
 					name = yeast
 					yeast_type = value['Type']
@@ -122,6 +150,7 @@ class beer_engine_mainwin:
 					f.write('{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
 		else:
 			with open(resource_path('water_chem_data.txt'), 'r') as f:
+				if brew_data.constants['Replace Defaults']: brew_data.water_chemistry_additions = {}
 				data = [line.strip().split('\t') for line in f]
 				for water_chem in data:
 					name = water_chem[0]
@@ -130,27 +159,6 @@ class beer_engine_mainwin:
 					brew_data.water_chemistry_additions[name] = {'Values': {'Type': water_chem_type}}
 					if time != 'N/A': brew_data.water_chemistry_additions[name]['Values']['Time'] = time
 
-		if not os.path.isfile(resource_path('defaults.txt')):
-			with open(resource_path('defaults.txt'), 'w') as f:
-				volume = brew_data.constants['Volume']
-				efficiency = brew_data.constants['Efficiency']*100
-				evaporation = round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
-				LGratio = brew_data.constants['Liquor To Grist Ratio']
-				attenuation = brew_data.constants['Attenuation Default']
-				save_close = brew_data.constants['Save On Close']
-				boil_time = brew_data.constants['Default Boil Time']
-				f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio, attenuation=attenuation, save_close=save_close, boil_time=boil_time))
-		else:
-			with open(resource_path('defaults.txt'), 'r') as f:
-				data = [line.strip().split('=') for line in f]
-				for constants in data:
-					if constants[0] == 'efficiency': brew_data.constants['Efficiency'] = float(constants[1])/100
-					elif constants[0] == 'volume': brew_data.constants['Volume'] = float(constants[1])
-					elif constants[0] == 'evaporation': brew_data.constants['Boil Volume Scale'] = (float(constants[1])/100)+1
-					elif constants[0] == 'LGratio': brew_data.constants['Liquor To Grist Ratio'] = float(constants[1])
-					elif constants[0] == 'attenuation': brew_data.constants['Attenuation Default'] = constants[1]
-					elif constants[0] == 'save_close': brew_data.constants['Save On Close'] = True if constants[1] == 'True' else False
-					elif constants[0] == 'boil_time': brew_data.constants['Default Boil Time'] = int(constants[1])
 
 		self.style.configure('.',background=_bgcolor)
 		self.style.configure('.',foreground=_fgcolor)
@@ -2683,6 +2691,24 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_min_lbl.configure(text='''Minutes''')
 		self.default_boil_time_min_lbl.configure(width=65)
 
+		self.replace_default_vars = tk.Label(self)
+		self.replace_default_vars.place(relx=0.0328, rely=0.655, height=19
+				, width=245)
+		self.replace_default_vars.configure(background=_bgcolor)
+		self.replace_default_vars.configure(foreground="#000000")
+		self.replace_default_vars.configure(font=font9)
+		self.replace_default_vars.configure(relief='flat')
+		self.replace_default_vars.configure(text='''Update Default Configuration:''')
+		self.replace_default_vars.configure(width=245)
+
+		self.replace_default_vars_chckbutt = tk.Checkbutton(self)
+		self.replace_default_vars_chckbutt.place(relx=0.328, rely=0.655
+				, relheight=0.049, relwidth=0.034)
+		self.replace_default_vars_chckbutt.configure(background=_bgcolor)
+		self.replace_default_vars_chckbutt.configure(justify='left')
+		self.replace_default_vars_variable = tk.BooleanVar()
+		self.replace_default_vars_chckbutt.configure(variable=self.replace_default_vars_variable)
+
 
 	def reset_to_defaults(self):
 		self.target_vol_ent.delete(0, tk.END)
@@ -2707,6 +2733,9 @@ class defaults_editor(tk.Frame):
 				elif constants[0] == 'boil_time':
 					self.default_boil_time_spinbox.delete(0, tk.END)
 					self.default_boil_time_spinbox.insert(0, constants[1])
+				elif constants[0] == 'replace_defaults':
+					self.replace_default_vars_variable.set(False if constants[1] == 'True' else True)
+
 	def save_all(self):
 		with open(resource_path('defaults.txt'), 'w') as f:
 			volume = float(self.target_vol_ent.get())
@@ -2718,7 +2747,9 @@ class defaults_editor(tk.Frame):
 			attenuation = (attenuation_type if attenuation_type != 'medium' else 'med') + '-' + (attenuation_temp)
 			save_close = self.save_on_close_var.get()
 			boil_time = self.default_boil_time_spinbox.get()
-			f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio, attenuation=attenuation, save_close=save_close, boil_time=boil_time))
+			replace_defaults = not self.replace_default_vars_variable.get()
+			f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}\nreplace_defaults={replace_defaults}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio,
+																																																									attenuation=attenuation, save_close=save_close, boil_time=boil_time, replace_defaults=replace_defaults))
 		self.temp_save()
 
 	def temp_save(self):
@@ -2728,6 +2759,7 @@ class defaults_editor(tk.Frame):
 		brew_data.constants['Liquor To Grist Ratio'] = float(self.liquor_to_grist_ent.get())
 		brew_data.constants['Save On Close'] = True if self.save_on_close_var.get() == 'True' else False
 		brew_data.constants['Default Boil Time'] = int(self.default_boil_time_spinbox.get())
+		brew_data.constants['Replace Defaults'] = True if self.save_on_close_var.get() == 'True' else False
 
 	def open_locals(self):
 		self.target_vol_ent.delete(0, tk.END)
@@ -2741,6 +2773,7 @@ class defaults_editor(tk.Frame):
 		self.boil_vol_ent.insert(0, round(brew_data.constants['Boil Volume Scale']*100, 1))
 		self.liquor_to_grist_ent.insert(0,  brew_data.constants['Liquor To Grist Ratio'])
 		self.default_boil_time_spinbox.insert(0, brew_data.constants['Default Boil Time'])
+		self.replace_default_vars_variable.set(not brew_data.constants['Replace Defaults'])
 class special_editor(tk.Frame):
 	def __init__(self, parent):
 		tk.Frame.__init__(self, parent, background=_bgcolor)
