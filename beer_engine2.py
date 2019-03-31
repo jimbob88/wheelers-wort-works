@@ -3,18 +3,12 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-from io import open
-try:
-	import Tkinter as tk
-	import tkinter.ttk as ttk
-	from Tkinter import filedialog, messagebox
-except:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import Tkinter as tk
+import ttk
+import tkFileDialog as filedialog
+import tkMessageBox as messagebox
 import sys
-import brew_data
+import brew_data2 as brew_data
 import platform
 import math
 import codecs
@@ -22,6 +16,7 @@ import string
 import os
 import webbrowser
 import ast
+from io import open
 try:
 	import bs4
 except ImportError:
@@ -793,6 +788,7 @@ class beer_engine_mainwin(object):
 			points = sum([(brew_data.grist_data[ingredient[u'Name']][u'Extract']*(ingredient[u'Values'][u'Grams'])/1000) * (1 if brew_data.grist_data[ingredient[u'Name']][u'Type'] in non_mashables else brew_data.constants[u'Efficiency']) for ingredient in self.ingredients])
 
 			orig_grav = ((points)/volume)+1000
+			self.og = orig_grav
 			self.original_gravity_ent.delete(0, tk.END)
 			self.original_gravity_ent.insert(0, round(orig_grav, 1))
 
@@ -889,6 +885,7 @@ class beer_engine_mainwin(object):
 			'''
 			ibu = sum([(hop[u'Values'][u'Grams'] * hop[u'Values'][u'Alpha'] * hop[u'Values'][u'Util']) / (float(self.boil_vol.get())*10)  for hop in self.hops])
 			ibu = (ibu*float(self.boil_vol.get()))/float(self.volume.get())
+			self.ibu = ibu
 			self.bitterness_ibu_ent.delete(0, tk.END)
 			self.bitterness_ibu_ent.insert(0, round(ibu))
 
@@ -1181,9 +1178,9 @@ class beer_engine_mainwin(object):
 
 		self.colour = colour_ebc()
 		self.fg = final_gravity()
-		self.og = float(self.original_gravity_ent.get())
+		self.og = float(self.og)
 		self.abv = alcohol_by_volume(self.og/1000, self.fg/1000)
-		self.ibu_gu = float(self.bitterness_ibu_ent.get()) / (self.og - 1000) if (self.og - 1000) != 0 else 0
+		self.ibu_gu = float(self.ibu) / (self.og - 1000) if (self.og - 1000) != 0 else 0
 		self.calc_lbl.configure(text=u'''Efficiency: {efficiency}%
 		Final Gravity: {final_gravity}
 		Alcohol(ABV): {abv}%
@@ -1462,6 +1459,7 @@ class beer_engine_mainwin(object):
 			start += u'<td class="ing4">{percentage}%</td>'.format(percentage=ingredient[u'Values'][u'Percent'])
 			start += u'</tr>'
 		start += u'</table><br>'
+		if start[-179:] == u'<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-179]
 
 		if self.sixth_tab.water_boil_is_disabled.get() == 1:
 			start += u'<p><b>Boil Time: </b>{boil_time}</p>'.format(boil_time=self.sixth_tab.water_boil_time_spinbx.get())
@@ -1505,6 +1503,8 @@ class beer_engine_mainwin(object):
 				start += u'<td class="hop6">N/A</td>'
 				start += u'</tr>'
 		start += u'</table><br>'
+		if start[-236:] == u'<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-236]
+
 
 		if use_sorttable:
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
@@ -1554,13 +1554,14 @@ class beer_engine_mainwin(object):
 				except KeyError:
 					pass
 		start += u'</table>'
+		if start[-245:] == u'<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr></table>': start = start[:-245]
 
 		start += u'<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
 		start += u'<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))
 		start += u'<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
 		start += u'<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
 		start += u'<p><b>Mash Efficiency: </b>{efficiency}<p>'.format(efficiency=brew_data.constants[u'Efficiency']*100)
-		start += u'<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.bitterness_ibu_ent.get())
+		start += u'<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.ibu)
 		start += u'<p><b>Colour: </b>{colour} EBC<p>'.format(colour=round(self.colour, 1))
 		start += u'</body>'
 		start += u'</html>'
@@ -1722,7 +1723,7 @@ class beer_engine_mainwin(object):
 					f.write(u'miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
 					f.write(u'miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write(u'miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
-					f.write(u'miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.original_gravity_ent.get()))
+					f.write(u'miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
 			elif file.lower()[-6:] == u'.berfx':
 				self.current_file = file

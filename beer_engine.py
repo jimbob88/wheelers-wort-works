@@ -789,6 +789,7 @@ class beer_engine_mainwin:
 			points = sum([(brew_data.grist_data[ingredient['Name']]['Extract']*(ingredient['Values']['Grams'])/1000) * (1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency']) for ingredient in self.ingredients])
 
 			orig_grav = ((points)/volume)+1000
+			self.og = orig_grav
 			self.original_gravity_ent.delete(0, tk.END)
 			self.original_gravity_ent.insert(0, round(orig_grav, 1))
 
@@ -885,6 +886,7 @@ class beer_engine_mainwin:
 			'''
 			ibu = sum([(hop['Values']['Grams'] * hop['Values']['Alpha'] * hop['Values']['Util']) / (float(self.boil_vol.get())*10)  for hop in self.hops])
 			ibu = (ibu*float(self.boil_vol.get()))/float(self.volume.get())
+			self.ibu = ibu
 			self.bitterness_ibu_ent.delete(0, tk.END)
 			self.bitterness_ibu_ent.insert(0, round(ibu))
 
@@ -1177,9 +1179,9 @@ class beer_engine_mainwin:
 
 		self.colour = colour_ebc()
 		self.fg = final_gravity()
-		self.og = float(self.original_gravity_ent.get())
+		self.og = float(self.og)
 		self.abv = alcohol_by_volume(self.og/1000, self.fg/1000)
-		self.ibu_gu = float(self.bitterness_ibu_ent.get()) / (self.og - 1000) if (self.og - 1000) != 0 else 0
+		self.ibu_gu = float(self.ibu) / (self.og - 1000) if (self.og - 1000) != 0 else 0
 		self.calc_lbl.configure(text='''Efficiency: {efficiency}%
 		Final Gravity: {final_gravity}
 		Alcohol(ABV): {abv}%
@@ -1458,6 +1460,7 @@ class beer_engine_mainwin:
 			start += '<td class="ing4">{percentage}%</td>'.format(percentage=ingredient['Values']['Percent'])
 			start += '</tr>'
 		start += '</table><br>'
+		if start[-179:] == '<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-179]
 
 		if self.sixth_tab.water_boil_is_disabled.get() == 1:
 			start += '<p><b>Boil Time: </b>{boil_time}</p>'.format(boil_time=self.sixth_tab.water_boil_time_spinbx.get())
@@ -1501,6 +1504,8 @@ class beer_engine_mainwin:
 				start += '<td class="hop6">N/A</td>'
 				start += '</tr>'
 		start += '</table><br>'
+		if start[-236:] == '<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-236]
+
 
 		if use_sorttable:
 			start += '<table style="width:800px" class="sortable" id="sortable">'
@@ -1550,13 +1555,14 @@ class beer_engine_mainwin:
 				except KeyError:
 					pass
 		start += '</table>'
+		if start[-245:] == '<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr></table>': start = start[:-245]
 
 		start += '<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
 		start += '<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))
 		start += '<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
 		start += '<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
 		start += '<p><b>Mash Efficiency: </b>{efficiency}<p>'.format(efficiency=brew_data.constants['Efficiency']*100)
-		start += '<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.bitterness_ibu_ent.get())
+		start += '<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.ibu)
 		start += '<p><b>Colour: </b>{colour} EBC<p>'.format(colour=round(self.colour, 1))
 		start += '</body>'
 		start += '</html>'
@@ -1718,7 +1724,7 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
 					f.write('miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
-					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.original_gravity_ent.get()))
+					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
