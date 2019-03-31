@@ -1684,8 +1684,8 @@ class beer_engine_mainwin(object):
 		self.sixth_tab.refresh_all()
 		self.recalculate()
 		self.is_ogfixed.set(is_ogfixed)
+		self.is_ebufixed.set(is_ebufixed)
 		self.recalculate()
-		#self.is_ebufixed.set(is_ebufixed)
 
 
 	def save_file(self, file):
