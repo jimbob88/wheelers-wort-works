@@ -1130,7 +1130,7 @@ class beer_engine_mainwin(object):
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
 			id = int(unicode(selection)[1:], 16)
-			apha = round(self.hops[id-1][u'Values'][u'Alpha']+alpha, 1)
+			alpha = round(self.hops[id-1][u'Values'][u'Alpha']+alpha, 1)
 			if alpha < 0: alpha = 0
 			self.hops[id-1][u'Values'][u'Alpha'] = alpha
 			self.refresh_hop()
