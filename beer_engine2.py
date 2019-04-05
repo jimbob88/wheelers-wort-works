@@ -1561,7 +1561,7 @@ class beer_engine_mainwin(object):
 		start += u'<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
 		start += u'<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
 		start += u'<p><b>Mash Efficiency: </b>{efficiency}<p>'.format(efficiency=brew_data.constants[u'Efficiency']*100)
-		start += u'<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.ibu)
+		start += u'<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=round(self.ibu))
 		start += u'<p><b>Colour: </b>{colour} EBC<p>'.format(colour=round(self.colour, 1))
 		start += u'</body>'
 		start += u'</html>'

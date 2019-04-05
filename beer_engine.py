@@ -1562,7 +1562,7 @@ class beer_engine_mainwin:
 		start += '<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
 		start += '<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
 		start += '<p><b>Mash Efficiency: </b>{efficiency}<p>'.format(efficiency=brew_data.constants['Efficiency']*100)
-		start += '<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=self.ibu)
+		start += '<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=round(self.ibu))
 		start += '<p><b>Colour: </b>{colour} EBC<p>'.format(colour=round(self.colour, 1))
 		start += '</body>'
 		start += '</html>'
