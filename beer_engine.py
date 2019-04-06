@@ -2289,6 +2289,8 @@ class grist_editor(tk.Frame):
 		self.grist_new_butt.configure(text='''New''')
 		self.grist_new_butt.configure(command=self.new)
 
+		############################ Config Section ############################
+
 		self.grist_name_lbl = tk.Label(self.grist_panedwindow2)
 		self.grist_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
 				, bordermode='ignore')
@@ -2763,14 +2765,12 @@ class defaults_editor(tk.Frame):
 		self.attenuation_temp_combo.configure(takefocus="")
 
 		self.save_on_close_lbl = tk.Label(self)
-		self.save_on_close_lbl.place(relx=0.038, rely=0.486, height=19
-				, width=125)
+		self.save_on_close_lbl.place(relx=0.038, rely=0.486)
 		self.save_on_close_lbl.configure(background=_bgcolor)
 		self.save_on_close_lbl.configure(foreground="#000000")
 		self.save_on_close_lbl.configure(font=font9)
 		self.save_on_close_lbl.configure(relief='flat')
 		self.save_on_close_lbl.configure(text='''Save on Close:''')
-		self.save_on_close_lbl.configure(width=125)
 
 		self.save_on_close_var = tk.StringVar()
 		self.save_on_close_combo = tk.OptionMenu(self, self.save_on_close_var, 'True', 'False')
@@ -2780,14 +2780,12 @@ class defaults_editor(tk.Frame):
 		self.save_on_close_combo.configure(takefocus="")
 
 		self.default_boil_time_lbl = tk.Label(self)
-		self.default_boil_time_lbl.place(relx=0.038, rely=0.571, height=19
-				, width=145)
+		self.default_boil_time_lbl.place(relx=0.038, rely=0.571)
 		self.default_boil_time_lbl.configure(background=_bgcolor)
 		self.default_boil_time_lbl.configure(foreground="#000000")
 		self.default_boil_time_lbl.configure(font=font9)
 		self.default_boil_time_lbl.configure(relief='flat')
 		self.default_boil_time_lbl.configure(text='''Default Boil Time:''')
-		self.default_boil_time_lbl.configure(width=145)
 
 		self.default_boil_time_spinbox = tk.Spinbox(self, from_=1.0, to=100.0)
 		self.default_boil_time_spinbox.place(relx=0.227, rely=0.571, relheight=0.049
@@ -2806,17 +2804,14 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_min_lbl.configure(font=font9)
 		self.default_boil_time_min_lbl.configure(relief='flat')
 		self.default_boil_time_min_lbl.configure(text='''Minutes''')
-		self.default_boil_time_min_lbl.configure(width=65)
 
 		self.replace_default_vars = tk.Label(self)
-		self.replace_default_vars.place(relx=0.0328, rely=0.655, height=19
-				, width=245)
+		self.replace_default_vars.place(relx=0.038, rely=0.655)
 		self.replace_default_vars.configure(background=_bgcolor)
 		self.replace_default_vars.configure(foreground="#000000")
 		self.replace_default_vars.configure(font=font9)
 		self.replace_default_vars.configure(relief='flat')
 		self.replace_default_vars.configure(text='''Update Default Configuration:''')
-		self.replace_default_vars.configure(width=245)
 
 		self.replace_default_vars_chckbutt = tk.Checkbutton(self)
 		self.replace_default_vars_chckbutt.place(relx=0.328, rely=0.655
