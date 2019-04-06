@@ -192,6 +192,115 @@ class beer_engine_mainwin:
 		self.master.rowconfigure(0, weight=1)
 		self.master.columnconfigure(0, weight=1)
 
+		######################### Menu ############################
+		self.menubar = tk.Menu(self.master,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
+		self.master.configure(menu = self.menubar)
+
+		self.file_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.file_menu,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="File")
+		self.sub_menu1 = tk.Menu(self.master,tearoff=0)
+		self.file_menu.add_command(activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Open",
+				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))),
+				accelerator="Ctrl+O")
+
+		self.master.bind("<Control-o>", lambda e: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))))
+
+		self.file_menu.add_command(activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Save",
+				command=self.save,
+				accelerator="Ctrl+S")
+		self.master.bind("<Control-s>", lambda e: self.save())
+		self.file_menu.add_command(activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Save All",
+				command=self.save_all,
+				accelerator="Ctrl+A")
+		self.master.bind("<Control-a>", lambda e: self.save_all())
+		self.file_menu.add_command(activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Save As",
+				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
+				accelerator="Ctrl+Shift+S")
+		self.master.bind("<Control-S>", lambda e: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
+		self.file_menu.add_cascade(menu=self.sub_menu1,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Print")
+		self.sub_menu1.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Simple HTML",
+				command=self.create_html,
+				accelerator="Ctrl+P")
+		self.master.bind("<Control-p>", lambda e: self.create_html())
+		self.sub_menu1.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Complex HTML",
+				command=self.create_complex_html,
+				accelerator="Ctrl+Shift+P")
+		self.master.bind("<Control-P>", lambda e: self.create_complex_html())
+
+		self.file_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Quit",
+				command=self.quit,
+				accelerator="Ctrl+Q")
+		self.master.bind("<Control-q>", lambda e: self.quit())
+
+		self.help_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.help_menu,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Help")
+		self.help_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Wheeler's Wort Works Help",
+				command=lambda: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'),
+				accelerator="Ctrl+H")
+		self.master.bind("<Control-h>", lambda e: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
+
 		######################## First Tab ########################
 		self.first_tab.configure(background=_bgcolor)
 		self.recipe_name_ent = tk.Entry(self.first_tab)
@@ -504,94 +613,6 @@ class beer_engine_mainwin:
 		self.quit_btt.configure(background=_bgcolor)
 		self.quit_btt.configure(text='''Quit''')
 		self.quit_btt.configure(command=self.quit)
-		self.menubar = tk.Menu(self.master,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
-		self.master.configure(menu = self.menubar)
-
-		self.file_menu = tk.Menu(self.master,tearoff=0)
-		self.menubar.add_cascade(menu=self.file_menu,
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="File")
-		self.sub_menu1 = tk.Menu(self.master,tearoff=0)
-		self.file_menu.add_command(activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Open",
-				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))))
-		self.file_menu.add_command(activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Save",
-				command=self.save)
-		self.file_menu.add_command(activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Save All",
-				command=self.save_all)
-		self.file_menu.add_command(activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Save As",
-				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
-		self.file_menu.add_cascade(menu=self.sub_menu1,
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Print")
-		self.sub_menu1.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Simple HTML",
-				command=self.create_html)
-		self.sub_menu1.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Complex HTML",
-				command=self.create_complex_html)
-		self.file_menu.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Quit",
-				command=self.quit)
-
-		self.help_menu = tk.Menu(self.master,tearoff=0)
-		self.menubar.add_cascade(menu=self.help_menu,
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Help")
-		self.help_menu.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Wheeler's Wort Works Help",
-				command=lambda: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
 
 		self.add_time_butt_1 = tk.Button(self.first_tab)
 		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28
@@ -937,12 +958,14 @@ class beer_engine_mainwin:
 			self.ingredients.append({'Name': name, 'Values': {'EBC': EBC, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0, 'Percent': 0.0}})
 			self.refresh_grist()
 
-		def bound(event, treeview, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
+		def bound(event, treeview, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html ADDED TREEVIEW functionality
 			key=event.keysym
+			if key == 'Escape':
+				add_grist_gui.destroy()
 			if len(key)<=1:
 				if key in string.ascii_lowercase:
 					try:
-						start_n= int(treeview.focus()[1:], 16)
+						start_n= int(treeview.focus()[1:], 16)-1
 					except IndexError:
 						start_n=-1
 					## clear the selection.
@@ -952,6 +975,7 @@ class beer_engine_mainwin:
 						item=list_data[n]
 						if item[0].lower()==key.lower():
 							treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+							treeview.focus('I{iid}'.format(iid=format(n+1, '03x')))
 							treeview.yview(n)
 							return
 						treeview.yview(n)
@@ -962,6 +986,7 @@ class beer_engine_mainwin:
 							if item[0].lower()==key.lower():
 								treeview.yview(n)
 								treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+								treeview.focus('I{iid}'.format(iid=format(n+1, '03x')))
 								return
 						treeview.yview(n)
 
@@ -988,10 +1013,12 @@ class beer_engine_mainwin:
 			self.refresh_hop()
 		def bound(event, treeview, list_data): #https://mail.python.org/pipermail/python-list/2002-May/170135.html
 			key=event.keysym
+			if key == 'Escape':
+				add_hop_gui.destroy()
 			if len(key)<=1:
 				if key in string.ascii_lowercase:
 					try:
-						start_n= int(treeview.focus()[1:], 16)
+						start_n= int(treeview.focus()[1:], 16)-1
 					except IndexError:
 						start_n=-1
 					## clear the selection.
@@ -1001,6 +1028,7 @@ class beer_engine_mainwin:
 						item=list_data[n]
 						if item[0].lower()==key.lower():
 							treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+							treeview.focus('I{iid}'.format(iid=format(n+1, '03x')))
 							treeview.yview(n)
 							return
 						treeview.yview(n)
@@ -1011,6 +1039,7 @@ class beer_engine_mainwin:
 							if item[0].lower()==key.lower():
 								treeview.yview(n)
 								treeview.selection_set('I{iid}'.format(iid=format(n+1, '03x')))
+								treeview.focus('I{iid}'.format(iid=format(n+1, '03x')))
 								return
 						treeview.yview(n)
 		add_hop_gui = tk.Toplevel()
