@@ -1967,50 +1967,15 @@ class hops_editor(tk.Frame):
 		self.hop_new_butt.configure(text='''New''')
 		self.hop_new_butt.configure(command=self.new)
 
+		#######################################################################
+
 		self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
-				, bordermode='ignore')
+		self.hop_name_lbl.place(relx=0.056, rely=0.087, bordermode='ignore')
 		self.hop_name_lbl.configure(background=_bgcolor)
 		self.hop_name_lbl.configure(foreground="#000000")
 		self.hop_name_lbl.configure(font=font9)
 		self.hop_name_lbl.configure(relief='flat')
 		self.hop_name_lbl.configure(text='''Name:''')
-
-		self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_form_lbl.place(relx=0.056, rely=0.152, height=19, width=49
-				, bordermode='ignore')
-		self.hop_form_lbl.configure(background=_bgcolor)
-		self.hop_form_lbl.configure(foreground="#000000")
-		self.hop_form_lbl.configure(font=font9)
-		self.hop_form_lbl.configure(relief='flat')
-		self.hop_form_lbl.configure(text='''Form:''')
-
-		self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_alpha_lbl.place(relx=0.056, rely=0.283, height=19, width=49
-				, bordermode='ignore')
-		self.hop_alpha_lbl.configure(background=_bgcolor)
-		self.hop_alpha_lbl.configure(foreground="#000000")
-		self.hop_alpha_lbl.configure(font=font9)
-		self.hop_alpha_lbl.configure(relief='flat')
-		self.hop_alpha_lbl.configure(text='''Alpha:''')
-
-		self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_origin_lbl.place(relx=0.056, rely=0.217, height=19, width=54
-				, bordermode='ignore')
-		self.hop_origin_lbl.configure(background=_bgcolor)
-		self.hop_origin_lbl.configure(foreground="#000000")
-		self.hop_origin_lbl.configure(font=font9)
-		self.hop_origin_lbl.configure(relief='flat')
-		self.hop_origin_lbl.configure(text='''Origin:''')
-
-		self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_use_lbl.place(relx=0.056, rely=0.348, height=19, width=49
-				, bordermode='ignore')
-		self.hop_use_lbl.configure(background=_bgcolor)
-		self.hop_use_lbl.configure(foreground="#000000")
-		self.hop_use_lbl.configure(font=font9)
-		self.hop_use_lbl.configure(relief='flat')
-		self.hop_use_lbl.configure(text='''Use:''')
 
 		self.hop_name_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_name_ent.place(relx=0.222, rely=0.087, relheight=0.046
@@ -2021,6 +1986,14 @@ class hops_editor(tk.Frame):
 		self.hop_name_ent.configure(takefocus="")
 		self.hop_name_ent.configure(cursor="xterm")
 
+		self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_form_lbl.place(relx=0.056, rely=0.152, bordermode='ignore')
+		self.hop_form_lbl.configure(background=_bgcolor)
+		self.hop_form_lbl.configure(foreground="#000000")
+		self.hop_form_lbl.configure(font=font9)
+		self.hop_form_lbl.configure(relief='flat')
+		self.hop_form_lbl.configure(text='''Form:''')
+
 		self.hop_form_combo = ttk.Combobox(self.hop_panedwindow2)
 		self.hop_form_combo.place(relx=0.222, rely=0.152, relheight=0.046
 				, relwidth=0.511, bordermode='ignore')
@@ -2030,6 +2003,14 @@ class hops_editor(tk.Frame):
 		self.hop_form_combo_values = ["Whole", "Pellet"]
 		self.hop_form_combo.configure(values=self.hop_form_combo_values)
 
+		self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_origin_lbl.place(relx=0.056, rely=0.217, bordermode='ignore')
+		self.hop_origin_lbl.configure(background=_bgcolor)
+		self.hop_origin_lbl.configure(foreground="#000000")
+		self.hop_origin_lbl.configure(font=font9)
+		self.hop_origin_lbl.configure(relief='flat')
+		self.hop_origin_lbl.configure(text='''Origin:''')
+
 		self.hop_origin_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_origin_ent.place(relx=0.222, rely=0.217, relheight=0.046
 				, relwidth=0.511, bordermode='ignore')
@@ -2037,6 +2018,14 @@ class hops_editor(tk.Frame):
 		self.hop_origin_ent.configure(width=184)
 		self.hop_origin_ent.configure(takefocus="")
 		self.hop_origin_ent.configure(cursor="xterm")
+
+		self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_alpha_lbl.place(relx=0.056, rely=0.283, bordermode='ignore')
+		self.hop_alpha_lbl.configure(background=_bgcolor)
+		self.hop_alpha_lbl.configure(foreground="#000000")
+		self.hop_alpha_lbl.configure(font=font9)
+		self.hop_alpha_lbl.configure(relief='flat')
+		self.hop_alpha_lbl.configure(text='''Alpha:''')
 
 		self.hop_alpha_ent = tk.Entry(self.hop_panedwindow2)
 		self.hop_alpha_ent.place(relx=0.222, rely=0.283, relheight=0.046
@@ -2046,13 +2035,20 @@ class hops_editor(tk.Frame):
 		self.hop_alpha_ent.configure(cursor="xterm")
 
 		self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
-		self.hop_alpha_percent.place(relx=0.694, rely=0.283, height=19, width=15
-				, bordermode='ignore')
+		self.hop_alpha_percent.place(relx=0.694, rely=0.283, bordermode='ignore')
 		self.hop_alpha_percent.configure(background=_bgcolor)
 		self.hop_alpha_percent.configure(foreground="#000000")
 		self.hop_alpha_percent.configure(font=font9)
 		self.hop_alpha_percent.configure(relief='flat')
 		self.hop_alpha_percent.configure(text='''%''')
+
+		self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_use_lbl.place(relx=0.056, rely=0.348, bordermode='ignore')
+		self.hop_use_lbl.configure(background=_bgcolor)
+		self.hop_use_lbl.configure(foreground="#000000")
+		self.hop_use_lbl.configure(font=font9)
+		self.hop_use_lbl.configure(relief='flat')
+		self.hop_use_lbl.configure(text='''Use:''')
 
 		self.hop_use_combo = ttk.Combobox(self.hop_panedwindow2)
 		self.hop_use_combo.place(relx=0.222, rely=0.348, relheight=0.046
@@ -2069,14 +2065,12 @@ class hops_editor(tk.Frame):
 		self.hop_comm_ent.configure(cursor="xterm")
 
 		self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
-		self.hop_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
-				, bordermode='ignore')
+		self.hop_comm_lbl.place(relx=0.056, rely=0.453, bordermode='ignore')
 		self.hop_comm_lbl.configure(background=_bgcolor)
 		self.hop_comm_lbl.configure(foreground="#000000")
 		self.hop_comm_lbl.configure(font=font9)
 		self.hop_comm_lbl.configure(relief='flat')
 		self.hop_comm_lbl.configure(text='''Comments:''')
-		self.hop_comm_lbl.configure(width=99)
 
 		self.hop_cancel_butt = tk.Button(self.hop_panedwindow2)
 		self.hop_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
