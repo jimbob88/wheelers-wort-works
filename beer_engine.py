@@ -305,7 +305,7 @@ class beer_engine_mainwin:
 		self.first_tab.configure(background=_bgcolor)
 		self.recipe_name_ent = tk.Entry(self.first_tab)
 		self.recipe_name_ent.place(relx=0.126, rely=0.021, height=23
-				, relwidth=0.21)
+				, relwidth=0.28)
 		self.recipe_name_ent.configure(background="white")
 		self.recipe_name_ent.configure(font="TkFixedFont")
 		self.recipe_name_ent.configure(selectbackground="#c4c4c4")
@@ -326,7 +326,7 @@ class beer_engine_mainwin:
 
 		self.volume = tk.StringVar()
 		self.volume_ent = tk.Entry(self.first_tab)
-		self.volume_ent.place(relx=0.492, rely=0.021,height=20, width=55) #relwidth=0.045
+		self.volume_ent.place(relx=0.492, rely=0.021, height=23, width=55) #relwidth=0.045
 		self.volume_ent.configure(background="white")
 		self.volume_ent.configure(font="TkFixedFont")
 		self.volume_ent.configure(selectbackground="#c4c4c4")

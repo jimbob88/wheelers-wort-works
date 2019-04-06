@@ -309,7 +309,7 @@ class beer_engine_mainwin(object):
 		self.first_tab.configure(background=_bgcolor)
 		self.recipe_name_ent = tk.Entry(self.first_tab)
 		self.recipe_name_ent.place(relx=0.126, rely=0.021, height=23
-				, relwidth=0.21)
+				, relwidth=0.28)
 		self.recipe_name_ent.configure(background=u"white")
 		self.recipe_name_ent.configure(font=u"TkFixedFont")
 		self.recipe_name_ent.configure(selectbackground=u"#c4c4c4")
