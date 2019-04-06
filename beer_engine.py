@@ -1431,7 +1431,7 @@ class beer_engine_mainwin:
 		self.recalculate()
 		if use_sorttable: start += '<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
 		start += '<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get().replace('&', '&amp;'), logo=resource_path('logo.png'))
-		start += '''
+		start += r'''
 		<!--Extracted From Graham Wheeler's Beer Engine recipe.html-->
 		<!--Yeast Section added by jimbob88-->
 		<style>
@@ -1456,8 +1456,11 @@ class beer_engine_mainwin:
 		td.yst6 {width:20; text-align:center; background-color: #FFFFFF;padding:4px}
 		td.yst7 {width:10; text-align:center; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
 		span.bold {font-weight: bold}
-		td.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;}
-		td.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-right: 1px solid #000000;}
+		th.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-bottom: 1px solid #000000;}
+		th.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-right: 1px solid #000000;border-bottom: 1px solid #000000;}
+		table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+    		content: " \25B4\25BE"
+		}
 		</style>'''
 		start += '</head><body>'
 		start += '<h2>{name}</h2>'.format(name=self.recipe_name_ent.get().replace('&', '&amp;'))
@@ -1465,7 +1468,7 @@ class beer_engine_mainwin:
 			start += '<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += '<table style="width:800px">'
-		start += '<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
+		start += '<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
 
 		for addition in self.sixth_tab.added_additions:
 			try:
@@ -1489,7 +1492,7 @@ class beer_engine_mainwin:
 			start += '<td class="ing4">{percentage}%</td>'.format(percentage=ingredient['Values']['Percent'])
 			start += '</tr>'
 		start += '</table><br>'
-		if start[-179:] == '<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-179]
+		if start[-179:] == '<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>': start = start[:-179]
 
 		if self.sixth_tab.water_boil_is_disabled.get() == 1:
 			start += '<p><b>Boil Time: </b>{boil_time}</p>'.format(boil_time=self.sixth_tab.water_boil_time_spinbx.get())
@@ -1498,7 +1501,7 @@ class beer_engine_mainwin:
 			start += '<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += '<table style="width:800px">'
-		start += '<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
+		start += '<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
 		#temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
 		temp_hop = self.hops[:]
 		for addition in self.sixth_tab.added_additions:
@@ -1533,14 +1536,14 @@ class beer_engine_mainwin:
 				start += '<td class="hop6">N/A</td>'
 				start += '</tr>'
 		start += '</table><br>'
-		if start[-236:] == '<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-236]
+		if start[-236:] == '<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>': start = start[:-236]
 
 
 		if use_sorttable:
 			start += '<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += '<table style="width:800px">'
-		start += '<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr>'
+		start += '<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr>'
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.yeast_data[addition]['Type'] == 'D':
@@ -1584,7 +1587,7 @@ class beer_engine_mainwin:
 				except KeyError:
 					pass
 		start += '</table>'
-		if start[-245:] == '<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr></table>': start = start[:-245]
+		if start[-245:] == '<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr></table>': start = start[:-245]
 
 		start += '<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
 		start += '<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))

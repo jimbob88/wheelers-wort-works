@@ -3,10 +3,16 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+from io import open
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
 import brew_data
 import platform
@@ -16,7 +22,6 @@ import string
 import os
 import webbrowser
 import ast
-from io import open
 try:
 	import bs4
 except ImportError:
@@ -1430,7 +1435,7 @@ class beer_engine_mainwin(object):
 		self.recalculate()
 		if use_sorttable: start += u'<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
 		start += u'<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'), logo=resource_path(u'logo.png'))
-		start += u'''
+		start += ur'''
 		<!--Extracted From Graham Wheeler's Beer Engine recipe.html-->
 		<!--Yeast Section added by jimbob88-->
 		<style>
@@ -1455,8 +1460,11 @@ class beer_engine_mainwin(object):
 		td.yst6 {width:20; text-align:center; background-color: #FFFFFF;padding:4px}
 		td.yst7 {width:10; text-align:center; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
 		span.bold {font-weight: bold}
-		td.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;}
-		td.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-right: 1px solid #000000;}
+		th.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-bottom: 1px solid #000000;}
+		th.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-right: 1px solid #000000;border-bottom: 1px solid #000000;}
+		table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+    		content: " \25B4\25BE"
+		}
 		</style>'''
 		start += u'</head><body>'
 		start += u'<h2>{name}</h2>'.format(name=self.recipe_name_ent.get().replace(u'&', u'&amp;'))
@@ -1464,7 +1472,7 @@ class beer_engine_mainwin(object):
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += u'<table style="width:800px">'
-		start += u'<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
+		start += u'<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
 
 		for addition in self.sixth_tab.added_additions:
 			try:
@@ -1488,7 +1496,7 @@ class beer_engine_mainwin(object):
 			start += u'<td class="ing4">{percentage}%</td>'.format(percentage=ingredient[u'Values'][u'Percent'])
 			start += u'</tr>'
 		start += u'</table><br>'
-		if start[-179:] == u'<tr><td class="subhead">Fermentable</td><td class="subhead">Colour</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-179]
+		if start[-179:] == u'<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>': start = start[:-179]
 
 		if self.sixth_tab.water_boil_is_disabled.get() == 1:
 			start += u'<p><b>Boil Time: </b>{boil_time}</p>'.format(boil_time=self.sixth_tab.water_boil_time_spinbx.get())
@@ -1497,7 +1505,7 @@ class beer_engine_mainwin(object):
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += u'<table style="width:800px">'
-		start += u'<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr>'
+		start += u'<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
 		#temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
 		temp_hop = self.hops[:]
 		for addition in self.sixth_tab.added_additions:
@@ -1532,14 +1540,14 @@ class beer_engine_mainwin(object):
 				start += u'<td class="hop6">N/A</td>'
 				start += u'</tr>'
 		start += u'</table><br>'
-		if start[-236:] == u'<tr><td class="subhead">Hop Variety</td><td class="subhead">Type</td><td class="subhead">Alpha</td><td class="subhead">Time</td><td class="subhead">lb:oz</td><td class="subhead">Grams</td><td class="subhead2">Ratio</td></tr></table><br>': start = start[:-236]
+		if start[-236:] == u'<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>': start = start[:-236]
 
 
 		if use_sorttable:
 			start += u'<table style="width:800px" class="sortable" id="sortable">'
 		else:
 			start += u'<table style="width:800px">'
-		start += u'<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr>'
+		start += u'<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr>'
 		for addition in self.sixth_tab.added_additions:
 			try:
 				if brew_data.yeast_data[addition][u'Type'] == u'D':
@@ -1583,7 +1591,7 @@ class beer_engine_mainwin(object):
 				except KeyError:
 					pass
 		start += u'</table>'
-		if start[-245:] == u'<tr><td class="subhead">Yeast</td><td class="subhead">Lab</td><td class="subhead">Origin</td><td class="subhead">Type</td><td class="subhead">Flocculation</td><td class="subhead">Attenuation</td><td class="subhead2">Temperature</td></tr></table>': start = start[:-245]
+		if start[-245:] == u'<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr></table>': start = start[:-245]
 
 		start += u'<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
 		start += u'<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))
