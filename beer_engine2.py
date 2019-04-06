@@ -1626,7 +1626,7 @@ class beer_engine_mainwin(object):
 				self.hops = []
 				with open(file, u'rb') as f:
 					#data = [line for line in f]
-					data = [line.replace('\xa7', '\t').strip().decode(u'ISO-8859-1').split(u'\t') for line in f]
+					data = [line.replace(u'\xa7', u'\t').strip().decode(u'ISO-8859-1').split(u'\t') for line in f]
 					#print(data)
 					for sublist in data:
 						if sublist[0] == u'grain':

@@ -1967,7 +1967,7 @@ class hops_editor(tk.Frame):
 		self.hop_new_butt.configure(text='''New''')
 		self.hop_new_butt.configure(command=self.new)
 
-		#######################################################################
+		############################ Config Section ############################
 
 		self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
 		self.hop_name_lbl.place(relx=0.056, rely=0.087, bordermode='ignore')
@@ -2286,8 +2286,7 @@ class grist_editor(tk.Frame):
 		############################ Config Section ############################
 
 		self.grist_name_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
-				, bordermode='ignore')
+		self.grist_name_lbl.place(relx=0.056, rely=0.087, bordermode='ignore')
 		self.grist_name_lbl.configure(background=_bgcolor)
 		self.grist_name_lbl.configure(foreground="#000000")
 		self.grist_name_lbl.configure(font=font10)
@@ -2302,92 +2301,13 @@ class grist_editor(tk.Frame):
 		self.grist_name_ent.configure(takefocus="")
 		self.grist_name_ent.configure(cursor="xterm")
 
-		self.grist_ferment_ent = tk.Entry(self.grist_panedwindow2)
-		self.grist_ferment_ent.place(relx=0.361, rely=0.348, relheight=0.046
-				, relwidth=0.372, bordermode='ignore')
-		self.grist_ferment_ent.configure(takefocus="")
-		self.grist_ferment_ent.configure(cursor="xterm")
-		self.grist_ferment_ent.configure(justify='center')
-
-		self.grist_comm_ent = tk.Entry(self.grist_panedwindow2)
-		self.grist_comm_ent.place(relx=0.028, rely=0.5, relheight=0.046
-				, relwidth=0.956, bordermode='ignore')
-		self.grist_comm_ent.configure(foreground="#000000")
-		self.grist_comm_ent.configure(takefocus="")
-		self.grist_comm_ent.configure(cursor="xterm")
-
-		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_comm_lbl.place(relx=0.056, rely=0.457, height=16, width=99
-				, bordermode='ignore')
-		self.grist_comm_lbl.configure(background=_bgcolor)
-		self.grist_comm_lbl.configure(foreground="#000000")
-		self.grist_comm_lbl.configure(font=font10)
-		self.grist_comm_lbl.configure(relief='flat')
-		self.grist_comm_lbl.configure(text='''Comments:''')
-
-		self.grist_cancel_butt = tk.Button(self.grist_panedwindow2)
-		self.grist_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
-				, bordermode='ignore')
-		self.grist_cancel_butt.configure(takefocus="")
-		self.grist_cancel_butt.configure(text='''Cancel''')
-		self.grist_cancel_butt.configure(command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
-
-		self.grist_clear_butt = tk.Button(self.grist_panedwindow2)
-		self.grist_clear_butt.place(relx=0.389, rely=0.565, height=28, width=83
-				, bordermode='ignore')
-		self.grist_clear_butt.configure(takefocus="")
-		self.grist_clear_butt.configure(text='''Clear Form''')
-		self.grist_clear_butt.configure(command=self.clear_form)
-
-		self.grist_done_butt = tk.Button(self.grist_panedwindow2)
-		self.grist_done_butt.place(relx=0.75, rely=0.565, height=28, width=83
-				, bordermode='ignore')
-		self.grist_done_butt.configure(takefocus="")
-		self.grist_done_butt.configure(text='''Done''')
-		self.grist_done_butt.configure(command=self.done)
-
-		self.grist_save_data_butt = tk.Button(self.grist_panedwindow2)
-		self.grist_save_data_butt.place(relx=0.222, rely=0.696, height=108
-				, width=213, bordermode='ignore')
-		self.grist_save_data_butt.configure(takefocus="")
-		self.grist_save_data_butt.configure(text='''Save to Database''')
-		self.grist_save_data_butt.configure(command=self.save)
-
 		self.grist_colour_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_colour_lbl.place(relx=0.056, rely=0.152, height=19, width=60
-				, bordermode='ignore')
+		self.grist_colour_lbl.place(relx=0.056, rely=0.152, bordermode='ignore')
 		self.grist_colour_lbl.configure(background=_bgcolor)
 		self.grist_colour_lbl.configure(foreground="#000000")
 		self.grist_colour_lbl.configure(font=font10)
 		self.grist_colour_lbl.configure(relief='flat')
 		self.grist_colour_lbl.configure(text='''Colour:''')
-
-		self.grist_extract_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_extract_lbl.place(relx=0.056, rely=0.217, height=19, width=60
-				, bordermode='ignore')
-		self.grist_extract_lbl.configure(background=_bgcolor)
-		self.grist_extract_lbl.configure(foreground="#000000")
-		self.grist_extract_lbl.configure(font=font10)
-		self.grist_extract_lbl.configure(relief='flat')
-		self.grist_extract_lbl.configure(text='''Extract:''')
-
-		self.grist_moisture_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_moisture_lbl.place(relx=0.056, rely=0.283, height=19, width=80
-				, bordermode='ignore')
-		self.grist_moisture_lbl.configure(background=_bgcolor)
-		self.grist_moisture_lbl.configure(foreground="#000000")
-		self.grist_moisture_lbl.configure(font=font10)
-		self.grist_moisture_lbl.configure(relief='flat')
-		self.grist_moisture_lbl.configure(text='''Moisture:''')
-
-		self.grist_ferment_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_ferment_lbl.place(relx=0.056, rely=0.348, height=19, width=107
-				, bordermode='ignore')
-		self.grist_ferment_lbl.configure(background=_bgcolor)
-		self.grist_ferment_lbl.configure(foreground="#000000")
-		self.grist_ferment_lbl.configure(font=font9)
-		self.grist_ferment_lbl.configure(relief='flat')
-		self.grist_ferment_lbl.configure(text='''Fermentability:''')
 
 		self.grist_colour_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_colour_ent.place(relx=0.222, rely=0.152, relheight=0.046
@@ -2397,6 +2317,22 @@ class grist_editor(tk.Frame):
 		self.grist_colour_ent.configure(takefocus="")
 		self.grist_colour_ent.configure(cursor="xterm")
 
+		self.grist_colour_ebc = tk.Label(self.grist_panedwindow2)
+		self.grist_colour_ebc.place(relx=0.75, rely=0.152, bordermode='ignore')
+		self.grist_colour_ebc.configure(background=_bgcolor)
+		self.grist_colour_ebc.configure(foreground="#000000")
+		self.grist_colour_ebc.configure(font=font10)
+		self.grist_colour_ebc.configure(relief='flat')
+		self.grist_colour_ebc.configure(text='''EBC''')
+
+		self.grist_extract_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_extract_lbl.place(relx=0.056, rely=0.217, bordermode='ignore')
+		self.grist_extract_lbl.configure(background=_bgcolor)
+		self.grist_extract_lbl.configure(foreground="#000000")
+		self.grist_extract_lbl.configure(font=font10)
+		self.grist_extract_lbl.configure(relief='flat')
+		self.grist_extract_lbl.configure(text='''Extract:''')
+
 		self.grist_extract_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_extract_ent.place(relx=0.222, rely=0.217, relheight=0.046
 				, relwidth=0.511, bordermode='ignore')
@@ -2404,6 +2340,22 @@ class grist_editor(tk.Frame):
 		self.grist_extract_ent.configure(foreground="#000000")
 		self.grist_extract_ent.configure(takefocus="")
 		self.grist_extract_ent.configure(cursor="xterm")
+
+		self.grist_extract_ldk = tk.Label(self.grist_panedwindow2)
+		self.grist_extract_ldk.place(relx=0.75, rely=0.217, bordermode='ignore')
+		self.grist_extract_ldk.configure(background=_bgcolor)
+		self.grist_extract_ldk.configure(foreground="#000000")
+		self.grist_extract_ldk.configure(font=font10)
+		self.grist_extract_ldk.configure(relief='flat')
+		self.grist_extract_ldk.configure(text='''LDK''')
+
+		self.grist_moisture_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_moisture_lbl.place(relx=0.056, rely=0.283, bordermode='ignore')
+		self.grist_moisture_lbl.configure(background=_bgcolor)
+		self.grist_moisture_lbl.configure(foreground="#000000")
+		self.grist_moisture_lbl.configure(font=font10)
+		self.grist_moisture_lbl.configure(relief='flat')
+		self.grist_moisture_lbl.configure(text='''Moisture:''')
 
 		self.grist_moisture_ent = tk.Entry(self.grist_panedwindow2)
 		self.grist_moisture_ent.place(relx=0.278, rely=0.283, relheight=0.046
@@ -2413,36 +2365,32 @@ class grist_editor(tk.Frame):
 		self.grist_moisture_ent.configure(takefocus="")
 		self.grist_moisture_ent.configure(cursor="xterm")
 
-		self.grist_colour_percent = tk.Label(self.grist_panedwindow2)
-		self.grist_colour_percent.place(relx=0.75, rely=0.152, height=19, width=40
-				, bordermode='ignore')
-		self.grist_colour_percent.configure(background=_bgcolor)
-		self.grist_colour_percent.configure(foreground="#000000")
-		self.grist_colour_percent.configure(font=font10)
-		self.grist_colour_percent.configure(relief='flat')
-		self.grist_colour_percent.configure(text='''EBC''')
-
-		self.grist_extract_ldk = tk.Label(self.grist_panedwindow2)
-		self.grist_extract_ldk.place(relx=0.75, rely=0.217, height=19, width=60
-				, bordermode='ignore')
-		self.grist_extract_ldk.configure(background=_bgcolor)
-		self.grist_extract_ldk.configure(foreground="#000000")
-		self.grist_extract_ldk.configure(font=font10)
-		self.grist_extract_ldk.configure(relief='flat')
-		self.grist_extract_ldk.configure(text='''LDK''')
-
 		self.grist_moisture_percent = tk.Label(self.grist_panedwindow2)
-		self.grist_moisture_percent.place(relx=0.75, rely=0.283, height=19, width=20
-				, bordermode='ignore')
+		self.grist_moisture_percent.place(relx=0.75, rely=0.283, bordermode='ignore')
 		self.grist_moisture_percent.configure(background=_bgcolor)
 		self.grist_moisture_percent.configure(foreground="#000000")
 		self.grist_moisture_percent.configure(font=font10)
 		self.grist_moisture_percent.configure(relief='flat')
 		self.grist_moisture_percent.configure(text='''%''')
 
+
+		self.grist_ferment_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_ferment_lbl.place(relx=0.056, rely=0.348, bordermode='ignore')
+		self.grist_ferment_lbl.configure(background=_bgcolor)
+		self.grist_ferment_lbl.configure(foreground="#000000")
+		self.grist_ferment_lbl.configure(font=font9)
+		self.grist_ferment_lbl.configure(relief='flat')
+		self.grist_ferment_lbl.configure(text='''Fermentability:''')
+
+		self.grist_ferment_ent = tk.Entry(self.grist_panedwindow2)
+		self.grist_ferment_ent.place(relx=0.361, rely=0.348, relheight=0.046
+				, relwidth=0.372, bordermode='ignore')
+		self.grist_ferment_ent.configure(takefocus="")
+		self.grist_ferment_ent.configure(cursor="xterm")
+		self.grist_ferment_ent.configure(justify='center')
+
 		self.grist_ferment_percent = tk.Label(self.grist_panedwindow2)
-		self.grist_ferment_percent.place(relx=0.75, rely=0.348, height=19, width=20
-				, bordermode='ignore')
+		self.grist_ferment_percent.place(relx=0.75, rely=0.348, bordermode='ignore')
 		self.grist_ferment_percent.configure(background=_bgcolor)
 		self.grist_ferment_percent.configure(foreground="#000000")
 		self.grist_ferment_percent.configure(font=font10)
@@ -2450,14 +2398,12 @@ class grist_editor(tk.Frame):
 		self.grist_ferment_percent.configure(text='''%''')
 
 		self.grist_type_lbl = tk.Label(self.grist_panedwindow2)
-		self.grist_type_lbl.place(relx=0.056, rely=0.413, height=19, width=50
-				, bordermode='ignore')
+		self.grist_type_lbl.place(relx=0.056, rely=0.413, bordermode='ignore')
 		self.grist_type_lbl.configure(background=_bgcolor)
 		self.grist_type_lbl.configure(foreground="#000000")
 		self.grist_type_lbl.configure(font=font10)
 		self.grist_type_lbl.configure(relief='flat')
 		self.grist_type_lbl.configure(text='''Type:''')
-		self.grist_type_lbl.configure(width=50)
 
 		self.grist_type_combo = ttk.Combobox(self.grist_panedwindow2)
 		self.grist_type_combo.place(relx=0.194, rely=0.413, relheight=0.046
@@ -2469,6 +2415,50 @@ class grist_editor(tk.Frame):
 		#print([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
 		self.grist_type_combo_values.append([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
 		self.grist_type_combo.configure(values=self.grist_type_combo_values)
+
+		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_comm_lbl.place(relx=0.056, rely=0.543, bordermode='ignore')
+		self.grist_comm_lbl.configure(background=_bgcolor)
+		self.grist_comm_lbl.configure(foreground="#000000")
+		self.grist_comm_lbl.configure(font=font10)
+		self.grist_comm_lbl.configure(relief='flat')
+		self.grist_comm_lbl.configure(text='''Comments:''')
+
+		self.grist_comm_ent = tk.Entry(self.grist_panedwindow2)
+		self.grist_comm_ent.place(relx=0.028, rely=0.587, relheight=0.046
+				, relwidth=0.956, bordermode='ignore')
+		self.grist_comm_ent.configure(foreground="#000000")
+		self.grist_comm_ent.configure(takefocus="")
+		self.grist_comm_ent.configure(cursor="xterm")
+
+		self.grist_cancel_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
+				, bordermode='ignore')
+		self.grist_cancel_butt.configure(takefocus="")
+		self.grist_cancel_butt.configure(text='''Cancel''')
+		self.grist_cancel_butt.configure(command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
+
+		self.grist_clear_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
+				, bordermode='ignore')
+		self.grist_clear_butt.configure(takefocus="")
+		self.grist_clear_butt.configure(text='''Clear Form''')
+		self.grist_clear_butt.configure(command=self.clear_form)
+
+		self.grist_done_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
+				, bordermode='ignore')
+		self.grist_done_butt.configure(takefocus="")
+		self.grist_done_butt.configure(text='''Done''')
+		self.grist_done_butt.configure(command=self.done)
+
+		self.grist_save_data_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_save_data_butt.place(relx=0.222, rely=0.739, height=108
+				, width=213, bordermode='ignore')
+		self.grist_save_data_butt.configure(takefocus="")
+		self.grist_save_data_butt.configure(text='''Save to Database''')
+		self.grist_save_data_butt.configure(command=self.save)
+
 
 		self.input_state(0)
 
@@ -3632,6 +3622,8 @@ class yeast_editor(tk.Frame):
 		self.yeast_new_butt.configure(takefocus="")
 		self.yeast_new_butt.configure(text='''New''')
 		self.yeast_new_butt.configure(command=self.new)
+
+		############################ Config Section ############################
 
 		self.yeast_name_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_name_lbl.place(relx=0.056, rely=0.087, bordermode='ignore')
