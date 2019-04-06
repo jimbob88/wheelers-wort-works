@@ -3644,8 +3644,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_new_butt.configure(command=self.new)
 
 		self.yeast_name_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_name_lbl.place(relx=0.056, rely=0.087, height=19, width=50
-				, bordermode=u'ignore')
+		self.yeast_name_lbl.place(relx=0.056, rely=0.087, bordermode=u'ignore')
 		self.yeast_name_lbl.configure(background=_bgcolor)
 		self.yeast_name_lbl.configure(foreground=u"#000000")
 		self.yeast_name_lbl.configure(font=font9)
@@ -3660,52 +3659,8 @@ class yeast_editor(tk.Frame):
 		self.yeast_name_ent.configure(takefocus=u"")
 		self.yeast_name_ent.configure(cursor=u"xterm")
 
-		self.yeast_comm_ent = tk.Entry(self.yeast_panedwindow2)
-		self.yeast_comm_ent.place(relx=0.028, rely=0.587, relheight=0.046
-				, relwidth=0.956, bordermode=u'ignore')
-		self.yeast_comm_ent.configure(takefocus=u"")
-		self.yeast_comm_ent.configure(cursor=u"xterm")
-
-		self.yeast_comm_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_comm_lbl.place(relx=0.056, rely=0.543, height=19, width=99
-				, bordermode=u'ignore')
-		self.yeast_comm_lbl.configure(background=_bgcolor)
-		self.yeast_comm_lbl.configure(foreground=u"#000000")
-		self.yeast_comm_lbl.configure(font=font9)
-		self.yeast_comm_lbl.configure(relief=u'flat')
-		self.yeast_comm_lbl.configure(text=u'''Comments:''')
-
-		self.yeast_cancel_butt = tk.Button(self.yeast_panedwindow2)
-		self.yeast_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
-				, bordermode=u'ignore')
-		self.yeast_cancel_butt.configure(takefocus=u"")
-		self.yeast_cancel_butt.configure(text=u'''Cancel''')
-		self.yeast_cancel_butt.configure(command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
-
-		self.yeast_clear_butt = tk.Button(self.yeast_panedwindow2)
-		self.yeast_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
-				, bordermode=u'ignore')
-		self.yeast_clear_butt.configure(takefocus=u"")
-		self.yeast_clear_butt.configure(text=u'''Clear Form''')
-		self.yeast_clear_butt.configure(command=self.clear_form)
-
-		self.yeast_done_butt = tk.Button(self.yeast_panedwindow2)
-		self.yeast_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
-				, bordermode=u'ignore')
-		self.yeast_done_butt.configure(takefocus=u"")
-		self.yeast_done_butt.configure(text=u'''Done''')
-		self.yeast_done_butt.configure(command=self.done)
-
-		self.yeast_save_data_butt = tk.Button(self.yeast_panedwindow2)
-		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, height=108
-				, width=213, bordermode=u'ignore')
-		self.yeast_save_data_butt.configure(takefocus=u"")
-		self.yeast_save_data_butt.configure(text=u'''Save to Database''')
-		self.yeast_save_data_butt.configure(command=self.save)
-
 		self.yeast_type_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_type_lbl.place(relx=0.056, rely=0.152, height=19, width=50
-				, bordermode=u'ignore')
+		self.yeast_type_lbl.place(relx=0.056, rely=0.152, bordermode=u'ignore')
 		self.yeast_type_lbl.configure(background=_bgcolor)
 		self.yeast_type_lbl.configure(foreground=u"#000000")
 		self.yeast_type_lbl.configure(font=font9)
@@ -3722,8 +3677,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_type_combo.configure(justify=u'center')
 
 		self.yeast_lab_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_lab_lbl.place(relx=0.056, rely=0.217, height=19, width=50
-				, bordermode=u'ignore')
+		self.yeast_lab_lbl.place(relx=0.056, rely=0.217, bordermode=u'ignore')
 		self.yeast_lab_lbl.configure(background=_bgcolor)
 		self.yeast_lab_lbl.configure(foreground=u"#000000")
 		self.yeast_lab_lbl.configure(font=font9)
@@ -3737,6 +3691,22 @@ class yeast_editor(tk.Frame):
 		self.yeast_lab_ent.configure(foreground=u"#000000")
 		self.yeast_lab_ent.configure(takefocus=u"")
 		self.yeast_lab_ent.configure(cursor=u"xterm")
+
+		self.yeast_origin_lbl = tk.Label(self.yeast_panedwindow2)
+		self.yeast_origin_lbl.place(relx=0.056, rely=0.283, bordermode=u'ignore')
+		self.yeast_origin_lbl.configure(background=_bgcolor)
+		self.yeast_origin_lbl.configure(foreground=u"#000000")
+		self.yeast_origin_lbl.configure(font=font9)
+		self.yeast_origin_lbl.configure(relief=u'flat')
+		self.yeast_origin_lbl.configure(text=u'''Origin:''')
+
+		self.yeast_origin_ent = tk.Entry(self.yeast_panedwindow2)
+		self.yeast_origin_ent.place(relx=0.222, rely=0.283, relheight=0.046
+				, relwidth=0.511, bordermode=u'ignore')
+		self.yeast_origin_ent.configure(justify=u'center')
+		self.yeast_origin_ent.configure(foreground=u"#000000")
+		self.yeast_origin_ent.configure(takefocus=u"")
+		self.yeast_origin_ent.configure(cursor=u"xterm")
 
 		self.yeast_flocc_lbl = tk.Label(self.yeast_panedwindow2)
 		self.yeast_flocc_lbl.place(relx=0.056, rely=0.348, height=19, width=100
@@ -3758,8 +3728,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_flocc_combo.configure(justify=u'center')
 
 		self.yeast_attenuation_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_attenuation_lbl.place(relx=0.056, rely=0.413, height=19
-				, width=100, bordermode=u'ignore')
+		self.yeast_attenuation_lbl.place(relx=0.056, rely=0.413, bordermode=u'ignore')
 		self.yeast_attenuation_lbl.configure(background=_bgcolor)
 		self.yeast_attenuation_lbl.configure(foreground=u"#000000")
 		self.yeast_attenuation_lbl.configure(font=font9)
@@ -3775,24 +3744,6 @@ class yeast_editor(tk.Frame):
 		self.yeast_temperature_lbl.configure(relief=u'flat')
 		self.yeast_temperature_lbl.configure(text=u'''Temperature:''')
 		self.yeast_temperature_lbl.configure(width=110)
-
-		self.yeast_origin_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_origin_lbl.place(relx=0.056, rely=0.283, height=19, width=70
-				, bordermode=u'ignore')
-		self.yeast_origin_lbl.configure(background=_bgcolor)
-		self.yeast_origin_lbl.configure(foreground=u"#000000")
-		self.yeast_origin_lbl.configure(font=font9)
-		self.yeast_origin_lbl.configure(relief=u'flat')
-		self.yeast_origin_lbl.configure(text=u'''Origin:''')
-		self.yeast_origin_lbl.configure(width=70)
-
-		self.yeast_origin_ent = tk.Entry(self.yeast_panedwindow2)
-		self.yeast_origin_ent.place(relx=0.222, rely=0.283, relheight=0.046
-				, relwidth=0.511, bordermode=u'ignore')
-		self.yeast_origin_ent.configure(justify=u'center')
-		self.yeast_origin_ent.configure(foreground=u"#000000")
-		self.yeast_origin_ent.configure(takefocus=u"")
-		self.yeast_origin_ent.configure(cursor=u"xterm")
 
 		self.yeast_attenuation_ent = tk.Entry(self.yeast_panedwindow2)
 		self.yeast_attenuation_ent.place(relx=0.333, rely=0.413, relheight=0.046
@@ -3824,6 +3775,49 @@ class yeast_editor(tk.Frame):
 		self.yeast_temperature_spinbox2.configure(selectbackground=u"#c4c4c4")
 		self.yeast_temperature_spinbox2.configure(width=48)
 		self.yeast_temperature_spinbox2.configure(textvariable=self.yeast_temperature_spinbox2_value)
+
+		self.yeast_comm_lbl = tk.Label(self.yeast_panedwindow2)
+		self.yeast_comm_lbl.place(relx=0.056, rely=0.543, bordermode=u'ignore')
+		self.yeast_comm_lbl.configure(background=_bgcolor)
+		self.yeast_comm_lbl.configure(foreground=u"#000000")
+		self.yeast_comm_lbl.configure(font=font9)
+		self.yeast_comm_lbl.configure(relief=u'flat')
+		self.yeast_comm_lbl.configure(text=u'''Comments:''')
+
+		self.yeast_comm_ent = tk.Entry(self.yeast_panedwindow2)
+		self.yeast_comm_ent.place(relx=0.028, rely=0.587, relheight=0.046
+		, relwidth=0.956, bordermode=u'ignore')
+		self.yeast_comm_ent.configure(takefocus=u"")
+		self.yeast_comm_ent.configure(cursor=u"xterm")
+
+		self.yeast_cancel_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
+				, bordermode=u'ignore')
+		self.yeast_cancel_butt.configure(takefocus=u"")
+		self.yeast_cancel_butt.configure(text=u'''Cancel''')
+		self.yeast_cancel_butt.configure(command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
+
+		self.yeast_clear_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
+				, bordermode=u'ignore')
+		self.yeast_clear_butt.configure(takefocus=u"")
+		self.yeast_clear_butt.configure(text=u'''Clear Form''')
+		self.yeast_clear_butt.configure(command=self.clear_form)
+
+		self.yeast_done_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
+				, bordermode=u'ignore')
+		self.yeast_done_butt.configure(takefocus=u"")
+		self.yeast_done_butt.configure(text=u'''Done''')
+		self.yeast_done_butt.configure(command=self.done)
+
+		self.yeast_save_data_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, height=108
+				, width=213, bordermode=u'ignore')
+		self.yeast_save_data_butt.configure(takefocus=u"")
+		self.yeast_save_data_butt.configure(text=u'''Save to Database''')
+		self.yeast_save_data_butt.configure(command=self.save)
+
 
 		self.yeast_lstbx.bind(u'<<ListboxSelect>>', self.select_listbox)
 		self.input_state(0)
