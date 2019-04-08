@@ -173,7 +173,7 @@ class beer_engine_mainwin:
 		self.master.geometry("800x480+674+369")
 		self.master.title("Wheeler's Wort Works")
 		self.master.configure(highlightcolor="black")
-		#self.master.resizable(0, 0)
+		self.master.resizable(0, 0)
 		self.tabbed_frame = ttk.Notebook(self.master)
 
 		self.first_tab = tk.Frame(self.tabbed_frame)
