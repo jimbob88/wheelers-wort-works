@@ -173,7 +173,7 @@ class beer_engine_mainwin:
 		self.master.geometry("800x480+674+369")
 		self.master.title("Wheeler's Wort Works")
 		self.master.configure(highlightcolor="black")
-		self.master.resizable(0, 0)
+		#self.master.resizable(0, 0)
 		self.tabbed_frame = ttk.Notebook(self.master)
 
 		self.first_tab = tk.Frame(self.tabbed_frame)
@@ -1488,7 +1488,7 @@ class beer_engine_mainwin:
 			start += '<td class="ing1">{name}</td>'.format(name=ingredient['Name'])
 			start += '<td class="ing2">{colour}</td>'.format(colour=ingredient['Values']['EBC'])
 			start += '<td class="ing3">{lb}:{oz}</td>'.format(lb=int(ingredient['Values']['lb:oz'][0]), oz=round(ingredient['Values']['lb:oz'][1], 1))
-			start += '<td class="ing3">{grams}</td>'.format(grams=round(ingredient['Values']['Grams'], 1))
+			start += '<td class="ing3">{grams}</td>'.format(grams=(round(ingredient['Values']['Grams'], 1)) if (ingredient['Values']['Grams']-int(ingredient['Values']['Grams'])) >= 2 else round(ingredient['Values']['Grams']))
 			start += '<td class="ing4">{percentage}%</td>'.format(percentage=ingredient['Values']['Percent'])
 			start += '</tr>'
 		start += '</table><br>'
@@ -1520,9 +1520,9 @@ class beer_engine_mainwin:
 				start += '<td class="hop1">{name}</td>'.format(name=hop['Name'])
 				start += '<td class="hop2">{type}</td>'.format(type=hop['Values']['Type'])
 				start += '<td class="hop3">{alpha}</td>'.format(alpha=hop['Values']['Alpha'])
-				start += '<td class="hop4">{time}</td>'.format(time=hop['Values']['Time'])
+				start += '<td class="hop4">{time}</td>'.format(time=round(hop['Values']['Time']))
 				start += '<td class="hop5">{lb}:{oz}</td>'.format(lb=int(hop['Values']['lb:oz'][0]), oz=round(hop['Values']['lb:oz'][1], 1))
-				start += '<td class="hop5">{grams}</td>'.format(grams=round(hop['Values']['Grams'], 1))
+				start += '<td class="hop5">{grams}</td>'.format(grams=(round(hop['Values']['Grams'], 1)) if (hop['Values']['Grams']-int(hop['Values']['Grams'])) >= 2 else round(hop['Values']['Grams']))
 				start += '<td class="hop6">{percentage}%</td>'.format(percentage=hop['Values']['Percent'])
 				start += '</tr>'
 			else:
