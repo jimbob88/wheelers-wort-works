@@ -182,12 +182,14 @@ class beer_engine_mainwin:
 		self.fourth_tab = yeast_editor(self.tabbed_frame)
 		self.fifth_tab = defaults_editor(self.tabbed_frame)
 		self.sixth_tab = special_editor(self.tabbed_frame)
+		self.seventh_tab = notes_area(self.tabbed_frame)
 		self.tabbed_frame.add(self.first_tab, text="Engine Room")
 		self.tabbed_frame.add(self.second_tab, text="Hop Editor")
 		self.tabbed_frame.add(self.third_tab, text="Grist Editor")
 		self.tabbed_frame.add(self.fourth_tab, text="Yeast Editor")
 		self.tabbed_frame.add(self.fifth_tab, text="Defaults Editor")
 		self.tabbed_frame.add(self.sixth_tab, text="Experimental Attenuation")
+		self.tabbed_frame.add(self.seventh_tab, text="Notes Area")
 		self.tabbed_frame.grid(row=0, column=0, sticky='nsew')
 		self.master.rowconfigure(0, weight=1)
 		self.master.columnconfigure(0, weight=1)
@@ -1589,13 +1591,15 @@ class beer_engine_mainwin:
 		start += '</table>'
 		if start[-245:] == '<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr></table>': start = start[:-245]
 
-		start += '<p><b>Final Volume: </b>{volume} Litres<p>'.format(volume=self.volume.get())
-		start += '<p><b>Original Gravity: </b>{og}<p>'.format(og=round(self.og, 1))
-		start += '<p><b>Final Gravity: </b>{fg}<p>'.format(fg=round(self.fg, 1))
-		start += '<p><b>Alcohol Content: </b>{abv}% ABV<p>'.format(abv=round(self.abv, 1))
-		start += '<p><b>Mash Efficiency: </b>{efficiency}<p>'.format(efficiency=brew_data.constants['Efficiency']*100)
-		start += '<p><b>Bitterness: </b>{bitterness} IBU<p>'.format(bitterness=round(self.ibu))
-		start += '<p><b>Colour: </b>{colour} EBC<p>'.format(colour=round(self.colour, 1))
+		start += '<p><b>Final Volume: </b>{volume} Litres</p>'.format(volume=self.volume.get())
+		start += '<p><b>Original Gravity: </b>{og}</p>'.format(og=round(self.og, 1))
+		start += '<p><b>Final Gravity: </b>{fg}</p>'.format(fg=round(self.fg, 1))
+		start += '<p><b>Alcohol Content: </b>{abv}% ABV</p>'.format(abv=round(self.abv, 1))
+		start += '<p><b>Mash Efficiency: </b>{efficiency}</p>'.format(efficiency=brew_data.constants['Efficiency']*100)
+		start += '<p><b>Bitterness: </b>{bitterness} IBU</p>'.format(bitterness=round(self.ibu))
+		start += '<p><b>Colour: </b>{colour} EBC</p>'.format(colour=round(self.colour, 1))
+		notes = self.seventh_tab.texpert.get('1.0', 'end').replace('\n', '<br>')
+		start += '''<hr><h2>Notes</h2>\n<p>{notes}</p>'''.format(notes=notes) if len(notes) >= 1 else ''
 		start += '</body>'
 		start += '</html>'
 
@@ -1616,10 +1620,12 @@ class beer_engine_mainwin:
 			examples = ['1920s Bitter', 'Bog-Standard Bitter', 'Black-Country Mild', 'Irish Stout', '1920s Mild', '1920s Porter', '1920s Stock Ale', '1920s Stout']
 			is_ogfixed = 0
 			is_ebufixed = 0
+			self.ingredients = []
+			self.hops = []
+			self.seventh_tab.texpert.delete('1.0', 'end')
+			notes = b''
 			if file.lower()[-5:] == '.berf' or file.split('/')[-1] in examples:
 				self.current_file = file
-				self.ingredients = []
-				self.hops = []
 				with open(file, 'rb') as f:
 					#data = [line for line in f]
 					data = [line.replace(b'\xa7', b'\t').strip().decode('ISO-8859-1').split('\t') for line in f]
@@ -1665,11 +1671,11 @@ class beer_engine_mainwin:
 								is_ogfixed = sublist[2]
 							elif sublist[1] == 'ebufixed':
 								is_ebufixed = sublist[2]
+							elif sublist[1] == 'notes':
+								notes += bytes(sublist[2],encoding='utf8')
+
 
 			elif file.lower()[-6:] == '.berfx':
-				self.current_file = file
-				self.ingredients = []
-				self.hops = []
 				self.current_file = file
 				with open(file, 'r') as f:
 					#data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
@@ -1709,17 +1715,20 @@ class beer_engine_mainwin:
 							elif sublist[1] == 'recipename':
 								self.recipe_name_ent.delete(0, tk.END)
 								self.recipe_name_ent.insert(0, sublist[2])
+							elif sublist[1] == 'notes':
+								notes += bytes(sublist[2],encoding='utf8')
 
-		self.refresh_hop()
-		self.refresh_grist()
-		self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
-		#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
-		self.fifth_tab.open_locals()
-		self.sixth_tab.refresh_all()
-		self.recalculate()
-		self.is_ogfixed.set(is_ogfixed)
-		self.is_ebufixed.set(is_ebufixed)
-		self.recalculate()
+			self.seventh_tab.texpert.insert('1.0', notes.decode('unicode_escape'))
+			self.refresh_hop()
+			self.refresh_grist()
+			self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
+			#print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
+			self.fifth_tab.open_locals()
+			self.sixth_tab.refresh_all()
+			self.recalculate()
+			self.is_ogfixed.set(is_ogfixed)
+			self.is_ebufixed.set(is_ebufixed)
+			self.recalculate()
 
 
 	def save_file(self, file):
@@ -1758,6 +1767,9 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
 					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
+					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))
+					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
+
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
 				with open(file, 'w') as f:
@@ -1776,6 +1788,9 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
 					f.write('miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
+
+					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))
+					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
 					for key, grist in brew_data.grist_data.items(): f.write('database\xa7grist\xa7{name}\t{data}\n'.format(name=key, data=grist))
 					for key, hop in brew_data.hop_data.items(): f.write('database\xa7hop\xa7{name}\t{data}\n'.format(name=key, data=hop))
@@ -3948,6 +3963,82 @@ class yeast_editor(tk.Frame):
 		for yeast in sorted(brew_data.yeast_data):
 			self.yeast_lstbx.insert(tk.END, yeast)
 
+class notes_area(tk.Frame):
+	def __init__(self, parent):
+		tk.Frame.__init__(self, parent)
+
+		self.widgets()
+
+	def widgets(self):
+		########################################################################################
+		#				Salvaged from https://github.com/jimbob88/texpert/					   #
+		########################################################################################
+		self.texpert = ScrolledText(self, bg="white", undo=True, maxundo=-1, font=("Arial", 11), wrap='none')
+		self.texpert.grid(row=0, column=0, sticky='nsew', padx=2, pady=2)
+		self.texpert.focus_set()
+		#edit menu
+		self.editmenu = tk.Menu(tearoff=0)
+		self.editmenu.add_command(label="Undo", command=self.undo_com, accelerator="Ctrl+Z")
+		self.editmenu.add_command(label="Redo", command=self.redo_com, accelerator="Shift+Ctrl+Z")
+		self.editmenu.add_separator()
+		self.editmenu.add_command(label="Cut", command=self.cut_com, accelerator="Ctrl+X")
+		self.texpert.bind("<Control-Key-x>", lambda e: self.undo_com)
+		self.editmenu.add_command(label="Copy", command=self.copy_com, accelerator="Ctrl+C")
+		self.texpert.bind("<Control-Key-c>", lambda e: self.undo_com)
+		self.editmenu.add_command(label="Paste", command=self.paste_com, accelerator="Ctrl+V")
+		self.texpert.bind("<Control-Key-v>", lambda e: self.undo_com)
+		self.editmenu.add_separator()
+		self.editmenu.add_command(label="Select All", command=self.select_all, accelerator="Ctrl+A")
+		# self.editmenu.add_separator()
+		# self.editmenu.add_command(label="Find", command=self.find_win, accelerator="Ctrl+F")
+
+		self.texpert.bind("<Control-Key-a>", self.select_all)
+		self.texpert.bind("<Control-Key-A>", self.select_all)
+		self.texpert.bind("<Button-3>", self.r_click)
+
+		self.current_file = None
+		self.file_type = None
+
+		self.grid_rowconfigure(0, weight=1)
+		self.grid_columnconfigure(0, weight=1)
+
+	def r_click(self, event):
+		self.editmenu.tk_popup(event.x_root, event.y_root)
+
+	def mode_popup(self, event):
+		try:
+			self.submenu.post(event.x_root, event.y_root)
+		finally:
+			self.submenu.grab_release()
+
+	def undo_com(self):
+		print(self.texpert.event_generate("<<Undo>>"))
+		try: self.texpert.event_generate("<<Undo>>")
+		except tk.TclError: print('Undo Failed')
+
+	def redo_com(self):
+		try: self.texpert.event_generate("<<Redo>>")
+		except tk.TclError: print('Redo Failed')
+
+	def cut_com(self):
+		try: self.texpert.event_generate("<<Cut>>")
+		except tk.TclError: pass
+
+	def copy_com(self):
+		try: self.texpert.event_generate("<<Copy>>")
+		except tk.TclError: pass
+
+	def paste_com(self):
+		try: self.texpert.event_generate("<<Paste>>")
+		except tk.TclError: pass
+
+	def select_all(self, event=None):
+		self.texpert.tag_add(tk.SEL, '1.0', 'end-1c')
+		self.texpert.mark_set(tk.INSERT, '1.0')
+		self.texpert.see(tk.INSERT)
+		return 'break'
+
+
 
 class AutoScroll(object):
 	'''Configure the scrollbars for a widget.'''
@@ -4043,6 +4134,13 @@ class ScrolledListBox(AutoScroll, tk.Listbox):
 		tk.Listbox.__init__(self, master, **kw)
 		AutoScroll.__init__(self, master)
 
+class ScrolledText(AutoScroll, tk.Text):
+	'''A standard Tkinter Text widget with scrollbars that will
+	automatically show/hide as needed.'''
+	@_create_container
+	def __init__(self, master, **kw):
+		tk.Text.__init__(self, master, **kw)
+		AutoScroll.__init__(self, master)
 
 
 def _bound_to_mousewheel(event, widget):
