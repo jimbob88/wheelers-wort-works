@@ -4220,6 +4220,7 @@ def resource_path(relative_path):
 def main():
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
+	root.config(cursor="arrow")
 	root.mainloop()
 
 
