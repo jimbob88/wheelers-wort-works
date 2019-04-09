@@ -67,7 +67,7 @@ class beer_engine_mainwin(object):
 
 		if not os.path.isfile(resource_path(u'hop_data.txt')):
 			with open(resource_path(u'hop_data.txt'), u'w') as f:
-				for hop, value in brew_data.hop_data.iteritems():
+				for hop, value in brew_data.hop_data.items():
 					name = hop
 					hop_type = value[u'Form']
 					origin = value[u'Origin']
@@ -91,7 +91,7 @@ class beer_engine_mainwin(object):
 				#print('hop_data =', brew_data.hop_data)
 		if not os.path.isfile(resource_path(u'grain_data.txt')):
 			with open(resource_path(u'grain_data.txt'), u'w') as f:
-				for ingredient, value in brew_data.grist_data.iteritems():
+				for ingredient, value in brew_data.grist_data.items():
 					name = ingredient
 					ebc = value[u'EBC']
 					grain_type = value[u'Type']
@@ -119,7 +119,7 @@ class beer_engine_mainwin(object):
 		if not os.path.isfile(resource_path(u'yeast_data.txt')):
 			with open(resource_path(u'yeast_data.txt'), u'w') as f:
 				if brew_data.constants[u'Replace Defaults']: brew_data.yeast_data = {}
-				for yeast, value in brew_data.yeast_data.iteritems():
+				for yeast, value in brew_data.yeast_data.items():
 					name = yeast
 					yeast_type = value[u'Type']
 					lab = value[u'Lab']
@@ -145,7 +145,7 @@ class beer_engine_mainwin(object):
 
 		if not os.path.isfile(resource_path(u'water_chem_data.txt')):
 			with open(resource_path(u'water_chem_data.txt'), u'w') as f:
-				for water_chem, values in brew_data.water_chemistry_additions.iteritems():
+				for water_chem, values in brew_data.water_chemistry_additions.items():
 					value = values[u'Values']
 					name = water_chem
 					time = value[u'Time'] if u'Time' in value else u'N/A'
@@ -1602,8 +1602,11 @@ class beer_engine_mainwin(object):
 		start += u'<p><b>Mash Efficiency: </b>{efficiency}</p>'.format(efficiency=brew_data.constants[u'Efficiency']*100)
 		start += u'<p><b>Bitterness: </b>{bitterness} IBU</p>'.format(bitterness=round(self.ibu))
 		start += u'<p><b>Colour: </b>{colour} EBC</p>'.format(colour=round(self.colour, 1))
-		notes = self.seventh_tab.texpert.get(u'1.0', u'end').replace(u'\n', u'<br>')
-		start += u'''<hr><h2>Notes</h2>\n<p>{notes}</p>'''.format(notes=notes) if len(notes) >= 1 else u''
+		notes = self.seventh_tab.texpert.get(u'1.0', u'end')
+		if self.seventh_tab.html_formatting.get():
+			start += u'''<hr><h2>Notes</h2>\n{notes}'''.format(notes=notes) if len(notes) >= 1 else u''
+		else:
+			start += u'''<hr><h2>Notes</h2>\n<p>{notes}</p>'''.format(notes=notes.replace(u'\n', u'<br>')) if len(notes) >= 1 else u''
 		start += u'</body>'
 		start += u'</html>'
 
@@ -1663,11 +1666,15 @@ class beer_engine_mainwin(object):
 						elif sublist[1] == u'recipename':
 							self.recipe_name_ent.delete(0, tk.END)
 							self.recipe_name_ent.insert(0, sublist[2])
-						elif sublist[1] == u'volume' and not any(e[1] == u'boilvol' for e in data):
+						elif sublist[1] == u'volume':
 							self.volume_ent.delete(0, tk.END)
 							self.volume_ent.insert(0, sublist[2])
+							if not any(e[1] == u'boilvol' for e in data):
+								self.boil_volume_ent.delete(0, tk.END)
+								self.boil_volume_ent.insert(0, float(sublist[2])*brew_data.constants[u'Boil Volume Scale'])
+						elif sublist[1] == u'boilvol':
 							self.boil_volume_ent.delete(0, tk.END)
-							self.boil_volume_ent.insert(0, float(sublist[2])*brew_data.constants[u'Boil Volume Scale'])
+							self.boil_volume_ent.insert(0, sublist[2])
 						elif sublist[1] == u'efficiency':
 							brew_data.constants[u'Efficiency'] = float(sublist[2])/100
 						elif sublist[0] == u'miscel':
@@ -1709,7 +1716,7 @@ class beer_engine_mainwin(object):
 							elif sublist[1] == u'water_chem':
 								brew_data.water_chemistry_additions[sublist[2]] = ast.literal_eval(sublist[3])
 							elif sublist[1] == u'constant':
-								for constant, value in ast.literal_eval(sublist[2]).iteritems():
+								for constant, value in ast.literal_eval(sublist[2]).items():
 									brew_data.constants[constant] = value
 						elif sublist[0] == u'miscel':
 							if sublist[1] == u'ogfixed':
@@ -1766,6 +1773,7 @@ class beer_engine_mainwin(object):
 						f.write(u'add\xa7{name}\t{type}\n'.format(name=name, type=addition_type))
 					f.write(u'default\xa7efficiency\t{efficiency}\n'.format(efficiency=brew_data.constants[u'Efficiency']*100))
 					f.write(u'default\xa7volume\t{volume}\n'.format(volume=self.volume.get()))
+					f.write(u'default\xa7boilvol\t{boilvol}\n'.format(boilvol=self.boil_vol.get()))
 					f.write(u'miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
 					f.write(u'miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write(u'miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
@@ -1792,15 +1800,16 @@ class beer_engine_mainwin(object):
 					f.write(u'miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write(u'miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
 					f.write(u'miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
+					f.write(u'default\xa7boilvol\t{boilvol}\n'.format(boilvol=self.boil_vol.get()))
 
 					notes = repr(self.seventh_tab.texpert.get(u'1.0', u'end'))
 					f.write(u'miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
-					for key, grist in brew_data.grist_data.iteritems(): f.write(u'database\xa7grist\xa7{name}\t{data}\n'.format(name=key, data=grist))
-					for key, hop in brew_data.hop_data.iteritems(): f.write(u'database\xa7hop\xa7{name}\t{data}\n'.format(name=key, data=hop))
-					for key, yeast in brew_data.yeast_data.iteritems(): f.write(u'database\xa7yeast\xa7{name}\t{data}\n'.format(name=key, data=yeast))
-					for key, water_chem in brew_data.water_chemistry_additions.iteritems(): f.write(u'database\xa7water_chem\xa7{name}\t{data}\n'.format(name=key, data=water_chem))
-					#for key, constant in brew_data.constants.iteritems(): f.write('database\xa7constant\xa7{name}\t{data}\n'.format(name=key, data=constant))
+					for key, grist in brew_data.grist_data.items(): f.write(u'database\xa7grist\xa7{name}\t{data}\n'.format(name=key, data=grist))
+					for key, hop in brew_data.hop_data.items(): f.write(u'database\xa7hop\xa7{name}\t{data}\n'.format(name=key, data=hop))
+					for key, yeast in brew_data.yeast_data.items(): f.write(u'database\xa7yeast\xa7{name}\t{data}\n'.format(name=key, data=yeast))
+					for key, water_chem in brew_data.water_chemistry_additions.items(): f.write(u'database\xa7water_chem\xa7{name}\t{data}\n'.format(name=key, data=water_chem))
+					#for key, constant in brew_data.constants.items(): f.write('database\xa7constant\xa7{name}\t{data}\n'.format(name=key, data=constant))
 					f.write(u'database\xa7constant\xa7{constants}'.format(constants=brew_data.constants))
 
 	def save(self):
@@ -2225,7 +2234,7 @@ class hops_editor(tk.Frame):
 
 	def save(self):
 		with open(resource_path(u'hop_data.txt'), u'w') as f:
-			for hop, value in brew_data.hop_data.iteritems():
+			for hop, value in brew_data.hop_data.items():
 				name = hop
 				type = value[u'Form']
 				origin = value[u'Origin']
@@ -2430,9 +2439,9 @@ class grist_editor(tk.Frame):
 		self.grist_type_combo.configure(width=197)
 		self.grist_type_combo.configure(takefocus=u"")
 		self.grist_type_combo_values = [u'Primary Malt', u'Secondary Malt', u'Mash Tun Adjunct', u'Can Be Steeped', u'Malt Extract', u'Copper Sugar']
-		#print([vals['Type'] for (grist, vals) in brew_data.grist_data.iteritems()])
-		#print([grist['Type'] for key, grist in brew_data.grist_data.iteritems() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
-		self.grist_type_combo_values.append([grist[u'Type'] for key, grist in brew_data.grist_data.iteritems() if grist[u'Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
+		#print([vals['Type'] for (grist, vals) in brew_data.grist_data.items()])
+		#print([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
+		self.grist_type_combo_values.append([grist[u'Type'] for key, grist in brew_data.grist_data.items() if grist[u'Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
 		self.grist_type_combo.configure(values=self.grist_type_combo_values)
 
 		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
@@ -2574,7 +2583,7 @@ class grist_editor(tk.Frame):
 
 	def save(self):
 		with open(resource_path(u'grain_data.txt'), u'w') as f:
-			for ingredient, value in brew_data.grist_data.iteritems():
+			for ingredient, value in brew_data.grist_data.items():
 				name = ingredient
 				ebc = value[u'EBC']
 				type = value[u'Type']
@@ -3554,7 +3563,7 @@ class special_editor(tk.Frame):
 		def save_to_database():
 			done()
 			with open(resource_path(u'water_chem_data.txt'), u'w') as f:
-				for water_chem, values in brew_data.water_chemistry_additions.iteritems():
+				for water_chem, values in brew_data.water_chemistry_additions.items():
 					value = values[u'Values']
 					name = water_chem
 					time = value[u'Time'] if u'Time' in value else u'N/A'
@@ -3950,7 +3959,7 @@ class yeast_editor(tk.Frame):
 
 	def save(self):
 		with open(resource_path(u'yeast_data.txt'), u'w') as f:
-			for yeast, value in brew_data.yeast_data.iteritems():
+			for yeast, value in brew_data.yeast_data.items():
 				name = yeast
 				yeast_type = value[u'Type']
 				lab = value[u'Lab']
@@ -3993,8 +4002,13 @@ class notes_area(tk.Frame):
 		self.texpert.bind(u"<Control-Key-v>", lambda e: self.undo_com)
 		self.editmenu.add_separator()
 		self.editmenu.add_command(label=u"Select All", command=self.select_all, accelerator=u"Ctrl+A")
+		self.editmenu.add_separator()
+		self.html_formatting = tk.BooleanVar()
+		self.editmenu.add_checkbutton(label=u"HTML Mode", variable=self.html_formatting)
 		# self.editmenu.add_separator()
 		# self.editmenu.add_command(label="Find", command=self.find_win, accelerator="Ctrl+F")
+
+
 
 		self.texpert.bind(u"<Control-Key-a>", self.select_all)
 		self.texpert.bind(u"<Control-Key-A>", self.select_all)

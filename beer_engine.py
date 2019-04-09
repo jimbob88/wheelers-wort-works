@@ -1598,8 +1598,11 @@ class beer_engine_mainwin:
 		start += '<p><b>Mash Efficiency: </b>{efficiency}</p>'.format(efficiency=brew_data.constants['Efficiency']*100)
 		start += '<p><b>Bitterness: </b>{bitterness} IBU</p>'.format(bitterness=round(self.ibu))
 		start += '<p><b>Colour: </b>{colour} EBC</p>'.format(colour=round(self.colour, 1))
-		notes = self.seventh_tab.texpert.get('1.0', 'end').replace('\n', '<br>')
-		start += '''<hr><h2>Notes</h2>\n<p>{notes}</p>'''.format(notes=notes) if len(notes) >= 1 else ''
+		notes = self.seventh_tab.texpert.get('1.0', 'end')
+		if self.seventh_tab.html_formatting.get():
+			start += '''<hr><h2>Notes</h2>\n{notes}'''.format(notes=notes) if len(notes) >= 1 else ''
+		else:
+			start += '''<hr><h2>Notes</h2>\n<p>{notes}</p>'''.format(notes=notes.replace('\n', '<br>')) if len(notes) >= 1 else ''
 		start += '</body>'
 		start += '</html>'
 
@@ -1659,11 +1662,15 @@ class beer_engine_mainwin:
 						elif sublist[1] == 'recipename':
 							self.recipe_name_ent.delete(0, tk.END)
 							self.recipe_name_ent.insert(0, sublist[2])
-						elif sublist[1] == 'volume' and not any(e[1] == 'boilvol' for e in data):
+						elif sublist[1] == 'volume':
 							self.volume_ent.delete(0, tk.END)
 							self.volume_ent.insert(0, sublist[2])
+							if not any(e[1] == 'boilvol' for e in data):
+								self.boil_volume_ent.delete(0, tk.END)
+								self.boil_volume_ent.insert(0, float(sublist[2])*brew_data.constants['Boil Volume Scale'])
+						elif sublist[1] == 'boilvol':
 							self.boil_volume_ent.delete(0, tk.END)
-							self.boil_volume_ent.insert(0, float(sublist[2])*brew_data.constants['Boil Volume Scale'])
+							self.boil_volume_ent.insert(0, sublist[2])
 						elif sublist[1] == 'efficiency':
 							brew_data.constants['Efficiency'] = float(sublist[2])/100
 						elif sublist[0] == 'miscel':
@@ -1762,6 +1769,7 @@ class beer_engine_mainwin:
 						f.write('add\xa7{name}\t{type}\n'.format(name=name, type=addition_type))
 					f.write('default\xa7efficiency\t{efficiency}\n'.format(efficiency=brew_data.constants['Efficiency']*100))
 					f.write('default\xa7volume\t{volume}\n'.format(volume=self.volume.get()))
+					f.write('default\xa7boilvol\t{boilvol}\n'.format(boilvol=self.boil_vol.get()))
 					f.write('miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
 					f.write('miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
@@ -1788,6 +1796,7 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7ogfixed\t{ogfixed}\n'.format(ogfixed=self.is_ogfixed.get()))
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
 					f.write('miscel\xa7recipename\t{recipename}\n'.format(recipename=self.recipe_name_ent.get()))
+					f.write('default\xa7boilvol\t{boilvol}\n'.format(boilvol=self.boil_vol.get()))
 
 					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))
 					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
@@ -3989,8 +3998,13 @@ class notes_area(tk.Frame):
 		self.texpert.bind("<Control-Key-v>", lambda e: self.undo_com)
 		self.editmenu.add_separator()
 		self.editmenu.add_command(label="Select All", command=self.select_all, accelerator="Ctrl+A")
+		self.editmenu.add_separator()
+		self.html_formatting = tk.BooleanVar()
+		self.editmenu.add_checkbutton(label="HTML Mode", variable=self.html_formatting)
 		# self.editmenu.add_separator()
 		# self.editmenu.add_command(label="Find", command=self.find_win, accelerator="Ctrl+F")
+
+
 
 		self.texpert.bind("<Control-Key-a>", self.select_all)
 		self.texpert.bind("<Control-Key-A>", self.select_all)
