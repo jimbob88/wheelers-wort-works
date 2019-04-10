@@ -4221,10 +4221,12 @@ def resource_path(relative_path):
 			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/html'), relative_path)
 		else:
 			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), relative_path)
-def main():
+def main(file=None):
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
 	root.config(cursor=u"arrow")
+	if file != None:
+		gui.open_file(file)
 	root.mainloop()
 
 
