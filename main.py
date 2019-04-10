@@ -10,6 +10,7 @@ if sys.version_info >= (3, 0):
 else:
     import beer_engine2 as beer_engine
     from urllib2 import urlopen
+    os.getcwd = os.getcwdu
 
 def resource_path(relative_path):
 	u""" Get absolute path to resource, works for dev and for PyInstaller """
@@ -44,6 +45,11 @@ if __name__ == u'__main__':
                     print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
                     with open(resource_path('update.py'), 'w') as f:
                         f.write(update_text)
+        elif os.path.splitext(sys.argv[1])[1] in ['.berf', '.berfx']:
+            beer_engine.__mode__ = __mode__
+            file = os.path.join(os.getcwd(), sys.argv[1]) if not os.path.isfile(sys.argv[1]) else os.path.expanduser(sys.argv[1])
+            beer_engine.main(file)
+
         else:
             print(u'Run --update to update the current install, or run --coreupdate to update the updater script')
             exit()
