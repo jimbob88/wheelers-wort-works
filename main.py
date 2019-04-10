@@ -3,6 +3,7 @@ from __future__ import with_statement
 from __future__ import absolute_import
 import sys
 import os
+import argparse
 from io import open
 if sys.version_info >= (3, 0):
     import beer_engine
@@ -28,31 +29,56 @@ def resource_path(relative_path):
 		else:
 			return os.path.join(os.path.expanduser(u'/usr/include/wheelers-wort-works'), relative_path)
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Arguments', formatter_class = argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument(u'-f', u'--file',
+                        required=False,
+                        action=u'store',
+                        default=None,
+                        help=u'The file to open `--file file_name.berf[x]`')
+    parser.add_argument(u'-u', u'--update',
+                        required=False,
+                        action=u'store_true',
+                        help=u'Using the current `update.py`, download the latest GitHub files')
+    parser.add_argument(u'-U', u'--coreupdate',
+                        required=False,
+                        action=u'store_true',
+                        help=u'Pull `update.py` from GitHub, then download the latest GitHub files')
+    parser.add_argument(u'-l', u'--local',
+                        required=False,
+                        action=u'store_true',
+                        help='Use the local mode')
+    parser.add_argument(u'-d', u'--deb',
+                        required=False,
+                        action=u'store_true',
+                        help=u'Use the debian mode (only use on a Debian/Ubuntu system)')
+
+    args = parser.parse_args()
+    return args
+
 __mode__ = u'local'
 if __name__ == u'__main__':
-    if len(sys.argv) > 1:
-        if sys.argv[1] == u'--update':
-            with open(resource_path(u'update.py'), u'r') as f:
-                exec(f.read())
-            update()
-        elif sys.argv[1] == u'--coreupdate':
-            with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
-                update_text = response.read().decode(u'utf-8')
-                exec(update_text)
-            update()
-            if len(sys.argv) > 2:
-                if sys.argv[2] == u'save':
-                    print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
-                    with open(resource_path('update.py'), 'w') as f:
-                        f.write(update_text)
-        elif os.path.splitext(sys.argv[1])[1] in ['.berf', '.berfx']:
-            beer_engine.__mode__ = __mode__
-            file = os.path.join(os.getcwd(), sys.argv[1]) if not os.path.isfile(sys.argv[1]) else os.path.expanduser(sys.argv[1])
-            beer_engine.main(file)
-
-        else:
-            print(u'Run --update to update the current install, or run --coreupdate to update the updater script')
-            exit()
+    args = get_args()
+    if args.deb:
+        __mode__ = u'deb'
+    if args.local:
+        __mode__ = u'local'
+    if args.update:
+        with open(resource_path(u'update.py'), u'r') as f:
+            exec(f.read())
+        update()
+    if args.coreupdate:
+        with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
+            update_text = response.read().decode(u'utf-8')
+            exec(update_text)
+        update()
+        print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
+        with open(resource_path('update.py'), 'w') as f:
+            f.write(update_text)
+    if os.path.splitext(args.file)[1] in ['.berf', '.berfx']:
+        beer_engine.__mode__ = __mode__
+        file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
+        beer_engine.main(file)
     else:
         beer_engine.__mode__ = __mode__
         beer_engine.main()
