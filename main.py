@@ -75,10 +75,11 @@ if __name__ == u'__main__':
         print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
         with open(resource_path('update.py'), 'w') as f:
             f.write(update_text)
-    if os.path.splitext(args.file)[1] in ['.berf', '.berfx']:
-        beer_engine.__mode__ = __mode__
-        file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
-        beer_engine.main(file)
+    if args.file != None:
+        if os.path.splitext(args.file)[1] in ['.berf', '.berfx']:
+            beer_engine.__mode__ = __mode__
+            file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
+            beer_engine.main(file)
     else:
         beer_engine.__mode__ = __mode__
         beer_engine.main()
