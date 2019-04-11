@@ -67,6 +67,7 @@ if __name__ == u'__main__':
         with open(resource_path(u'update.py'), u'r') as f:
             exec(f.read())
         update()
+        exit()
     if args.coreupdate:
         with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
             update_text = response.read().decode(u'utf-8')
@@ -75,6 +76,7 @@ if __name__ == u'__main__':
         print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
         with open(resource_path('update.py'), 'w') as f:
             f.write(update_text)
+        exit()
     if args.file != None:
         if os.path.splitext(args.file)[1] in ['.berf', '.berfx']:
             beer_engine.__mode__ = __mode__
