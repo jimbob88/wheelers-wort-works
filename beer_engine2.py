@@ -4,15 +4,10 @@ from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
-try:
-	import Tkinter as tk
-	import tkinter.ttk as ttk
-	from Tkinter import filedialog, messagebox
-except:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import Tkinter as tk
+import ttk
+import tkFileDialog as filedialog
+import tkMessageBox as messagebox
 import sys
 import brew_data
 import platform
@@ -1223,7 +1218,7 @@ class beer_engine_mainwin(object):
 		Colour: {colour} EBC
 		Mash Liquor: {mash_liquor}L
 		IBU:GU: {ibu_gu}'''.format(
-			efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=round(self.fg, 1),
+			efficiency=round(brew_data.constants[u'Efficiency']*100, 13), final_gravity=round(self.fg, 1),
 			abv=round(self.abv, 1), colour=round(self.colour,1), mash_liquor=round(mash_liquor(),1),
 			ibu_gu=round(self.ibu_gu, 2)))
 		self.refresh_hop()
@@ -4221,12 +4216,14 @@ def resource_path(relative_path):
 			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/html'), relative_path)
 		else:
 			return os.path.join(os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'), relative_path)
-def main(file=None):
+def main(file=None, update_available=False):
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
 	root.config(cursor=u"arrow")
 	if file != None:
 		gui.open_file(file)
+	if update_available:
+		messagebox.showinfo(u"Update Available", u"An update has become avaiable, it is recommended you run the command: {command}".format(command=(u'sudo wheelers-wort-works --coreupdate' if __mode__ == u'deb' else u'python3 main.py --coreupdate')))
 	root.mainloop()
 
 

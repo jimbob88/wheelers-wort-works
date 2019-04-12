@@ -1219,7 +1219,7 @@ class beer_engine_mainwin:
 		Colour: {colour} EBC
 		Mash Liquor: {mash_liquor}L
 		IBU:GU: {ibu_gu}'''.format(
-			efficiency=brew_data.constants['Efficiency']*100, final_gravity=round(self.fg, 1),
+			efficiency=round(brew_data.constants['Efficiency']*100, 13), final_gravity=round(self.fg, 1),
 			abv=round(self.abv, 1), colour=round(self.colour,1), mash_liquor=round(mash_liquor(),1),
 			ibu_gu=round(self.ibu_gu, 2)))
 		self.refresh_hop()
@@ -4217,12 +4217,14 @@ def resource_path(relative_path):
 			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/html'), relative_path)
 		else:
 			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/'), relative_path)
-def main(file=None):
+def main(file=None, update_available=False):
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
 	root.config(cursor="arrow")
 	if file != None:
 		gui.open_file(file)
+	if update_available:
+		messagebox.showinfo("Update Available", "An update has become avaiable, it is recommended you run the command: {command}".format(command=('sudo wheelers-wort-works --coreupdate' if __mode__ == 'deb' else 'python3 main.py --coreupdate')))
 	root.mainloop()
 
 
