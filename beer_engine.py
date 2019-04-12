@@ -915,7 +915,7 @@ class beer_engine_mainwin:
 
 		def refresh_indiv_ibu():
 			for hop in self.hops:
-				ibu = (hop['Values']['Grams'] * hop['Values']['Alpha'] * hop['Values']['Util']) / (float(self.volume.get())*10)
+				ibu = (hop['Values']['Grams'] * hop['Values']['Alpha'] * hop['Values']['Util']) / (float(self.boil_vol.get())*10)
 				hop['Values']['ibu'] = ibu
 
 
