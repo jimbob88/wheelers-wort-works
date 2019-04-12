@@ -59,29 +59,51 @@ def get_args():
 __mode__ = u'local'
 if __name__ == u'__main__':
     args = get_args()
+    update_available = False
+    update = False
+    try:
+        with urlopen(u'https://github.com/jimbob88/wheelers-wort-works') as response:
+            text =response.read().decode(u'utf-8')
+            sec = (''.join(text[text.find(u'<a class="commit-tease-sha"'):].partition(u'</a>')[0:2]))
+            commit = (sec.split(u'"')[3].split(u'/')[-1])
+            if os.path.isfile(resource_path(u'commit.txt')):
+                prev_commit = [line for line in open(resource_path(u'commit.txt'), 'r')][0]
+            else:
+                prev_commit = 0
+            if prev_commit != commit:
+                update = True
+                update_available = True
+            else:
+                print('Already the Latest Edition')
+            with open(resource_path(u'commit.txt'), 'w') as f:
+                f.write(commit)
+    except:
+        update = True
+
     if args.deb:
         __mode__ = u'deb'
     if args.local:
         __mode__ = u'local'
-    if args.update:
-        with open(resource_path(u'update.py'), u'r') as f:
-            exec(f.read())
-        update()
-        exit()
-    if args.coreupdate:
-        with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
-            update_text = response.read().decode(u'utf-8')
-            exec(update_text)
-        update()
-        print('Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
-        with open(resource_path('update.py'), 'w') as f:
-            f.write(update_text)
-        exit()
+    if args.update or args.coreupdate:
+        if args.update and update:
+            with open(resource_path(u'update.py'), u'r') as f:
+                exec(f.read())
+            update()
+            exit()
+        if args.coreupdate and update:
+            with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
+                update_text = response.read().decode(u'utf-8')
+                exec(update_text)
+            update()
+            print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
+            with open(resource_path('update.py'), 'w') as f:
+                f.write(update_text)
+            exit()
     if args.file != None:
-        if os.path.splitext(args.file)[1] in ['.berf', '.berfx']:
+        if os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
             beer_engine.__mode__ = __mode__
             file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
-            beer_engine.main(file)
+            beer_engine.main(file, update_available)
     else:
         beer_engine.__mode__ = __mode__
-        beer_engine.main()
+        beer_engine.main(update_available=update_available)
