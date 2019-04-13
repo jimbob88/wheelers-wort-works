@@ -75,8 +75,6 @@ if __name__ == u'__main__':
                 update_available = True
             else:
                 print('Already the Latest Edition')
-            with open(resource_path(u'commit.txt'), 'w') as f:
-                f.write(commit)
     except:
         update = True
 
@@ -85,11 +83,13 @@ if __name__ == u'__main__':
     if args.local:
         __mode__ = u'local'
     if args.update or args.coreupdate:
+        commit = commit if 'commit' in locals() or 'commit' in globals() else [line for line in open(resource_path(u'commit.txt'), 'r')][0]
         if args.update and update:
             with open(resource_path(u'update.py'), u'r') as f:
                 exec(f.read())
             update()
-            exit()
+            with open(resource_path(u'commit.txt'), 'w') as f:
+                f.write(commit)
         if args.coreupdate and update:
             with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
                 update_text = response.read().decode(u'utf-8')
@@ -98,7 +98,9 @@ if __name__ == u'__main__':
             print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
             with open(resource_path('update.py'), 'w') as f:
                 f.write(update_text)
-            exit()
+            with open(resource_path(u'commit.txt'), 'w') as f:
+                f.write(commit)
+        exit()
     if args.file != None:
         if os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
             beer_engine.__mode__ = __mode__
