@@ -863,7 +863,7 @@ class beer_engine_mainwin:
 				self.scrolled_tree_hops.column("#0",width="90", anchor="w",minwidth="20",stretch="1")
 
 				for column in self.hop_columns:
-					self.scrolled_tree_hops.heading(column, text=column, command=lambda: self.sort_by_hop(column))
+					self.scrolled_tree_hops.heading(column, text=column, command=lambda column=column: self.sort_by_hop(column))
 					if column != 'lb:oz' and column != '%':
 						self.scrolled_tree_hops.column(column, width=40, anchor="center")
 					elif column == 'lb:oz':
@@ -1405,7 +1405,6 @@ class beer_engine_mainwin:
 	def sort_by_hop(self, column):
 		# [{'Name': 'Nelson Sauvin', 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
 		old_hops = self.hops
-
 		if column == 'Hop Variety':
 			self.hops = sorted(self.hops, key=lambda k: k['Name'])
 		elif column == 'Type':
@@ -1424,7 +1423,6 @@ class beer_engine_mainwin:
 			self.hops = sorted(self.hops, key=lambda k: k['Values']['Grams'])
 		elif column == '%':
 			self.hops = sorted(self.hops, key=lambda k: k['Values']['Percent'])
-
 		if old_hops == self.hops:
 			self.hops.reverse()
 		self.refresh_hop()
