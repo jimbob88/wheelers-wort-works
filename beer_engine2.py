@@ -3981,7 +3981,7 @@ class notes_area(tk.Frame):
 		########################################################################################
 		#				Salvaged from https://github.com/jimbob88/texpert/					   #
 		########################################################################################
-		self.texpert = ScrolledText(self, bg=u"white", undo=True, maxundo=-1, font=(u"Arial", 11), wrap=u'none')
+		self.texpert = ScrolledText(self, bg=u"white", undo=True, maxundo=-1, font=(u"Arial", 11))
 		self.texpert.grid(row=0, column=0, sticky=u'nsew', padx=2, pady=2)
 		self.texpert.focus_set()
 		#edit menu
