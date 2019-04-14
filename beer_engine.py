@@ -335,8 +335,8 @@ class beer_engine_mainwin:
 		self.volume_ent.configure(justify='center')
 		self.volume_ent.configure(validate="focusout")
 		self.volume_ent.configure(textvariable=self.volume)
-		self.volume_ent.configure(validatecommand=lambda: self.boil_vol.set(str(float(self.volume.get())*brew_data.constants['Boil Volume Scale'])))
-		self.volume_ent.bind('<Return>', lambda event: self.boil_vol.set(str(float(self.volume.get())*brew_data.constants['Boil Volume Scale'])))
+		self.volume_ent.configure(validatecommand=lambda: self.boil_vol.set(round(float(self.volume.get())*brew_data.constants['Boil Volume Scale'], 2)))
+		self.volume_ent.bind('<Return>', lambda event: self.boil_vol.set(round(float(self.volume.get())*brew_data.constants['Boil Volume Scale'], 2)))
 		self.volume_ent.insert(0, str(brew_data.constants['Volume']))
 
 		self.boil_volume_lbl = tk.Label(self.first_tab)
