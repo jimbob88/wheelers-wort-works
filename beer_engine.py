@@ -1679,8 +1679,10 @@ class beer_engine_mainwin:
 							elif sublist[1] == 'ebufixed':
 								is_ebufixed = sublist[2]
 							elif sublist[1] == 'notes':
-								notes += bytes(sublist[2],encoding='utf8')
-
+								# notes += bytes(sublist[2],encoding='utf8')
+								# print(notes, str(sublist[2]))
+								notes = sublist[2]
+								# print(notes, ast.literal_eval("'"+notes+"'"))
 
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
@@ -1723,9 +1725,10 @@ class beer_engine_mainwin:
 								self.recipe_name_ent.delete(0, tk.END)
 								self.recipe_name_ent.insert(0, sublist[2])
 							elif sublist[1] == 'notes':
-								notes += bytes(sublist[2],encoding='utf8')
+								#notes += bytes(sublist[2],encoding='utf8')
+								notes = sublist[2]
 
-			self.seventh_tab.texpert.insert('1.0', notes.decode('unicode_escape'))
+			self.seventh_tab.texpert.insert('1.0', ast.literal_eval("'"+notes+"'"))
 			self.refresh_hop()
 			self.refresh_grist()
 			self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
@@ -1775,7 +1778,8 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7ebufixed\t{ebufixed}\n'.format(ebufixed=self.is_ebufixed.get()))
 					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
-					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))
+					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))#, encoding='utf8')
+					print(notes)
 					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
 			elif file.lower()[-6:] == '.berfx':
