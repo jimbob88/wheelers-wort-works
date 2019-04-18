@@ -1614,7 +1614,7 @@ class beer_engine_mainwin:
 		self.create_html(use_sorttable=True)
 
 	def open_file(self, file):
-		if file != '' and file != None:
+		if file != '' and file != None and type(file) != tuple:
 			self.sixth_tab.original_additions = list(sorted(brew_data.water_chemistry_additions)) + list(sorted(brew_data.yeast_data))
 			self.sixth_tab.added_additions = []
 			self.sixth_tab.refresh_all()
