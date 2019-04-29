@@ -485,23 +485,36 @@ class beer_engine_mainwin(object):
 		self.calculation_frame.configure(text=u'''Calculation''')
 		self.calculation_frame.configure(underline=u"0")
 		self.calculation_frame.configure(relief=u'sunken')
-		self.calculation_frame.configure(width=120)
+		self.calculation_frame.grid_rowconfigure(0, weight=1)
+		self.calculation_frame.grid_columnconfigure(0, weight=1)
 
-		self.calc_lbl = tk.Message(self.calculation_frame)
-		self.calc_lbl.place(relx=0.083, rely=0.108, height=150, width=103 #97
-				, bordermode=u'ignore')
+		# self.calc_lbl = tk.Message(self.calculation_frame)
+		# self.calc_lbl.grid(row=0, column=0, pady=5,padx=5)
+		# self.calc_lbl.configure(background=_bgcolor)
+		# self.calc_lbl.configure(foreground="#000000")
+		# self.calc_lbl.configure(font=(None, 7))
+		# self.calc_lbl.configure(relief='flat')
+		# #self.calc_lbl.configure(anchor='nw')
+		# self.calc_lbl.configure(text='''Efficiency: {efficiency}%
+		# Final Gravity: {final_gravity}
+		# Alcohol (ABV): {abv}
+		# Colour: {colour}EBC
+		# Mash Liquor: {mash_liquor}L
+		# IBU:GU: {ibu_gu}'''.format(efficiency=brew_data.constants['Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0))
+		# #self.calc_lbl.configure(width=97)
+
+		self.calc_lbl = tk.Text(self.calculation_frame)
+		self.calc_lbl.grid(row=0, column=0, pady=5,padx=5)
 		self.calc_lbl.configure(background=_bgcolor)
 		self.calc_lbl.configure(foreground=u"#000000")
-		self.calc_lbl.configure(font=(None, 7), pady=5,padx=5)
-		self.calc_lbl.configure(relief=u'flat')
-		self.calc_lbl.configure(anchor=u'nw')
-		self.calc_lbl.configure(text=u'''Efficiency: {efficiency}%
-		Final Gravity: {final_gravity}
-		Alcohol (ABV): {abv}
-		Colour: {colour}EBC
-		Mash Liquor: {mash_liquor}L
-		IBU:GU: {ibu_gu}'''.format(efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0))
-		self.calc_lbl.configure(width=97)
+		self.calc_lbl.configure(font=(None, 7))
+		self.calc_lbl.configure(relief=u'flat', wrap=tk.WORD)
+		#self.calc_lbl.configure(anchor='nw')
+		default_text = u'''Efficiency: {efficiency}%{enter}Final Gravity: {final_gravity}{enter}Alcohol (ABV): {abv}{enter}Colour: {colour}EBC{enter}Mash Liquor: {mash_liquor}L{enter}IBU:GU: {ibu_gu}'''.format(efficiency=brew_data.constants[u'Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0, enter=u'\n\n')
+
+		self.calc_lbl.insert(u'end', default_text)
+		self.calc_lbl.configure(state=u'disabled')
+		#self.calc_lbl.configure(width=97)
 
 		self.hop_add_new_butt = tk.Button(self.first_tab)
 		self.hop_add_new_butt.place(relx=0.707, rely=0.507, height=29, width=80)
@@ -1217,15 +1230,13 @@ class beer_engine_mainwin(object):
 		self.og = float(self.og)
 		self.abv = alcohol_by_volume(self.og/1000, self.fg/1000)
 		self.ibu_gu = float(self.ibu) / (self.og - 1000) if (self.og - 1000) != 0 else 0
-		self.calc_lbl.configure(text=u'''Efficiency: {efficiency}%
-		Final Gravity: {final_gravity}
-		Alcohol(ABV): {abv}%
-		Colour: {colour} EBC
-		Mash Liquor: {mash_liquor}L
-		IBU:GU: {ibu_gu}'''.format(
+		self.calc_lbl.configure(state=u'normal')
+		self.calc_lbl.delete(u'1.0', u'end')
+		self.calc_lbl.insert(u'end', u'''Efficiency: {efficiency}%{enter}Final Gravity: {final_gravity}{enter}Alcohol (ABV): {abv}{enter}Colour: {colour}EBC{enter}Mash Liquor: {mash_liquor}L{enter}IBU:GU: {ibu_gu}'''.format(
 			efficiency=round(brew_data.constants[u'Efficiency']*100, 13), final_gravity=round(self.fg, 1),
 			abv=round(self.abv, 1), colour=round(self.colour,1), mash_liquor=round(mash_liquor(),1),
-			ibu_gu=round(self.ibu_gu, 2)))
+			ibu_gu=round(self.ibu_gu, 2), enter=u'\n\n'))
+		self.calc_lbl.configure(state=u'disabled')
 		self.refresh_hop()
 		self.refresh_grist()
 
