@@ -103,7 +103,7 @@ if __name__ == u'__main__':
 				f.write(update_text)
 			with open(resource_path(u'commit.txt'), 'w') as f:
 				f.write(commit)
-		exit()
+		if __mode__ == 'deb': exit()
 	if args.file != None:
 		if os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
 			beer_engine.__mode__ = __mode__
