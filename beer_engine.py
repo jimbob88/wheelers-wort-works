@@ -852,7 +852,10 @@ class beer_engine_mainwin:
 				percent = ingredient['Values']['Percent']
 				orig_grav = float(self.original_gravity_ent.get())-1000
 				vol = float(self.volume.get())
-				weight = percent*((orig_grav*vol)/factor)*1000
+				try:
+					weight = percent*((orig_grav*vol)/factor)*1000
+				except:
+					weight = 0
 				lb = weight/brew_data.constants['Conversion']['lb-g']
 				oz = (lb-int(lb))*16
 				self.ingredients[idx] = {'Name': ingredient['Name'], 'Values': {'EBC': EBC, 'Grav': 0.0, 'lb:oz': (lb,oz), 'Grams': weight, 'Percent': percent}}
@@ -950,7 +953,10 @@ class beer_engine_mainwin:
 				if util > 0 and alpha > 0:
 					total_ibus = float(self.bitterness_ibu_ent.get())
 					vol = float(self.volume.get())
-					weight = percent*((total_ibus*vol*10)/factor) #(((total_ibus*(percent/100))*(vol*10))/util)/alpha
+					try:
+						weight = percent*((total_ibus*vol*10)/factor) #(((total_ibus*(percent/100))*(vol*10))/util)/alpha
+					except:
+						weight = 0
 					lb = weight/brew_data.constants['Conversion']['lb-g']
 					oz = (lb-int(lb))*16
 					self.hops[idx] = {'Name': hop['Name'], 'Values': {'Type': type, 'Alpha': alpha, 'Time': time, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (lb, oz), 'Grams': weight, 'Percent': percent}}
