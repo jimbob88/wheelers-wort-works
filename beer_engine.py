@@ -17,6 +17,7 @@ import codecs
 import string
 import os
 import webbrowser
+import datetime
 import ast
 try:
 	import bs4
@@ -242,7 +243,7 @@ class beer_engine_mainwin:
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save As",
-				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
+				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berfx", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
 				accelerator="Ctrl+Shift+S")
 		self.master.bind("<Control-S>", lambda e: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
 		self.file_menu.add_cascade(menu=self.sub_menu1,
@@ -302,6 +303,33 @@ class beer_engine_mainwin:
 				command=lambda: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'),
 				accelerator="Ctrl+H")
 		self.master.bind("<Control-h>", lambda e: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
+
+		self.backup_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.backup_menu,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Backup")
+		self.backup_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Backup",
+				command=self.database_to_folder,
+				accelerator="Ctrl+H")
+		self.backup_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Restore",
+				command=self.restore_backup_dialogue,
+				accelerator="Ctrl+H")			
 
 		######################## First Tab ########################
 		self.first_tab.configure(background=_bgcolor)
@@ -1948,6 +1976,93 @@ class beer_engine_mainwin:
 			self.rem_1g_ing_butt.configure(font="TkFixedFont")
 		else:
 			self.ingredient_to_imperial()
+
+	def database_to_folder(self, folder=None):
+		if folder == None: folder = os.path.dirname(resource_path('hop_data.txt'))
+		if type(folder) != tuple: print(folder)
+		curr_time = datetime.datetime.today().strftime('%d-%m-%Y %H-%M-%S')
+		print(curr_time)
+		# HOP DATA
+		with open(os.path.join(folder, 'hop_data {curr_time}.txt'.format(curr_time=curr_time)), 'w') as f:
+			for hop, value in brew_data.hop_data.items():
+				name = hop
+				hop_type = value['Form']
+				origin = value['Origin']
+				alpha = value['Alpha']
+				use = value['Use']
+				description = value['Description']
+				f.write('{name}\t{type}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(name=name, type=hop_type, origin=origin, alpha=alpha, use=use, description=description))
+		# GRAIN DATA
+		with open(os.path.join(folder, 'grain_data {curr_time}.txt'.format(curr_time=curr_time)), 'w') as f:
+			for ingredient, value in brew_data.grist_data.items():
+				name = ingredient
+				ebc = value['EBC']
+				grain_type = value['Type']
+				extract = value['Extract']
+				moisture = value['Moisture']
+				fermentability = value['Fermentability']
+				description = value['Description']
+				f.write('{name}\t{ebc}\t{type}\t{extract}\t{moisture}\t{fermentability}\t{description}\n'.format(name=name, ebc=ebc, type=grain_type, extract=extract, moisture=moisture, fermentability=fermentability, description=description))
+		# HOP DATA
+		with open(os.path.join(folder, 'yeast_data {curr_time}.txt'.format(curr_time=curr_time)), 'w') as f:
+			for yeast, value in brew_data.yeast_data.items():
+				name = yeast
+				yeast_type = value['Type']
+				lab = value['Lab']
+				flocculation = value['Flocculation']
+				attenuation = value['Attenuation']
+				temperature = value['Temperature']
+				origin = value['Origin']
+				description = value['Description']
+				f.write('{name}\t{yeast_type}\t{lab}\t{flocculation}\t{attenuation}\t{temperature}\t{origin}\t{description}\n'.format(name=name, yeast_type=yeast_type, lab=lab, flocculation=flocculation, attenuation=attenuation, temperature=temperature, origin=origin, description=description))
+		# DEFAULTS
+		with open(os.path.join(folder, 'defaults {curr_time}.txt'.format(curr_time=curr_time)), 'w') as f:
+				volume = brew_data.constants['Volume']
+				efficiency = brew_data.constants['Efficiency']*100
+				evaporation = round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
+				LGratio = brew_data.constants['Liquor To Grist Ratio']
+				attenuation = brew_data.constants['Attenuation Default']
+				save_close = brew_data.constants['Save On Close']
+				boil_time = brew_data.constants['Default Boil Time']
+				replace_defaults = brew_data.constants['Replace Defaults']
+				f.write('efficiency={efficiency}\nvolume={volume}\nevaporation={evaporation}\nLGratio={LGratio}\nattenuation={attenuation}\nsave_close={save_close}\nboil_time={boil_time}\nreplace_defaults={replace_defaults}'.format(efficiency=efficiency, volume=volume, evaporation=evaporation, LGratio=LGratio,
+																																																										attenuation=attenuation, save_close=save_close, boil_time=boil_time, replace_defaults=replace_defaults))	# WATER CHEM DATA
+		
+		with open(os.path.join(folder, 'water_chem_data {curr_time}.txt'.format(curr_time=curr_time)), 'w') as f:
+			for water_chem, values in brew_data.water_chemistry_additions.items():
+				value = values['Values']
+				name = water_chem
+				time = value['Time'] if 'Time' in value else 'N/A'
+				#print(value)
+				water_chem_type = value['Type']
+				f.write('{name}\t{time}\t{water_chem_type}\n'.format(name=name, time=time, water_chem_type=water_chem_type))
+		
+		with open(resource_path('backups.txt'), 'a+') as f:
+			f.write('{curr_time}\n'.format(curr_time=curr_time))
+
+	def restore_backup_dialogue(self):
+		def restore():
+			print(backups.curselection())
+			print(backup_list[backups.curselection()[0]])
+			time = backup_list[backups.curselection()[0]]
+			for file_start in ['grain_data', 'hop_data', 'water_chem_data', 'yeast_data', 'defaults']:
+				print('{file_start} {time}.txt'.format(file_start=file_start, time=time))
+				if os.path.isfile('{file_start} {time}.txt'.format(file_start=file_start, time=time)):
+					print(True, open('{file_start} {time}.txt'.format(file_start=file_start, time=time)).readlines())
+					with open(file_start+'.txt', 'w') as f:
+						for line in open('{file_start} {time}.txt'.format(file_start=file_start, time=time)).readlines():
+							print(line)
+							f.write(line)
+
+		restore_backup_dia = tk.Toplevel()
+		restore_backup_dia.resizable(0, 0)
+		backups = ScrolledListBox(restore_backup_dia)
+		backups.grid(row=1,column=0)
+		backup_list = [backup.strip() for backup in open(resource_path('backups.txt')).readlines()]
+		for backup in backup_list:
+			backups.insert('end', backup)
+		backups_res_butt = tk.Button(restore_backup_dia, text='Restore', command = restore)
+		backups_res_butt.grid(row=1,column=1)
 
 class hops_editor(tk.Frame):
 	def __init__(self, parent):
