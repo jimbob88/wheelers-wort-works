@@ -2165,6 +2165,7 @@ class hops_editor(tk.Frame):
 
 	def show_data(self, hop):
 		self.input_state(1)
+		self.name = hop
 		name = hop
 		form = brew_data.hop_data[name]['Form']
 		origin = brew_data.hop_data[name]['Origin']
@@ -2218,6 +2219,7 @@ class hops_editor(tk.Frame):
 		use = self.hop_use_combo.get()
 		description = self.hop_comm_ent.get()
 		brew_data.hop_data[name] = {'Form': form, 'Origin': origin, 'Description': description, 'Use': use, 'Alpha': alpha}
+		del brew_data.hop_data[self.name]
 		idx = list(sorted(brew_data.hop_data.keys())).index(name)
 		self.reinsert()
 		self.show_data(name)
@@ -2525,6 +2527,7 @@ class grist_editor(tk.Frame):
 			pass
 
 	def show_data(self, grist):
+		self.name = grist
 		name = grist
 		colour = brew_data.grist_data[name]['EBC']
 		extract = brew_data.grist_data[name]['Extract']
@@ -2617,6 +2620,7 @@ class grist_editor(tk.Frame):
 		description = self.grist_comm_ent.get()
 		type = self.grist_type_combo_values.index(self.grist_type_combo.get()) + 1
 		brew_data.grist_data[name] = {'EBC': colour, 'Type': type, 'Extract': extract, 'Description': description, 'Moisture': moisture, 'Fermentability': fermentability}
+		del brew_data.grist_data[self.name]
 		#print(brew_data.grist_data[name])
 		idx = list(sorted(brew_data.grist_data.keys())).index(name)
 		self.reinsert()
@@ -3858,6 +3862,7 @@ class yeast_editor(tk.Frame):
 		del self.__funcid0
 
 	def show_data(self, yeast):
+		self.name = yeast
 		name = yeast
 		yeast_type = brew_data.yeast_data[name]['Type']
 		yeast_type = 'Dry' if yeast_type == 'D' else yeast_type
@@ -3969,6 +3974,7 @@ class yeast_editor(tk.Frame):
 		yeast_type = 'D' if self.yeast_type_combo.get() == 'Dry' else self.yeast_type_combo.get()
 		yeast_type = 'L' if yeast_type == 'Liquid' else yeast_type
 		brew_data.yeast_data[name] = {'Type': yeast_type, 'Lab': lab, 'Flocculation': flocculation, 'Attenuation': attenuation, 'Temperature': temperature, 'Description': description, 'Origin': origin}
+		del brew_data.yeast_data[self.name]
 		self.reinsert()
 		self.show_data(name)
 
