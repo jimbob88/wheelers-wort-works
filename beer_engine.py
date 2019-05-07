@@ -242,7 +242,7 @@ class beer_engine_mainwin:
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save As",
-				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
+				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berfx", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
 				accelerator="Ctrl+Shift+S")
 		self.master.bind("<Control-S>", lambda e: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
 		self.file_menu.add_cascade(menu=self.sub_menu1,
@@ -1794,7 +1794,7 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
 					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))#, encoding='utf8')
-					print(notes)
+					# print(notes)
 					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
 			elif file.lower()[-6:] == '.berfx':
@@ -4051,7 +4051,7 @@ class notes_area(tk.Frame):
 			self.submenu.grab_release()
 
 	def undo_com(self):
-		print(self.texpert.event_generate("<<Undo>>"))
+		# print(self.texpert.event_generate("<<Undo>>"))
 		try: self.texpert.event_generate("<<Undo>>")
 		except tk.TclError: print('Undo Failed')
 
