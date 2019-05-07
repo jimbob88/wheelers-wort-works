@@ -1822,7 +1822,7 @@ class beer_engine_mainwin:
 					f.write('miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
 					notes = repr(self.seventh_tab.texpert.get('1.0', 'end'))#, encoding='utf8')
-					print(notes)
+					# print(notes)
 					f.write('miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
 			elif file.lower()[-6:] == '.berfx':
@@ -4166,7 +4166,7 @@ class notes_area(tk.Frame):
 			self.submenu.grab_release()
 
 	def undo_com(self):
-		print(self.texpert.event_generate("<<Undo>>"))
+		# print(self.texpert.event_generate("<<Undo>>"))
 		try: self.texpert.event_generate("<<Undo>>")
 		except tk.TclError: print('Undo Failed')
 

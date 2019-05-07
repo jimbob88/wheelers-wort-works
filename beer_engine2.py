@@ -3,16 +3,10 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-from io import open
-try:
-	import Tkinter as tk
-	import tkinter.ttk as ttk
-	from Tkinter import filedialog, messagebox
-except:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import Tkinter as tk
+import ttk
+import tkFileDialog as filedialog
+import tkMessageBox as messagebox
 import sys
 import brew_data
 import platform
@@ -23,6 +17,7 @@ import os
 import webbrowser
 import datetime
 import ast
+from io import open
 try:
 	import bs4
 except ImportError:
@@ -1826,7 +1821,7 @@ class beer_engine_mainwin(object):
 					f.write(u'miscel\xa7origgrav\t{origgrav}\n'.format(origgrav=self.og))
 
 					notes = repr(self.seventh_tab.texpert.get(u'1.0', u'end'))#, encoding='utf8')
-					print notes
+					# print(notes)
 					f.write(u'miscel\xa7notes\t{notes}\n'.format(notes=notes[1:-1]))
 
 			elif file.lower()[-6:] == u'.berfx':
@@ -4170,7 +4165,7 @@ class notes_area(tk.Frame):
 			self.submenu.grab_release()
 
 	def undo_com(self):
-		print self.texpert.event_generate(u"<<Undo>>")
+		# print(self.texpert.event_generate("<<Undo>>"))
 		try: self.texpert.event_generate(u"<<Undo>>")
 		except tk.TclError: print u'Undo Failed'
 
