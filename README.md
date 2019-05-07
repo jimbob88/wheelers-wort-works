@@ -96,4 +96,4 @@ Use the local directory to place configuration files (e.g. `hop_data.txt`, `gris
 ##### `-d, --deb`
 Use `~/.config/Wheelers-Wort-Works` to place configuration files (e.g. `hop_data.txt`, `grist_data.txt` etc.) and use `~/.config/Wheelers-Wort-Works/recipes` for a recipe area.
 
-**NOTE:** Errors will occur if `logo.png` doesn't exist in the following location: `/usr/include/wheelers-wort-works/logo.png`
+**NOTE:** Errors will occur if `logo.png` doesn't exist in the following location: `/usr/include/wheelers-wort-works/logo.png` This should ONLY be done when running `--deb`
