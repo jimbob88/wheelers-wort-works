@@ -168,7 +168,11 @@ class beer_engine_mainwin(object):
 		self.current_file = u''
 		self.master = master
 		self.master.protocol(u"WM_DELETE_WINDOW", self.quit)
-		self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
+		if platform.system() == u'Darwin':
+			if not float(u'.'.join(platform.mac_ver()[0].split(u'.')[:2])) >= 10.12:
+				self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
+		else:
+			self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
 		self.master.geometry(u"800x480+674+369")
 		self.master.title(u"Wheeler's Wort Works")
 		self.master.configure(highlightcolor=u"black")
