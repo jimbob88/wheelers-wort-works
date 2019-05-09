@@ -170,7 +170,7 @@ class beer_engine_mainwin:
 		self.master = master
 		self.master.protocol("WM_DELETE_WINDOW", self.quit)
 		if platform.system() == 'Darwin':
-			if not float('.'.join(platform.mac_ver()[0].split('.')[:2])) >= 10.12:
+			if not float('.'.join(platform.mac_ver()[0].split('.')[:2])) >= 11:
 				self.master.tk.call('wm', 'iconphoto', self.master._w, tk.PhotoImage(file=resource_path('logo.png')))
 		else:
 			self.master.tk.call('wm', 'iconphoto', self.master._w, tk.PhotoImage(file=resource_path('logo.png')))
