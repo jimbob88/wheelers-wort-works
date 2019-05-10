@@ -3,10 +3,16 @@
 from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+from io import open
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
 import brew_data
 import platform
@@ -16,7 +22,6 @@ import string
 import os
 import webbrowser
 import ast
-from io import open
 try:
 	import bs4
 except ImportError:
@@ -168,11 +173,8 @@ class beer_engine_mainwin(object):
 		self.current_file = u''
 		self.master = master
 		self.master.protocol(u"WM_DELETE_WINDOW", self.quit)
-		if platform.system() == u'Darwin':
-			if not float(u'.'.join(platform.mac_ver()[0].split(u'.')[:2])) >= 11:
+		if not platform.system() == u'Darwin':
 				self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
-		else:
-			self.master.tk.call(u'wm', u'iconphoto', self.master._w, tk.PhotoImage(file=resource_path(u'logo.png')))
 		self.master.geometry(u"800x480+674+369")
 		self.master.title(u"Wheeler's Wort Works")
 		self.master.configure(highlightcolor=u"black")
