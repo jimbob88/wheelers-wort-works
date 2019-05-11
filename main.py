@@ -25,11 +25,11 @@ def resource_path(relative_path):
 		return os.path.join(base_path, relative_path)
 	elif __mode__ == u'deb':
 		if os.path.basename(relative_path) == u'logo.png':
-			return u'/usr/include/wheelers-wort-works/logo.png'
+			return u'/usr/include/wheelers-wort-works-ce/logo.png'
 		elif os.path.basename(relative_path) == u'commit.txt':
-			return os.path.expanduser(u'~/.config/Wheelers-Wort-Works/commit.txt')
+			return os.path.expanduser(u'~/.config/Wheelers-Wort-Works-ce/commit.txt')
 		else:
-			return os.path.join(os.path.expanduser(u'/usr/include/wheelers-wort-works'), relative_path)
+			return os.path.join(os.path.expanduser(u'/usr/include/wheelers-wort-works-ce'), relative_path)
 
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments', formatter_class = argparse.ArgumentDefaultsHelpFormatter)

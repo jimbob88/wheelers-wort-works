@@ -215,10 +215,10 @@ class beer_engine_mainwin:
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Open",
-				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))),
+				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))),
 				accelerator="Ctrl+O")
 
-		self.master.bind("<Control-o>", lambda e: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))))
+		self.master.bind("<Control-o>", lambda e: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'), title = "Select file", filetypes = (("BERF","*.berf *.berfx"), ("all files","*.*")))))
 
 		self.file_menu.add_command(activebackground="#ececec",
 				activeforeground="#000000",
@@ -244,9 +244,9 @@ class beer_engine_mainwin:
 				font="TkMenuFont",
 				foreground="#000000",
 				label="Save As",
-				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berfx", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
+				command=lambda: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berfx", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))),
 				accelerator="Ctrl+Shift+S")
-		self.master.bind("<Control-S>", lambda e: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
+		self.master.bind("<Control-S>", lambda e: self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get()))))
 		self.file_menu.add_cascade(menu=self.sub_menu1,
 				activebackground="#ececec",
 				activeforeground="#000000",
@@ -1882,7 +1882,7 @@ class beer_engine_mainwin:
 		if self.current_file != '':
 			self.save_file(self.current_file)
 		else:
-		 	self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get())))
+		 	self.save_file(filedialog.asksaveasfilename(initialdir = os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'),title = "Select file", defaultextension=".berf", initialfile='{0}.berf'.format(self.recipe_name_ent.get())))
 
 	def save_all(self):
 		self.save()
@@ -4412,11 +4412,11 @@ def resource_path(relative_path):
 		return os.path.join(base_path, relative_path)
 	elif __mode__ == 'deb':
 		if os.path.basename(relative_path) == 'logo.png':
-			return '/usr/include/wheelers-wort-works/logo.png'
+			return '/usr/include/wheelers-wort-works-ce/logo.png'
 		elif os.path.splitext(os.path.basename(relative_path))[1] == '.html':
-			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/recipes/html'), relative_path)
+			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/recipes/html'), relative_path)
 		else:
-			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works/'), relative_path)
+			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/'), relative_path)
 def main(file=None, update_available=False):
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
