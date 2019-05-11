@@ -17,8 +17,8 @@ import codecs
 import string
 import os
 import webbrowser
-import datetime
 import ast
+import datetime
 try:
 	import bs4
 except ImportError:
@@ -172,11 +172,11 @@ class beer_engine_mainwin:
 		self.master.protocol("WM_DELETE_WINDOW", self.quit)
 		if not platform.system() == 'Darwin':
 				self.master.tk.call('wm', 'iconphoto', self.master._w, tk.PhotoImage(file=resource_path('logo.png')))
-		self.master.geometry("800x480+674+369")
+		self.master.geometry("+674+369")
 		self.master.title("Wheeler's Wort Works")
 		self.master.configure(highlightcolor="black")
-		self.master.resizable(0, 0)
-		self.tabbed_frame = ttk.Notebook(self.master)
+		# self.master.resizable(0, 0)
+		self.tabbed_frame = ttk.Notebook(self.master, width=800, height=480)
 
 		self.first_tab = tk.Frame(self.tabbed_frame)
 		self.second_tab = hops_editor(self.tabbed_frame)
@@ -286,6 +286,31 @@ class beer_engine_mainwin:
 				accelerator="Ctrl+Q")
 		self.master.bind("<Control-q>", lambda e: self.quit())
 
+		self.backup_menu = tk.Menu(self.master,tearoff=0)
+		self.menubar.add_cascade(menu=self.backup_menu,
+				activebackground="#ececec",
+				activeforeground="#000000",
+				 background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Backup")
+		self.backup_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Backup",
+				command=self.database_to_folder)
+		self.backup_menu.add_command(
+				activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Restore",
+				command=self.restore_backup_dialogue)	
+
 		self.help_menu = tk.Menu(self.master,tearoff=0)
 		self.menubar.add_cascade(menu=self.help_menu,
 				activebackground="#ececec",
@@ -305,37 +330,17 @@ class beer_engine_mainwin:
 				accelerator="Ctrl+H")
 		self.master.bind("<Control-h>", lambda e: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
 
-		self.backup_menu = tk.Menu(self.master,tearoff=0)
-		self.menubar.add_cascade(menu=self.backup_menu,
-				activebackground="#ececec",
-				activeforeground="#000000",
-				 background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Backup")
-		self.backup_menu.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Backup",
-				command=self.database_to_folder,
-				accelerator="Ctrl+H")
-		self.backup_menu.add_command(
-				activebackground="#ececec",
-				activeforeground="#000000",
-				background=_bgcolor,
-				font="TkMenuFont",
-				foreground="#000000",
-				label="Restore",
-				command=self.restore_backup_dialogue,
-				accelerator="Ctrl+H")			
-
 		######################## First Tab ########################
 		self.first_tab.configure(background=_bgcolor)
+
+		self.recipe_name_lbl = tk.Label(self.first_tab)
+		self.recipe_name_lbl.place(relx=0.013, rely=0.021, relheight=0.0375, relwidth=0.1125)
+		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
+		self.recipe_name_lbl.configure(background=_bgcolor)
+		self.recipe_name_lbl.configure(text='''Recipe Name:''')
+
 		self.recipe_name_ent = tk.Entry(self.first_tab)
-		self.recipe_name_ent.place(relx=0.126, rely=0.021, height=23
+		self.recipe_name_ent.place(relx=0.126, rely=0.021, relheight=0.0479
 				, relwidth=0.28)
 		self.recipe_name_ent.configure(background="white")
 		self.recipe_name_ent.configure(font="TkFixedFont")
@@ -343,21 +348,16 @@ class beer_engine_mainwin:
 		self.recipe_name_ent.configure(justify='center')
 		self.recipe_name_ent.insert(0, 'No Name')
 
-		self.recipe_name_lbl = tk.Label(self.first_tab)
-		self.recipe_name_lbl.place(relx=0.013, rely=0.021, height=18, width=90)
-		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
-		self.recipe_name_lbl.configure(background=_bgcolor)
-		self.recipe_name_lbl.configure(text='''Recipe Name:''')
-
 		self.volume_lbl = tk.Label(self.first_tab)
-		self.volume_lbl.place(relx=0.417, rely=0.021, height=18, width=53)
+		self.volume_lbl.place(relx=0.417, rely=0.021, relheight=0.0375, relwidth=0.0662)
 		self.volume_lbl.configure(activebackground="#f9f9f9")
 		self.volume_lbl.configure(background=_bgcolor)
 		self.volume_lbl.configure(text='''Volume:''')
 
 		self.volume = tk.StringVar()
 		self.volume_ent = tk.Entry(self.first_tab)
-		self.volume_ent.place(relx=0.492, rely=0.021, height=23, width=55) #relwidth=0.045
+		self.volume_ent.place(relx=0.492, rely=0.021, relheight=0.0479
+				, relwidth=0.07) #relwidth=0.045
 		self.volume_ent.configure(background="white")
 		self.volume_ent.configure(font="TkFixedFont")
 		self.volume_ent.configure(selectbackground="#c4c4c4")
@@ -369,22 +369,25 @@ class beer_engine_mainwin:
 		self.volume_ent.insert(0, str(brew_data.constants['Volume']))
 
 		self.boil_volume_lbl = tk.Label(self.first_tab)
-		self.boil_volume_lbl.place(relx=0.571, rely=0.021, height=18, width=85)
+		self.boil_volume_lbl.place(relx=0.571, rely=0.021, relheight=0.0375
+				, relwidth=0.1062)
 		self.boil_volume_lbl.configure(text='''Boil Volume:''')
 		self.boil_volume_lbl.configure(background=_bgcolor)
 
 		self.boil_vol = tk.StringVar()
 		self.boil_volume_ent = tk.Entry(self.first_tab)
-		self.boil_volume_ent.place(relx=0.682, rely=0.021,height=23, relwidth=0.058)
+		self.boil_volume_ent.place(relx=0.682, rely=0.021, relheight=0.0479
+				, relwidth=0.070)
 		self.boil_volume_ent.configure(background="white")
 		self.boil_volume_ent.configure(font="TkFixedFont")
 		self.boil_volume_ent.configure(width=46)
 		self.boil_volume_ent.configure(justify='center')
 		self.boil_volume_ent.configure(textvariable=self.boil_vol)
 		self.boil_vol.set(str(brew_data.constants['Volume']*brew_data.constants['Boil Volume Scale']))
+		
 		self.ingredient_rem_butt = tk.Button(self.first_tab)
-		self.ingredient_rem_butt.place(relx=0.013, rely=0.402, height=29
-				, width=76)
+		self.ingredient_rem_butt.place(relx=0.013, rely=0.402, relheight=0.0604
+				, relwidth=0.0950)
 		self.ingredient_rem_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_rem_butt.configure(background=_bgcolor)
 		self.ingredient_rem_butt.configure(cursor="X_cursor")
@@ -392,24 +395,24 @@ class beer_engine_mainwin:
 		self.ingredient_rem_butt.configure(command=self.delete_ingredient)
 
 		self.ingredient_add_new_butt = tk.Button(self.first_tab)
-		self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, height=28
-				, width=82)
+		self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, relheight=0.0583
+				, relwidth=0.1025)
 		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_add_new_butt.configure(background=_bgcolor)
 		self.ingredient_add_new_butt.configure(text='''Add New''')
 		self.ingredient_add_new_butt.configure(command=self.add_grist)
 
 		self.adjust_weight_ing_lbl = tk.Label(self.first_tab)
-		self.adjust_weight_ing_lbl.place(relx=0.606, rely=0.169, height=14
-				, width=91)
+		self.adjust_weight_ing_lbl.place(relx=0.606, rely=0.169, relheight=0.0292
+				, relwidth=0.1138)
 		self.adjust_weight_ing_lbl.configure(activebackground="#f9f9f9")
 		self.adjust_weight_ing_lbl.configure(background=_bgcolor)
 		self.adjust_weight_ing_lbl.configure(font=font9)
 		self.adjust_weight_ing_lbl.configure(text='''Adjust Weight''')
 
 		self.add_1000g_ing_butt = tk.Button(self.first_tab)
-		self.add_1000g_ing_butt.place(relx=0.606, rely=0.211, height=28
-				, width=45)
+		self.add_1000g_ing_butt.place(relx=0.606, rely=0.211, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_1000g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_1000g_ing_butt.configure(background=_bgcolor)
 		self.add_1000g_ing_butt.configure(text='''+1Kg''')
@@ -417,7 +420,8 @@ class beer_engine_mainwin:
 		self.add_1000g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_100g_ing_butt = tk.Button(self.first_tab)
-		self.add_100g_ing_butt.place(relx=0.606, rely=0.275, height=28, width=45)
+		self.add_100g_ing_butt.place(relx=0.606, rely=0.275, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_100g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_100g_ing_butt.configure(background=_bgcolor)
 		self.add_100g_ing_butt.configure(text='''+100g''')
@@ -425,8 +429,8 @@ class beer_engine_mainwin:
 		self.add_100g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_1000g_ing_butt = tk.Button(self.first_tab)
-		self.rem_1000g_ing_butt.place(relx=0.669, rely=0.211, height=28
-				, width=45)
+		self.rem_1000g_ing_butt.place(relx=0.669, rely=0.211, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_1000g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_1000g_ing_butt.configure(background=_bgcolor)
 		self.rem_1000g_ing_butt.configure(text='''-1Kg''')
@@ -434,7 +438,8 @@ class beer_engine_mainwin:
 		self.rem_1000g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_100g_ing_butt = tk.Button(self.first_tab)
-		self.rem_100g_ing_butt.place(relx=0.669, rely=0.275, height=28, width=45)
+		self.rem_100g_ing_butt.place(relx=0.669, rely=0.275, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_100g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_100g_ing_butt.configure(background=_bgcolor)
 		self.rem_100g_ing_butt.configure(text='''-100g''')
@@ -442,7 +447,8 @@ class beer_engine_mainwin:
 		self.rem_100g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_10g_ing_butt = tk.Button(self.first_tab)
-		self.add_10g_ing_butt.place(relx=0.606, rely=0.338, height=28, width=45)
+		self.add_10g_ing_butt.place(relx=0.606, rely=0.338, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_10g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_10g_ing_butt.configure(background=_bgcolor)
 		self.add_10g_ing_butt.configure(text='''+10g''')
@@ -450,7 +456,8 @@ class beer_engine_mainwin:
 		self.add_10g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_10g_ing_butt = tk.Button(self.first_tab)
-		self.rem_10g_ing_butt.place(relx=0.669, rely=0.338, height=28, width=45)
+		self.rem_10g_ing_butt.place(relx=0.669, rely=0.338, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_10g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_10g_ing_butt.configure(background=_bgcolor)
 		self.rem_10g_ing_butt.configure(text='''-10g''')
@@ -458,7 +465,8 @@ class beer_engine_mainwin:
 		self.rem_10g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_1g_ing_butt = tk.Button(self.first_tab)
-		self.add_1g_ing_butt.place(relx=0.606, rely=0.402, height=28, width=45)
+		self.add_1g_ing_butt.place(relx=0.606, rely=0.402, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_1g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_1g_ing_butt.configure(background=_bgcolor)
 		self.add_1g_ing_butt.configure(text='''+1g''')
@@ -466,7 +474,8 @@ class beer_engine_mainwin:
 		self.add_1g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_1g_ing_butt = tk.Button(self.first_tab)
-		self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, height=28, width=45)
+		self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_1g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_1g_ing_butt.configure(background=_bgcolor)
 		self.rem_1g_ing_butt.configure(text='''-1g''')
@@ -474,30 +483,31 @@ class beer_engine_mainwin:
 		self.rem_1g_ing_butt.configure(font="TkFixedFont")
 
 		self.original_gravity_lbl = tk.Label(self.first_tab)
-		self.original_gravity_lbl.place(relx=0.72, rely=0.085, height=14
-				, width=79)
+		self.original_gravity_lbl.place(relx=0.72, rely=0.085, relheight=0.0292
+				, relwidth=0.0988)
 		self.original_gravity_lbl.configure(activebackground="#f9f9f9")
 		self.original_gravity_lbl.configure(background=_bgcolor)
 		self.original_gravity_lbl.configure(font=font9)
 		self.original_gravity_lbl.configure(text='''Original Gravity''')
 
 		self.original_gravity_ent = tk.Entry(self.first_tab)
-		self.original_gravity_ent.place(relx=0.745, rely=0.127, height=20, width=18
-				, relwidth=0.058)
+		self.original_gravity_ent.place(relx=0.745, rely=0.127, relheight=0.0417
+				, relwidth=0.07)
 		self.original_gravity_ent.configure(background="white")
 		self.original_gravity_ent.configure(font="TkFixedFont")
 		self.original_gravity_ent.configure(selectbackground="#c4c4c4")
 		self.original_gravity_ent.configure(justify='center')
 		self.ingredient_zero_butt = tk.Button(self.first_tab)
-		self.ingredient_zero_butt.place(relx=0.745, rely=0.211, height=29
-				, width=55)
+		self.ingredient_zero_butt.place(relx=0.745, rely=0.211, relheight=0.0604
+				, relwidth=0.0688)
 		self.ingredient_zero_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_zero_butt.configure(background=_bgcolor)
 		self.ingredient_zero_butt.configure(text='''Zero''')
 		self.ingredient_zero_butt.configure(command=self.zero_ingredients)
 
 		self.recalc_butt = tk.Button(self.first_tab)
-		self.recalc_butt.place(relx=0.859, rely=0.042, height=29, width=97)
+		self.recalc_butt.place(relx=0.859, rely=0.042, relheight=0.0604
+				, relwidth=0.1213)
 		self.recalc_butt.configure(activebackground="#f9f9f9")
 		self.recalc_butt.configure(background=_bgcolor)
 		self.recalc_butt.configure(text='''Recalculate''')
@@ -529,7 +539,7 @@ class beer_engine_mainwin:
 		# #self.calc_lbl.configure(width=97)
 
 		self.calc_lbl = tk.Text(self.calculation_frame)
-		self.calc_lbl.grid(row=0, column=0, pady=5,padx=5)
+		self.calc_lbl.grid(row=0, column=0)
 		self.calc_lbl.configure(background=_bgcolor)
 		self.calc_lbl.configure(foreground="#000000")
 		self.calc_lbl.configure(font=(None, 7))
@@ -542,22 +552,24 @@ class beer_engine_mainwin:
 		#self.calc_lbl.configure(width=97)
 
 		self.hop_add_new_butt = tk.Button(self.first_tab)
-		self.hop_add_new_butt.place(relx=0.707, rely=0.507, height=29, width=80)
+		self.hop_add_new_butt.place(relx=0.707, rely=0.507, relheight=0.0604
+				, relwidth=0.1000)
 		self.hop_add_new_butt.configure(activebackground="#f9f9f9")
 		self.hop_add_new_butt.configure(background=_bgcolor)
 		self.hop_add_new_butt.configure(text='''Add Hop''')
 		self.hop_add_new_butt.configure(command=self.add_hop)
 
 		self.adjust_weight_hop_lbl = tk.Label(self.first_tab)
-		self.adjust_weight_hop_lbl.place(relx=0.72, rely=0.592, height=14
-				, width=91)
+		self.adjust_weight_hop_lbl.place(relx=0.72, rely=0.592, relheight=0.0292
+				, relwidth=0.1138)
 		self.adjust_weight_hop_lbl.configure(activebackground="#f9f9f9")
 		self.adjust_weight_hop_lbl.configure(background=_bgcolor)
 		self.adjust_weight_hop_lbl.configure(font=font9)
 		self.adjust_weight_hop_lbl.configure(text='''Adjust Weight''')
 
 		self.add_100g_hop_butt = tk.Button(self.first_tab)
-		self.add_100g_hop_butt.place(relx=0.72, rely=0.634, height=28, width=45)
+		self.add_100g_hop_butt.place(relx=0.72, rely=0.634, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_100g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_100g_hop_butt.configure(background=_bgcolor)
 		self.add_100g_hop_butt.configure(text='''+100g''')
@@ -565,7 +577,8 @@ class beer_engine_mainwin:
 		self.add_100g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_100g_hop_butt = tk.Button(self.first_tab)
-		self.rem_100g_hop_butt.place(relx=0.783, rely=0.634, height=28, width=45)
+		self.rem_100g_hop_butt.place(relx=0.783, rely=0.634, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_100g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_100g_hop_butt.configure(background=_bgcolor)
 		self.rem_100g_hop_butt.configure(text='''-100g''')
@@ -573,7 +586,8 @@ class beer_engine_mainwin:
 		self.rem_100g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_25g_hop_butt = tk.Button(self.first_tab)
-		self.add_25g_hop_butt.place(relx=0.72, rely=0.698, height=28, width=45)
+		self.add_25g_hop_butt.place(relx=0.72, rely=0.698, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_25g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_25g_hop_butt.configure(background=_bgcolor)
 		self.add_25g_hop_butt.configure(text='''+25g''')
@@ -581,7 +595,8 @@ class beer_engine_mainwin:
 		self.add_25g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_25g_hop_butt = tk.Button(self.first_tab)
-		self.rem_25g_hop_butt.place(relx=0.783, rely=0.698, height=28, width=45)
+		self.rem_25g_hop_butt.place(relx=0.783, rely=0.698, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_25g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_25g_hop_butt.configure(background=_bgcolor)
 		self.rem_25g_hop_butt.configure(text='''-25g''')
@@ -589,7 +604,8 @@ class beer_engine_mainwin:
 		self.rem_25g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_10g_hop_butt = tk.Button(self.first_tab)
-		self.add_10g_hop_butt.place(relx=0.72, rely=0.761, height=28, width=45)
+		self.add_10g_hop_butt.place(relx=0.72, rely=0.761, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_10g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_10g_hop_butt.configure(background=_bgcolor)
 		self.add_10g_hop_butt.configure(text='''+10g''')
@@ -597,7 +613,8 @@ class beer_engine_mainwin:
 		self.add_10g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_10g_hop_butt = tk.Button(self.first_tab)
-		self.rem_10g_hop_butt.place(relx=0.783, rely=0.761, height=28, width=45)
+		self.rem_10g_hop_butt.place(relx=0.783, rely=0.761, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_10g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_10g_hop_butt.configure(background=_bgcolor)
 		self.rem_10g_hop_butt.configure(text='''-10g''')
@@ -605,7 +622,8 @@ class beer_engine_mainwin:
 		self.rem_10g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_1g_hop_butt = tk.Button(self.first_tab)
-		self.add_1g_hop_butt.place(relx=0.72, rely=0.825, height=28, width=45)
+		self.add_1g_hop_butt.place(relx=0.72, rely=0.825, relheight=0.0583
+				, relwidth=0.0563)
 		self.add_1g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_1g_hop_butt.configure(background=_bgcolor)
 		self.add_1g_hop_butt.configure(text='''+1g''')
@@ -613,7 +631,8 @@ class beer_engine_mainwin:
 		self.add_1g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_1g_hop_butt = tk.Button(self.first_tab)
-		self.rem_1g_hop_butt.place(relx=0.783, rely=0.825, height=28, width=45)
+		self.rem_1g_hop_butt.place(relx=0.783, rely=0.825, relheight=0.0583
+				, relwidth=0.0563)
 		self.rem_1g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_1g_hop_butt.configure(background=_bgcolor)
 		self.rem_1g_hop_butt.configure(text='''-1g''')
@@ -621,30 +640,32 @@ class beer_engine_mainwin:
 		self.rem_1g_hop_butt.configure(font="TkFixedFont")
 
 		self.hop_zero_butt = tk.Button(self.first_tab)
-		self.hop_zero_butt.place(relx=0.859, rely=0.634, height=28, width=55)
+		self.hop_zero_butt.place(relx=0.859, rely=0.634, relheight=0.0583
+				, relwidth=0.0688)
 		self.hop_zero_butt.configure(activebackground="#f9f9f9")
 		self.hop_zero_butt.configure(background=_bgcolor)
 		self.hop_zero_butt.configure(text='''Zero''')
 		self.hop_zero_butt.configure(command=self.zero_hops)
 
 		self.bitterness_ibu_lbl = tk.Label(self.first_tab)
-		self.bitterness_ibu_lbl.place(relx=0.846, rely=0.507, height=14
-				, width=79)
+		self.bitterness_ibu_lbl.place(relx=0.846, rely=0.507, relheight=0.0583
+				, relwidth=0.0950)
 		self.bitterness_ibu_lbl.configure(activebackground="#f9f9f9")
 		self.bitterness_ibu_lbl.configure(background=_bgcolor)
 		self.bitterness_ibu_lbl.configure(font=font9)
 		self.bitterness_ibu_lbl.configure(text='''Bitterness IBU''')
 
 		self.bitterness_ibu_ent = tk.Entry(self.first_tab)
-		self.bitterness_ibu_ent.place(relx=0.859, rely=0.55, height=20, width=18
-				, relwidth=0.058)
+		self.bitterness_ibu_ent.place(relx=0.859, rely=0.55, relheight=0.0417
+				, relwidth=0.0580)
 		self.bitterness_ibu_ent.configure(background="white")
 		self.bitterness_ibu_ent.configure(font="TkFixedFont")
 		self.bitterness_ibu_ent.configure(selectbackground="#c4c4c4")
 		self.bitterness_ibu_ent.configure(justify='center')
 
 		self.hop_rem_butt = tk.Button(self.first_tab)
-		self.hop_rem_butt.place(relx=0.013, rely=0.825, height=28, width=76)
+		self.hop_rem_butt.place(relx=0.013, rely=0.825, relheight=0.0583
+				, relwidth=0.0950)
 		self.hop_rem_butt.configure(activebackground="#f9f9f9")
 		self.hop_rem_butt.configure(background=_bgcolor)
 		self.hop_rem_butt.configure(cursor="X_cursor")
@@ -652,63 +673,64 @@ class beer_engine_mainwin:
 		self.hop_rem_butt.configure(command=self.delete_hop)
 
 		self.quit_btt = tk.Button(self.first_tab)
-		self.quit_btt.place(relx=0.922, rely=0.93, height=29, width=53)
+		self.quit_btt.place(relx=0.922, rely=0.93, relheight=0.0604
+				, relwidth=0.0663)
 		self.quit_btt.configure(activebackground="#f9f9f9")
 		self.quit_btt.configure(background=_bgcolor)
 		self.quit_btt.configure(text='''Quit''')
 		self.quit_btt.configure(command=self.quit)
 
 		self.add_time_butt_1 = tk.Button(self.first_tab)
-		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28
-				, width=78)
+		self.add_time_butt_1.place(relx=0.426, rely=0.825, relheight=0.0583
+				, relwidth=0.0975)
 		self.add_time_butt_1.configure(activebackground="#f9f9f9")
 		self.add_time_butt_1.configure(background=_bgcolor)
 		self.add_time_butt_1.configure(text='''Time +1''')
 		self.add_time_butt_1.configure(command=lambda: self.add_time(1))
 
 		self.rem_time_butt_1 = tk.Button(self.first_tab)
-		self.rem_time_butt_1.place(relx=0.426, rely=0.888, height=28
-				, width=78)
+		self.rem_time_butt_1.place(relx=0.426, rely=0.888, relheight=0.0583
+				, relwidth=0.0975)
 		self.rem_time_butt_1.configure(activebackground="#f9f9f9")
 		self.rem_time_butt_1.configure(background=_bgcolor)
 		self.rem_time_butt_1.configure(text='''Time -1''')
 		self.rem_time_butt_1.configure(command=lambda: self.add_time(-1))
 
 		self.add_time_butt_10 = tk.Button(self.first_tab)
-		self.add_time_butt_10.place(relx=0.328, rely=0.825, height=28
-				, width=78)
+		self.add_time_butt_10.place(relx=0.328, rely=0.825, relheight=0.0583
+				, relwidth=0.0975)
 		self.add_time_butt_10.configure(activebackground="#f9f9f9")
 		self.add_time_butt_10.configure(background=_bgcolor)
 		self.add_time_butt_10.configure(text='''Time +10''')
 		self.add_time_butt_10.configure(command=lambda: self.add_time(10))
 
 		self.rem_time_butt_10 = tk.Button(self.first_tab)
-		self.rem_time_butt_10.place(relx=0.328, rely=0.888, height=28
-				, width=78)
+		self.rem_time_butt_10.place(relx=0.328, rely=0.888, relheight=0.0583
+				, relwidth=0.0975)
 		self.rem_time_butt_10.configure(activebackground="#f9f9f9")
 		self.rem_time_butt_10.configure(background=_bgcolor)
 		self.rem_time_butt_10.configure(text='''Time -10''')
 		self.rem_time_butt_10.configure(command=lambda: self.add_time(-10))
 
 		self.add_alpha_butt_pt1 = tk.Button(self.first_tab)
-		self.add_alpha_butt_pt1.place(relx=0.129, rely=0.825, height=29
-				, width=78)
+		self.add_alpha_butt_pt1.place(relx=0.129, rely=0.825, relheight=0.0583
+				, relwidth=0.0975)
 		self.add_alpha_butt_pt1.configure(activebackground="#f9f9f9")
 		self.add_alpha_butt_pt1.configure(background=_bgcolor)
 		self.add_alpha_butt_pt1.configure(text='''Alpha +0.1''')
 		self.add_alpha_butt_pt1.configure(command=lambda: self.add_alpha(0.1))
 
 		self.rem_alpha_butt_pt1 = tk.Button(self.first_tab)
-		self.rem_alpha_butt_pt1.place(relx=0.129, rely=0.888, height=28
-				, width=78)
+		self.rem_alpha_butt_pt1.place(relx=0.129, rely=0.888, relheight=0.0583
+				, relwidth=0.0975)
 		self.rem_alpha_butt_pt1.configure(activebackground="#f9f9f9")
 		self.rem_alpha_butt_pt1.configure(background=_bgcolor)
 		self.rem_alpha_butt_pt1.configure(text='''Alpha -0.1''')
 		self.rem_alpha_butt_pt1.configure(command=lambda: self.add_alpha(-0.1))
 
 		self.add_alpha_butt_1 = tk.Button(self.first_tab)
-		self.add_alpha_butt_1.place(relx=0.227, rely=0.825, height=29
-				, width=76)
+		self.add_alpha_butt_1.place(relx=0.227, rely=0.825, relheight=0.0583
+				, relwidth=0.0975)
 		self.add_alpha_butt_1.configure(activebackground="#f9f9f9")
 		self.add_alpha_butt_1.configure(background=_bgcolor)
 		self.add_alpha_butt_1.configure(text='''Alpha +1''')
@@ -716,8 +738,8 @@ class beer_engine_mainwin:
 		self.add_alpha_butt_1.configure(command=lambda: self.add_alpha(1))
 
 		self.rem_alpha_butt_1 = tk.Button(self.first_tab)
-		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, height=28
-				, width=76)
+		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, relheight=0.0583
+				, relwidth=0.0975)
 		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9")
 		self.rem_alpha_butt_1.configure(background=_bgcolor)
 		self.rem_alpha_butt_1.configure(text='''Alpha -1''')
@@ -725,7 +747,7 @@ class beer_engine_mainwin:
 
 		self.style.configure('Treeview.Heading',  font="TkDefaultFont")
 		self.style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Deja Vu Sans Mono', 9)) #Calibri
-		self.frame_ingredients = tk.Frame(self.first_tab, width=600)
+		self.frame_ingredients = tk.Frame(self.first_tab)
 		self.frame_ingredients.grid_rowconfigure(0, weight=1)
 		self.frame_ingredients.grid_columnconfigure(0, weight=1)
 		self.frame_ingredients.place(relx=0.013, rely=0.085
@@ -1979,7 +2001,15 @@ class beer_engine_mainwin:
 			self.ingredient_to_imperial()
 
 	def database_to_folder(self, folder=None):
-		if folder == None: folder = os.path.dirname(resource_path('hop_data.txt'))
+		if folder == None: 
+			if not os.path.exists(os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')):
+				try:
+					os.makedirs(os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups'))
+					folder = os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')
+				except:
+					folder = os.path.dirname(resource_path('hop_data.txt')) 
+			else:
+				folder = os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')
 		if type(folder) != tuple: print(folder)
 		curr_time = datetime.datetime.today().strftime('%d-%m-%Y %H-%M-%S')
 		print(curr_time)
@@ -2041,29 +2071,65 @@ class beer_engine_mainwin:
 		with open(resource_path('backups.txt'), 'a+') as f:
 			f.write('{curr_time}\n'.format(curr_time=curr_time))
 
+		messagebox.showinfo('Backup Successful', 'Backup {time} Created Successfully'.format(time=curr_time))		
+
 	def restore_backup_dialogue(self):
-		def restore():
-			print(backups.curselection())
-			print(backup_list[backups.curselection()[0]])
-			time = backup_list[backups.curselection()[0]]
-			for file_start in ['grain_data', 'hop_data', 'water_chem_data', 'yeast_data', 'defaults']:
-				print('{file_start} {time}.txt'.format(file_start=file_start, time=time))
-				if os.path.isfile('{file_start} {time}.txt'.format(file_start=file_start, time=time)):
-					print(True, open('{file_start} {time}.txt'.format(file_start=file_start, time=time)).readlines())
-					with open(file_start+'.txt', 'w') as f:
-						for line in open('{file_start} {time}.txt'.format(file_start=file_start, time=time)).readlines():
-							print(line)
-							f.write(line)
+		def restore(folder=None):
+			if folder == None: 
+				if os.path.exists(os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')):
+					folder = os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')
+				else:
+					folder = os.path.dirname(resource_path('hop_data.txt'))
+			file_starts = ['grain_data', 'hop_data', 'water_chem_data', 'yeast_data', 'defaults']
+			try:			
+				selection = backups.selection()[0]
+				for file_start in file_starts:
+					if file_start in selection:
+						file_starts = [file_start]
+						selection = selection[len(file_start):]
+				id = int(str(selection)[1:], 16)
+			except Exception as e:
+				messagebox.showwarning('No Backup Selected', 'Please select a Restore Point', parent=restore_backup_dia)
+				return
+			if messagebox.askquestion('Verify', 'This operation will overwrite current database. Are you sure you wish to Restore Database?', parent=restore_backup_dia) == 'no':
+				return
+			try:	
+				time = backup_list[id-1]
+				for file_start in file_starts:
+					print('{file_start} {time}.txt'.format(file_start=file_start, time=time))
+					if os.path.isfile(os.path.join(folder, '{file_start} {time}.txt'.format(file_start=file_start, time=time))):
+						with open(resource_path(file_start+'.txt'), 'w') as f:
+							for line in open(os.path.join(folder, '{file_start} {time}.txt'.format(file_start=file_start, time=time))).readlines():
+								f.write(line)
+					else:
+						messagebox.showerror('File Not Found', 'File Not Found: {file}'.format(file=os.path.join(folder, '{file_start} {time}.txt'.format(file_start=file_start, time=time))))
+				messagebox.showinfo('Restore Successful', 'Backup {time} Restored Successfully'.format(time=time), parent=restore_backup_dia)
+			except Exception as e:
+				print(e)
+
 
 		restore_backup_dia = tk.Toplevel()
 		restore_backup_dia.resizable(0, 0)
-		backups = ScrolledListBox(restore_backup_dia)
-		backups.grid(row=1,column=0)
-		backup_list = [backup.strip() for backup in open(resource_path('backups.txt')).readlines()]
+		backups = ScrolledTreeView(restore_backup_dia, custom_insert=False, show="tree")
+		backups.grid(row=0,column=0)
+		if os.path.isfile(resource_path('backups.txt')):
+			backup_list = [backup.strip() for backup in open(resource_path('backups.txt')).readlines()]
+		else:
+			backup_list = []
 		for backup in backup_list:
-			backups.insert('end', backup)
+			curr_insert = backups.insert('', tk.END, text=(backup))
+			print(curr_insert)
+			for idx, file_start in enumerate(['grain_data', 'hop_data', 'water_chem_data', 'yeast_data', 'defaults']):
+				if os.path.exists(os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups')):
+					file_name = os.path.join(os.path.dirname(resource_path('hop_data.txt')), 'backups/{file_start} {time}.txt'.format(file_start=file_start, time=backup))
+				else:
+					file_name = resource_path('{file_start} {time}.txt'.format(file_start=file_start, time=backup))
+				print(file_name)
+				if os.path.isfile(file_name):
+					print(idx)
+					backups.insert(curr_insert, 'end', text='{file_start}.txt'.format(file_start=file_start), iid='{file_start}{iid}'.format(file_start=file_start, iid=curr_insert))
 		backups_res_butt = tk.Button(restore_backup_dia, text='Restore', command = restore)
-		backups_res_butt.grid(row=1,column=1)
+		backups_res_butt.grid(row=0,column=1)
 
 class hops_editor(tk.Frame):
 	def __init__(self, parent):
@@ -2087,14 +2153,11 @@ class hops_editor(tk.Frame):
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
 
-		self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal")
-		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
-				, relwidth=0.966)
-		self.TPanedwindow1.configure(width=800)
-		self.hop_panedwindow1 = tk.LabelFrame(width=400, text='Hops:', background=_bgcolor)
-		self.TPanedwindow1.add(self.hop_panedwindow1)
-		self.hop_panedwindow2 = tk.LabelFrame(text='Modifications:', background=_bgcolor)
-		self.TPanedwindow1.add(self.hop_panedwindow2)
+		self.hop_panedwindow1 = tk.LabelFrame(self, text='Hops:', background=_bgcolor)
+		self.hop_panedwindow1.place(relx=0.005, rely=0.005, relheight=0.990, relwidth=0.5)
+
+		self.hop_panedwindow2 = tk.LabelFrame(self, text='Modifications:', background=_bgcolor)
+		self.hop_panedwindow2.place(relx=0.510, rely=0.005, relheight=0.990, relwidth=0.485)		
 
 		self.hop_lstbx = ScrolledListBox(self.hop_panedwindow1)
 		self.hop_lstbx.place(relx=0.025, rely=0.043, relheight=0.887
@@ -2103,24 +2166,23 @@ class hops_editor(tk.Frame):
 		self.hop_lstbx.configure(font="TkFixedFont")
 		self.hop_lstbx.configure(highlightcolor="#d9d9d9")
 		self.hop_lstbx.configure(selectbackground="#c4c4c4")
-		self.hop_lstbx.configure(width=10)
 
 		self.hop_delete_butt = tk.Button(self.hop_panedwindow1)
-		self.hop_delete_butt.place(relx=0.025, rely=0.929, height=28, width=83
+		self.hop_delete_butt.place(relx=0.025, rely=0.929, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_delete_butt.configure(takefocus="")
 		self.hop_delete_butt.configure(text='''Delete''')
 		self.hop_delete_butt.configure(command=self.delete)
 
 		self.hop_modify_butt = tk.Button(self.hop_panedwindow1)
-		self.hop_modify_butt.place(relx=0.35, rely=0.929, height=28, width=83
+		self.hop_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_modify_butt.configure(takefocus="")
 		self.hop_modify_butt.configure(text='''Modify''')
 		self.hop_modify_butt.configure(command=lambda: self.input_state(1))
 
 		self.hop_new_butt = tk.Button(self.hop_panedwindow1)
-		self.hop_new_butt.place(relx=0.725, rely=0.929, height=28, width=83
+		self.hop_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_new_butt.configure(takefocus="")
 		self.hop_new_butt.configure(text='''New''')
@@ -2253,11 +2315,10 @@ class hops_editor(tk.Frame):
 		self.hop_done_butt.configure(command=self.done)
 
 		self.hop_save_data_butt = tk.Button(self.hop_panedwindow2)
-		self.hop_save_data_butt.place(relx=0.222, rely=0.696, height=108
-				, width=213, bordermode='ignore')
+		self.hop_save_data_butt.place(relx=0.222, rely=0.696, relwidth=0.5713
+				, relheight=0.2312, bordermode='ignore')
 		self.hop_save_data_butt.configure(takefocus="")
 		self.hop_save_data_butt.configure(text='''Save to Database''')
-		self.hop_save_data_butt.configure(width=213)
 		self.hop_save_data_butt.configure(command=self.save)
 
 		self.hop_lstbx.bind('<<ListboxSelect>>', self.select_listbox)
@@ -2405,14 +2466,10 @@ class grist_editor(tk.Frame):
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
 
-		self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal",  background=_bgcolor)
-		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
-				, relwidth=0.966)
-		self.grist_panedwindow1 = tk.LabelFrame(width=400
-				, text='Fermentable Ingredients:',  background=_bgcolor)
-		self.TPanedwindow1.add(self.grist_panedwindow1)
-		self.grist_panedwindow2 = tk.LabelFrame(text='Modifications:',  background=_bgcolor)
-		self.TPanedwindow1.add(self.grist_panedwindow2)
+		self.grist_panedwindow1 = tk.LabelFrame(self, text='Hops:', background=_bgcolor)
+		self.grist_panedwindow1.place(relx=0.005, rely=0.005, relheight=0.990, relwidth=0.5)
+		self.grist_panedwindow2 = tk.LabelFrame(self, text='Modifications:', background=_bgcolor)
+		self.grist_panedwindow2.place(relx=0.510, rely=0.005, relheight=0.990, relwidth=0.485)		
 
 		self.grist_lstbx = ScrolledListBox(self.grist_panedwindow1)
 		self.grist_lstbx.place(relx=0.025, rely=0.043, relheight=0.887
@@ -2421,24 +2478,23 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.configure(font="TkFixedFont")
 		self.grist_lstbx.configure(highlightcolor="#d9d9d9")
 		self.grist_lstbx.configure(selectbackground="#c4c4c4")
-		self.grist_lstbx.configure(width=10)
 
 		self.grist_delete_butt = tk.Button(self.grist_panedwindow1)
-		self.grist_delete_butt.place(relx=0.025, rely=0.924, height=28, width=83
+		self.grist_delete_butt.place(relx=0.025, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_delete_butt.configure(takefocus="")
 		self.grist_delete_butt.configure(text='''Delete''')
 		self.grist_delete_butt.configure(command=self.delete)
 
 		self.grist_modify_butt = tk.Button(self.grist_panedwindow1)
-		self.grist_modify_butt.place(relx=0.35, rely=0.924, height=28, width=83
+		self.grist_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_modify_butt.configure(takefocus="")
 		self.grist_modify_butt.configure(text='''Modify''')
 		self.grist_modify_butt.configure(command=lambda: self.input_state(1))
 
 		self.grist_new_butt = tk.Button(self.grist_panedwindow1)
-		self.grist_new_butt.place(relx=0.725, rely=0.924, height=28, width=83
+		self.grist_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_new_butt.configure(takefocus="")
 		self.grist_new_butt.configure(text='''New''')
@@ -2614,8 +2670,8 @@ class grist_editor(tk.Frame):
 		self.grist_done_butt.configure(command=self.done)
 
 		self.grist_save_data_butt = tk.Button(self.grist_panedwindow2)
-		self.grist_save_data_butt.place(relx=0.222, rely=0.739, height=108
-				, width=213, bordermode='ignore')
+		self.grist_save_data_butt.place(relx=0.222, rely=0.739, relwidth=0.5713
+				, relheight=0.2312, bordermode='ignore')
 		self.grist_save_data_butt.configure(takefocus="")
 		self.grist_save_data_butt.configure(text='''Save to Database''')
 		self.grist_save_data_butt.configure(command=self.save)
@@ -3747,13 +3803,13 @@ class yeast_editor(tk.Frame):
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
 
-		self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal",  background=_bgcolor)
-		self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
-				, relwidth=0.966)
-		self.yeast_panedwindow1 = tk.LabelFrame(width=400, text='Yeasts:',  background=_bgcolor)
-		self.TPanedwindow1.add(self.yeast_panedwindow1)
-		self.yeast_panedwindow2 = tk.LabelFrame(text='Modifications:', background=_bgcolor)
-		self.TPanedwindow1.add(self.yeast_panedwindow2)
+		# self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal",  background=_bgcolor)
+		# self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
+		# 		, relwidth=0.966)
+		self.yeast_panedwindow1 = tk.LabelFrame(self, text='Hops:', background=_bgcolor)
+		self.yeast_panedwindow1.place(relx=0.005, rely=0.005, relheight=0.990, relwidth=0.5)
+		self.yeast_panedwindow2 = tk.LabelFrame(self, text='Modifications:', background=_bgcolor)
+		self.yeast_panedwindow2.place(relx=0.510, rely=0.005, relheight=0.990, relwidth=0.485)	
 
 
 		self.yeast_lstbx = ScrolledListBox(self.yeast_panedwindow1)
@@ -3763,24 +3819,23 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.configure(font="TkFixedFont")
 		self.yeast_lstbx.configure(highlightcolor="#d9d9d9")
 		self.yeast_lstbx.configure(selectbackground="#c4c4c4")
-		self.yeast_lstbx.configure(width=10)
 
 		self.yeast_delete_butt = tk.Button(self.yeast_panedwindow1)
-		self.yeast_delete_butt.place(relx=0.025, rely=0.924, height=28, width=83
+		self.yeast_delete_butt.place(relx=0.025, rely=0.929, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_delete_butt.configure(takefocus="")
 		self.yeast_delete_butt.configure(text='''Delete''')
 		self.yeast_delete_butt.configure(command=self.delete)
 
 		self.yeast_modify_butt = tk.Button(self.yeast_panedwindow1)
-		self.yeast_modify_butt.place(relx=0.35, rely=0.924, height=28, width=83
+		self.yeast_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_modify_butt.configure(takefocus="")
 		self.yeast_modify_butt.configure(text='''Modify''')
 		self.yeast_modify_butt.configure(command=lambda: self.input_state(1))
 
 		self.yeast_new_butt = tk.Button(self.yeast_panedwindow1)
-		self.yeast_new_butt.place(relx=0.725, rely=0.924, height=28, width=83
+		self.yeast_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_new_butt.configure(takefocus="")
 		self.yeast_new_butt.configure(text='''New''')
@@ -3957,8 +4012,8 @@ class yeast_editor(tk.Frame):
 		self.yeast_done_butt.configure(command=self.done)
 
 		self.yeast_save_data_butt = tk.Button(self.yeast_panedwindow2)
-		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, height=108
-				, width=213, bordermode='ignore')
+		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, relwidth=0.5713
+				, relheight=0.2312, bordermode='ignore')
 		self.yeast_save_data_butt.configure(takefocus="")
 		self.yeast_save_data_butt.configure(text='''Save to Database''')
 		self.yeast_save_data_butt.configure(command=self.save)
@@ -4266,9 +4321,10 @@ class ScrolledTreeView(AutoScroll, ttk.Treeview):
 	'''A standard ttk Treeview widget with scrollbars that will
 	automatically show/hide as needed.'''
 	@_create_container
-	def __init__(self, master, **kw):
+	def __init__(self, master, custom_insert=True, **kw):
 		ttk.Treeview.__init__(self, master, **kw)
 		AutoScroll.__init__(self, master)
+		self.custom_insert = custom_insert
 
 	def insert(self, parent, index, iid=None, **kw):
 		opts = ttk._format_optdict(kw)
@@ -4276,9 +4332,12 @@ class ScrolledTreeView(AutoScroll, ttk.Treeview):
 			res = self.tk.call(self._w, "insert", parent, index,
 				"-id", iid, *opts)
 		else:
-			iid = 'I{iid}'.format(iid=format(len(self.get_children())+1, '03x')) #hex(len(self.get_children())).split('x')[-1]
-			res = self.tk.call(self._w, "insert", parent, index,
-				"-id", iid, *opts)
+			if self.custom_insert:
+				iid = 'I{iid}'.format(iid=format(len(self.get_children())+1, '03x')) #hex(len(self.get_children())).split('x')[-1]
+				res = self.tk.call(self._w, "insert", parent, index,
+					"-id", iid, *opts)
+			else:
+				res = self.tk.call(self._w, "insert", parent, index, *opts)
 		return res
 
 class ScrolledListBox(AutoScroll, tk.Listbox):
