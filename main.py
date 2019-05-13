@@ -68,7 +68,7 @@ if __name__ == u'__main__':
 	update_available = False
 	update = False
 	try:
-		with urlopen(u'https://github.com/jimbob88/wheelers-wort-works') as response:
+		with urlopen(u'https://github.com/jimbob88/wheelers-wort-works/tree/community_edition') as response:
 			text =response.read().decode(u'utf-8')
 			sec = (''.join(text[text.find(u'<a class="commit-tease-sha"'):].partition(u'</a>')[0:2]))
 			commit = (sec.split(u'"')[3].split(u'/')[-1])
@@ -94,11 +94,11 @@ if __name__ == u'__main__':
 			with open(resource_path(u'commit.txt'), 'w') as f:
 				f.write(commit)
 		if args.coreupdate and update:
-			with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py') as response:
+			with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/update.py') as response:
 				update_text = response.read().decode(u'utf-8')
 				exec(update_text)
 			update()
-			print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/update.py'))
+			print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/update.py'))
 			with open(resource_path('update.py'), 'w') as f:
 				f.write(update_text)
 			with open(resource_path(u'commit.txt'), 'w') as f:
