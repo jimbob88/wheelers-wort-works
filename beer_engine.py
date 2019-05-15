@@ -2420,7 +2420,7 @@ class hops_editor(tk.Frame):
 			try:
 				brew_data.hop_data[name] = brew_data.hop_data[tk.ACTIVE]
 			except:
-				brew_data.hop_data[name] = {'Form': 'Whole', 'Origin': 'Unkown', 'Description': '', 'Use': 'General Purpose', 'Alpha': 12.7}
+				brew_data.hop_data[name] = {'Form': 'Whole', 'Origin': 'Unknown', 'Description': '', 'Use': 'General Purpose', 'Alpha': 12.7}
 		self.show_data(name)
 		self.hop_lstbx.select_set(tk.END)
 		self.hop_lstbx.activate(tk.END)
@@ -4119,7 +4119,7 @@ class yeast_editor(tk.Frame):
 			try:
 				brew_data.yeast_data[name] = brew_data.yeast_data[tk.ACTIVE]
 			except:
-				brew_data.yeast_data[name] = {'Type': 'D', 'Lab': 'Lallemand', 'Flocculation': 'Low', 'Attenuation': 'High', 'Temperature': '66-72°', 'Description': 'Unkown', 'Origin': 'Unknown'}
+				brew_data.yeast_data[name] = {'Type': 'D', 'Lab': 'Lallemand', 'Flocculation': 'Low', 'Attenuation': 'High', 'Temperature': '66-72°', 'Description': 'Unknown', 'Origin': 'Unknown'}
 
 		self.show_data(name)
 		self.yeast_lstbx.select_set(tk.END)
