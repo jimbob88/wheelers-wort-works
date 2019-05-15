@@ -4428,7 +4428,7 @@ def main(file=None, update_available=False):
 	if file != None:
 		gui.open_file(file)
 	if update_available:
-		messagebox.showinfo(u"Update Available", u"An update has become available, it is recommended you run the command: {command}".format(command=(u'sudo wheelers-wort-works --coreupdate' if __mode__ == u'deb' else u'python3 main.py --coreupdate')))
+		messagebox.showinfo(u"Update Available", u"An update has become available, it is recommended you run the command: {command}".format(command=(u'sudo wheelers-wort-works-ce --coreupdate' if __mode__ == u'deb' else u'python3 main.py --coreupdate')))
 	root.mainloop()
 
 
