@@ -2466,7 +2466,7 @@ class grist_editor(tk.Frame):
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
 
-		self.grist_panedwindow1 = tk.LabelFrame(self, text='Hops:', background=_bgcolor)
+		self.grist_panedwindow1 = tk.LabelFrame(self, text='Fermentable Ingredients:', background=_bgcolor)
 		self.grist_panedwindow1.place(relx=0.005, rely=0.005, relheight=0.990, relwidth=0.5)
 		self.grist_panedwindow2 = tk.LabelFrame(self, text='Modifications:', background=_bgcolor)
 		self.grist_panedwindow2.place(relx=0.510, rely=0.005, relheight=0.990, relwidth=0.485)		
@@ -3806,7 +3806,7 @@ class yeast_editor(tk.Frame):
 		# self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal",  background=_bgcolor)
 		# self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973
 		# 		, relwidth=0.966)
-		self.yeast_panedwindow1 = tk.LabelFrame(self, text='Hops:', background=_bgcolor)
+		self.yeast_panedwindow1 = tk.LabelFrame(self, text='Yeasts:', background=_bgcolor)
 		self.yeast_panedwindow1.place(relx=0.005, rely=0.005, relheight=0.990, relwidth=0.5)
 		self.yeast_panedwindow2 = tk.LabelFrame(self, text='Modifications:', background=_bgcolor)
 		self.yeast_panedwindow2.place(relx=0.510, rely=0.005, relheight=0.990, relwidth=0.485)	
