@@ -829,6 +829,7 @@ class beer_engine_mainwin(object):
 
 	def refresh_tab_onclick(self, event):
 		tab = self.tabbed_frame.tk.call(self.tabbed_frame._w, u"identify", u"tab", event.x, event.y)
+		print tab, type(tab)
 		if tab == 0:
 			self.refresh_all()
 		elif tab == 1:
@@ -2443,7 +2444,7 @@ class hops_editor(tk.Frame):
 
 	def reinsert(self):
 		self.hop_lstbx.delete(0, tk.END)
-		for hop in sorted(brew_data.hop_data):
+		for hop in sorted(brew_data.hop_data, key=lambda kv: kv.lower()):
 			self.hop_lstbx.insert(tk.END, hop)
 
 class grist_editor(tk.Frame):
@@ -2804,7 +2805,7 @@ class grist_editor(tk.Frame):
 
 	def reinsert(self):
 		self.grist_lstbx.delete(0, tk.END)
-		for hop in sorted(brew_data.grist_data):
+		for hop in sorted(brew_data.grist_data, key=lambda kv: kv.lower()):
 			self.grist_lstbx.insert(tk.END, hop)
 
 class defaults_editor(tk.Frame):
@@ -4169,7 +4170,7 @@ class yeast_editor(tk.Frame):
 
 	def reinsert(self):
 		self.yeast_lstbx.delete(0, tk.END)
-		for yeast in sorted(brew_data.yeast_data):
+		for yeast in sorted(brew_data.yeast_data, key=lambda kv: kv.lower()):
 			self.yeast_lstbx.insert(tk.END, yeast)
 
 class notes_area(tk.Frame):
