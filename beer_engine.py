@@ -2327,8 +2327,8 @@ class beer_engine_mainwin:
 								#notes += bytes(sublist[2],encoding='utf8')
 								notes = sublist[2]
 
-			self.seventh_tab.texpert.insert(
-				'1.0', ast.literal_eval("'" + notes + "'"))
+			self.seventh_tab.texpert.insert('1.0', ast.literal_eval(
+					"'"+notes.replace("'", r'\'').replace('"', r'\"')+"'"))
 			self.refresh_hop()
 			self.refresh_grist()
 			self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(
