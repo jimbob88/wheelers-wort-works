@@ -1705,6 +1705,8 @@ class beer_engine_mainwin(object):
 						 u"*.berf *.berfx"),
 						(u"all files",
 						 u"*.*")))
+		if file_str == u'' or file_str is None or type(file_str) == tuple:
+			return
 		dialog = tk.Toplevel(self.master)
 		dialog.resizable(0, 0)
 		dialog.title(u"Open")
@@ -1729,7 +1731,7 @@ class beer_engine_mainwin(object):
 			self.hops = []
 			self.seventh_tab.texpert.delete(u'1.0', u'end')
 			notes = ''
-			if file.lower()[-5:] == u'.berf' or file.split(u'/')[-1] in examples:
+			if file.lower().endswith(u'.berf') or file.split(u'/')[-1] in examples:
 				self.current_file = file
 				with open(file, u'rb') as f:
 					#data = [line for line in f]
@@ -1786,7 +1788,7 @@ class beer_engine_mainwin(object):
 								notes = sublist[2]
 								# print(notes, ast.literal_eval("'"+notes+"'"))
 
-			elif file.lower()[-6:] == u'.berfx':
+			elif file.lower().endswith(u'.berfx'):
 				self.current_file = file
 				with open(file, u'r') as f:
 					#data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
