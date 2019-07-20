@@ -213,16 +213,17 @@ class beer_engine_mainwin(object):
 				foreground=u"#000000",
 				label=u"File")
 		self.sub_menu1 = tk.Menu(self.master,tearoff=0)
-		self.file_menu.add_command(activebackground=u"#ececec",
-				activeforeground=u"#000000",
-				 background=_bgcolor,
-				font=u"TkMenuFont",
-				foreground=u"#000000",
-				label=u"Open",
-				command=lambda: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == u'deb' else u'.'), title = u"Select file", filetypes = ((u"BERF",u"*.berf *.berfx"), (u"all files",u"*.*")))),
-				accelerator=u"Ctrl+O")
+		self.file_menu.add_command(
+			activebackground=u"#ececec",
+			activeforeground=u"#000000",
+			background=_bgcolor,
+			font=u"TkMenuFont",
+			foreground=u"#000000",
+			label=u"Open",
+			command=self.open_dialog,
+			accelerator=u"Ctrl+O")
 
-		self.master.bind(u"<Control-o>", lambda e: self.open_file(filedialog.askopenfilename(initialdir = os.path.expanduser(u'~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == u'deb' else u'.'), title = u"Select file", filetypes = ((u"BERF",u"*.berf *.berfx"), (u"all files",u"*.*")))))
+		self.master.bind(u"<Control-o>", self.open_dialog)
 
 		self.file_menu.add_command(activebackground=u"#ececec",
 				activeforeground=u"#000000",
@@ -1685,6 +1686,36 @@ class beer_engine_mainwin(object):
 
 	def create_complex_html(self):
 		self.create_html(use_sorttable=True)
+	
+	def open_dialog(self):
+		def save_and_open():
+			dialog.destroy()
+			self.save()
+			self.open_file(file_str)
+		def j_open(): # JUST OPEN
+			dialog.destroy()
+			self.open_file(file_str)
+		
+		file_str = filedialog.askopenfilename(
+					initialdir=os.path.expanduser(
+						u'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == u'deb' else u'.'),
+					title=u"Select file",
+					filetypes=(
+						(u"BERF",
+						 u"*.berf *.berfx"),
+						(u"all files",
+						 u"*.*")))
+		dialog = tk.Toplevel(self.master)
+		dialog.resizable(0, 0)
+		dialog.title(u"Open")
+		tk.Label(dialog, text=u'Are you sure you wish to open this file? Any unsaved changes will be lost').grid(row=0, column=0, columnspan=3)
+		tk.Button(dialog, text=u'Save and open', command=save_and_open).grid(row=1, column=0)
+		tk.Button(dialog, text=u'Open without saving', command=j_open).grid(row=1, column=1)
+		tk.Button(dialog, text=u'Cancel', command=dialog.destroy).grid(row=1, column=2)
+		dialog.update_idletasks() 
+		x = self.master.winfo_x() + (self.master.winfo_width()/2) - (dialog.winfo_width()/2)
+		y = self.master.winfo_y() + (self.master.winfo_height()/2) - (dialog.winfo_height()/2)
+		dialog.geometry(u"+{x}+{y}".format(x=int(x), y=int(y)))
 
 	def open_file(self, file):
 		if file != u'' and file != None and type(file) != tuple:
@@ -1799,7 +1830,7 @@ class beer_engine_mainwin(object):
 								#notes += bytes(sublist[2],encoding='utf8')
 								notes = sublist[2]
 
-			self.seventh_tab.texpert.insert(u'1.0', ast.literal_eval(u"'"+notes.replace(u"'", r'\'').replace(u'"', r'\"')+u"'"))
+			self.seventh_tab.texpert.insert(u'1.0', ast.literal_eval(u"'"+notes.replace(u"'", ur'\'').replace(u'"', ur'\"')+u"'"))
 			self.refresh_hop()
 			self.refresh_grist()
 			self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
@@ -1894,10 +1925,28 @@ class beer_engine_mainwin(object):
 		self.create_html()
 
 	def quit(self):
-		if messagebox.askokcancel(u"Quit", u"Do you want to quit?"):
-			if brew_data.constants[u'Save On Close']:
-				self.save()
+		u''' Quit Wheeler's Wort Works '''
+		def save_and_quit():
+			save_cont_win.destroy()
+			self.save()
 			self.master.destroy()
+
+		if brew_data.constants[u'Save On Close']:
+			save_cont_win = tk.Toplevel(self.master)
+			save_cont_win.resizable(0, 0)
+			save_cont_win.title(u"Quit")
+			tk.Label(save_cont_win, text=u'Are you sure you wish to save and quit?').grid(row=0, column=0, columnspan=3)
+			tk.Button(save_cont_win, text=u'Save and quit', command=save_and_quit).grid(row=1, column=0)
+			tk.Button(save_cont_win, text=u'Quit without saving', command=self.master.destroy).grid(row=1, column=1)
+			tk.Button(save_cont_win, text=u'Cancel', command=save_cont_win.destroy).grid(row=1, column=2)
+			save_cont_win.update_idletasks() 
+			x = self.master.winfo_x() + (self.master.winfo_width()/2) - (save_cont_win.winfo_width()/2)
+			y = self.master.winfo_y() + (self.master.winfo_height()/2) - (save_cont_win.winfo_height()/2)
+			save_cont_win.geometry(u"+{x}+{y}".format(x=int(x), y=int(y)))
+
+		else:
+			if messagebox.askokcancel(u"Quit",  u"Do you want to quit? Any unsaved changes will be lost"):
+				self.master.destroy()
 
 	def add_percent_ingredients(self, amount, curr_selection=None):
 		try:
