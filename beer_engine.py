@@ -303,18 +303,7 @@ class beer_engine_mainwin:
 			command=self.open_dialog,
 			accelerator="Ctrl+O")
 
-		self.master.bind(
-			"<Control-o>",
-			lambda e: self.open_file(
-				filedialog.askopenfilename(
-					initialdir=os.path.expanduser(
-						'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),
-					title="Select file",
-					filetypes=(
-						("BERF",
-						 "*.berf *.berfx"),
-						("all files",
-						 "*.*")))))
+		self.master.bind("<Control-o>", self.open_dialog)
 
 		self.file_menu.add_command(activebackground="#ececec",
 								   activeforeground="#000000",

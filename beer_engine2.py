@@ -7,10 +7,15 @@ from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except BaseException:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
 import platform
 import math
@@ -302,18 +307,7 @@ class beer_engine_mainwin(object):
 			command=self.open_dialog,
 			accelerator=u"Ctrl+O")
 
-		self.master.bind(
-			u"<Control-o>",
-			lambda e: self.open_file(
-				filedialog.askopenfilename(
-					initialdir=os.path.expanduser(
-						u'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == u'deb' else u'.'),
-					title=u"Select file",
-					filetypes=(
-						(u"BERF",
-						 u"*.berf *.berfx"),
-						(u"all files",
-						 u"*.*")))))
+		self.master.bind(u"<Control-o>", self.open_dialog)
 
 		self.file_menu.add_command(activebackground=u"#ececec",
 								   activeforeground=u"#000000",
