@@ -1718,6 +1718,7 @@ class beer_engine_mainwin(object):
 		x = self.master.winfo_x() + (self.master.winfo_width()/2) - (dialog.winfo_width()/2)
 		y = self.master.winfo_y() + (self.master.winfo_height()/2) - (dialog.winfo_height()/2)
 		dialog.geometry(u"+{x}+{y}".format(x=int(x), y=int(y)))
+		dialog.attributes(u"-topmost", True)
 
 	def open_file(self, file):
 		if file != u'' and file != None and type(file) != tuple:
@@ -1945,6 +1946,7 @@ class beer_engine_mainwin(object):
 			x = self.master.winfo_x() + (self.master.winfo_width()/2) - (save_cont_win.winfo_width()/2)
 			y = self.master.winfo_y() + (self.master.winfo_height()/2) - (save_cont_win.winfo_height()/2)
 			save_cont_win.geometry(u"+{x}+{y}".format(x=int(x), y=int(y)))
+			save_cont_win.attributes(u"-topmost", True)
 
 		else:
 			if messagebox.askokcancel(u"Quit",  u"Do you want to quit? Any unsaved changes will be lost"):
@@ -4479,8 +4481,35 @@ def main(file=None, update_available=False):
 	root.config(cursor=u"arrow")
 	if file != None:
 		gui.open_file(file)
-	if update_available:
-		messagebox.showinfo(u"Update Available", u"An update has become available, it is recommended you run the command: {command}".format(command=(u'sudo wheelers-wort-works-ce --coreupdate' if __mode__ == u'deb' else u'python3 main.py --coreupdate')))
+	if update_available:		
+		update_win = tk.Toplevel(root)
+		update_win.title(u'Update Available')
+		update_win.resizable(0, 0)
+		tk.Label(update_win, text=u'An update has become available, it is recommended you run the command:', font=(u'TkFixedFont', 12)).grid(row=0, column=0, columnspan=3, sticky=u'nsew')
+		command = u"{command}".format(
+			command=(
+				u'sudo wheelers-wort-works-ce --coreupdate' if __mode__ == u'deb' else u'python3 main.py --coreupdate'))
+		command_box = tk.Text(update_win, height=1, width=50, font=(u'TkFixedFont', 12), background=u'lightgray')
+		command_box.grid(row=1, column=0, columnspan=3, sticky=u'nsew')
+		command_box.insert(u'1.0', command, u"center")
+		command_box[u'state'] = u'disabled'
+		command_box.tag_configure(u'center_text', justify=u'center')
+		command_box.tag_add(u'center_text', 1.0, u'end')
+		editmenu = tk.Menu(tearoff=0)
+		editmenu.add_command(
+			label=u"Copy",
+			command=lambda: copy_command(root, command),
+			accelerator=u"Ctrl+C")
+		command_box.bind(u"<Control-Key-c>", lambda event: copy_command(root, command))
+		command_box.bind(u"<Button-3>", lambda event: editmenu.tk_popup(event.x_root, event.y_root))
+
+		tk.Button(update_win, text=u'Okay', command=update_win.destroy).grid(row=2, column=1, sticky=u'nsew')		
+		update_win.update_idletasks() 
+		x = root.winfo_x() + (root.winfo_width()/2) - (update_win.winfo_width()/2)
+		y = root.winfo_y() + (root.winfo_height()/2) - (update_win.winfo_height()/2)
+		update_win.geometry(u"+{x}+{y}".format(x=int(x), y=int(y)))
+		update_win.attributes(u"-topmost", True)
+
 	root.mainloop()
 
 
