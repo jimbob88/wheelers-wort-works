@@ -2186,6 +2186,8 @@ class beer_engine_mainwin:
 		x = self.master.winfo_x() + (self.master.winfo_width()/2) - (dialog.winfo_width()/2)
 		y = self.master.winfo_y() + (self.master.winfo_height()/2) - (dialog.winfo_height()/2)
 		dialog.geometry("+{x}+{y}".format(x=int(x), y=int(y)))
+		dialog.attributes("-topmost", True)
+
 
 	def open_file(self, file):
 		''' Open a `.berf` or `.berfx` file '''
@@ -2531,6 +2533,7 @@ class beer_engine_mainwin:
 			x = self.master.winfo_x() + (self.master.winfo_width()/2) - (save_cont_win.winfo_width()/2)
 			y = self.master.winfo_y() + (self.master.winfo_height()/2) - (save_cont_win.winfo_height()/2)
 			save_cont_win.geometry("+{x}+{y}".format(x=int(x), y=int(y)))
+			save_cont_win.attributes("-topmost", True)
 
 		else:
 			if messagebox.askokcancel("Quit",  "Do you want to quit? Any unsaved changes will be lost"):
@@ -5703,6 +5706,9 @@ def resource_path(relative_path):
 			os.path.expanduser('~/.config/Wheelers-Wort-Works/'),
 			relative_path)
 
+def copy_command(root, command):
+	root.clipboard_clear()
+	root.clipboard_append(command)
 
 def main(file=None, update_available=False):
 	''' Main function - launches tk interface '''
@@ -5712,11 +5718,35 @@ def main(file=None, update_available=False):
 	if file is not None:
 		gui.open_file(file)
 	if update_available:
-		messagebox.showinfo(
-			"Update Available",
-			"An update has become available, it is recommended you run the command: {command}".format(
-				command=(
-					'sudo wheelers-wort-works --coreupdate' if __mode__ == 'deb' else 'python3 main.py --coreupdate')))
+		update_win = tk.Toplevel(root)
+		update_win.title('Update Available')
+		update_win.resizable(0, 0)
+		tk.Label(update_win, text='An update has become available, it is recommended you run the command:', font=('TkFixedFont', 12)).grid(row=0, column=0, columnspan=3, sticky='nsew')
+		command = "{command}".format(
+			command=(
+				'sudo wheelers-wort-works --coreupdate' if __mode__ == 'deb' else 'python3 main.py --coreupdate'))
+		command_box = tk.Text(update_win, height=1, width=50, font=('TkFixedFont', 12), background='lightgray')
+		command_box.grid(row=1, column=0, columnspan=3, sticky='nsew')
+		command_box.insert('1.0', command, "center")
+		command_box['state'] = 'disabled'
+		command_box.tag_configure('center_text', justify='center')
+		command_box.tag_add('center_text', 1.0, 'end')
+		editmenu = tk.Menu(tearoff=0)
+		editmenu.add_command(
+			label="Copy",
+			command=lambda: copy_command(root, command),
+			accelerator="Ctrl+C")
+		command_box.bind("<Control-Key-c>", lambda event: copy_command(root, command))
+		command_box.bind("<Button-3>", lambda event: editmenu.tk_popup(event.x_root, event.y_root))
+
+		tk.Button(update_win, text='Okay', command=update_win.destroy).grid(row=2, column=1, sticky='nsew')		
+		update_win.update_idletasks() 
+		x = root.winfo_x() + (root.winfo_width()/2) - (update_win.winfo_width()/2)
+		y = root.winfo_y() + (root.winfo_height()/2) - (update_win.winfo_height()/2)
+		update_win.geometry("+{x}+{y}".format(x=int(x), y=int(y)))
+		update_win.attributes("-topmost", True)
+
+
 	root.mainloop()
 
 
