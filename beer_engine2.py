@@ -2453,8 +2453,8 @@ class hops_editor(tk.Frame):
 		alpha = float(self.hop_alpha_ent.get())
 		use = self.hop_use_combo.get()
 		description = self.hop_comm_ent.get()
-		brew_data.hop_data[name] = {u'Form': form, u'Origin': origin, u'Description': description, u'Use': use, u'Alpha': alpha}
 		del brew_data.hop_data[self.name]
+		brew_data.hop_data[name] = {u'Form': form, u'Origin': origin, u'Description': description, u'Use': use, u'Alpha': alpha}
 		idx = list(sorted(brew_data.hop_data.keys())).index(name)
 		self.reinsert()
 		self.show_data(name)
@@ -2849,8 +2849,8 @@ class grist_editor(tk.Frame):
 		fermentability = float(self.grist_ferment_ent.get())
 		description = self.grist_comm_ent.get()
 		type = self.grist_type_combo_values.index(self.grist_type_combo.get()) + 1
-		brew_data.grist_data[name] = {u'EBC': colour, u'Type': type, u'Extract': extract, u'Description': description, u'Moisture': moisture, u'Fermentability': fermentability}
 		del brew_data.grist_data[self.name]
+		brew_data.grist_data[name] = {u'EBC': colour, u'Type': type, u'Extract': extract, u'Description': description, u'Moisture': moisture, u'Fermentability': fermentability}
 		#print(brew_data.grist_data[name])
 		idx = list(sorted(brew_data.grist_data.keys())).index(name)
 		self.reinsert()
@@ -4202,8 +4202,8 @@ class yeast_editor(tk.Frame):
 		flocculation = self.yeast_flocc_combo.get()
 		yeast_type = u'D' if self.yeast_type_combo.get() == u'Dry' else self.yeast_type_combo.get()
 		yeast_type = u'L' if yeast_type == u'Liquid' else yeast_type
-		brew_data.yeast_data[name] = {u'Type': yeast_type, u'Lab': lab, u'Flocculation': flocculation, u'Attenuation': attenuation, u'Temperature': temperature, u'Description': description, u'Origin': origin}
 		del brew_data.yeast_data[self.name]
+		brew_data.yeast_data[name] = {u'Type': yeast_type, u'Lab': lab, u'Flocculation': flocculation, u'Attenuation': attenuation, u'Temperature': temperature, u'Description': description, u'Origin': origin}
 		self.reinsert()
 		self.show_data(name)
 
