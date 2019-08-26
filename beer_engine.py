@@ -3063,7 +3063,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_min_lbl.configure(text='''Minutes''')
 
 		self.replace_default_vars = tk.Label(self)
-		self.replace_default_vars.place(relx=0.038, rely=0.655)
+		# self.replace_default_vars.place(relx=0.038, rely=0.655)
 		self.replace_default_vars.configure(background=_bgcolor)
 		self.replace_default_vars.configure(foreground="#000000")
 		self.replace_default_vars.configure(font=font9)
