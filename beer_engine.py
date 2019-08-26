@@ -2990,9 +2990,9 @@ class defaults_editor(tk.Frame):
 		self.done_button.configure(command=self.temp_save)
 
 		self.reset_to_defaults_butt = tk.Button(self)
-		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=127)
+		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=190)
 		self.reset_to_defaults_butt.configure(takefocus="")
-		self.reset_to_defaults_butt.configure(text='''Reset To Defaults''')
+		self.reset_to_defaults_butt.configure(text='''Reset to Local Database''')
 		self.reset_to_defaults_butt.configure(command=self.reset_to_defaults)
 
 		self.attenuation_defaults_lbl= tk.Label(self)
