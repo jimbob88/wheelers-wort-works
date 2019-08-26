@@ -3813,8 +3813,8 @@ class defaults_editor(tk.Frame):
 			text='''Update Default Configuration:''')
 
 		self.replace_default_vars_chckbutt = tk.Checkbutton(self)
-		self.replace_default_vars_chckbutt.place(
-			relx=0.328, rely=0.655, relheight=0.049, relwidth=0.034)
+		# self.replace_default_vars_chckbutt.place(
+			# relx=0.328, rely=0.655, relheight=0.049, relwidth=0.034)
 		self.replace_default_vars_chckbutt.configure(background=_bgcolor)
 		self.replace_default_vars_chckbutt.configure(justify='left')
 		self.replace_default_vars_variable = tk.BooleanVar()
