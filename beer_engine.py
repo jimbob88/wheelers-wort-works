@@ -26,6 +26,89 @@ except ImportError:
 
 __mode__ = 'local'
 _bgcolor = 'SystemButtonFace' if platform.system() == 'Windows' else '#d9d9d9'
+
+def get_wiki(section, name):
+	if section == 'engineroom': section = 'An-Advanced-Guide-to-the-Engine-Room'
+	elif section == 'ingrededitors': section = 'An-Advanced-Guide-to-the-Hop⁄Grist⁄Yeast-Editor'
+	elif section == 'defaults': section = 'An-Advanced-Guide-to-the-Defaults-Editor'
+	elif section == 'attenuation': section = 'An-Advanced-Guide-to-the-Experimental-Attenuation-Tab'
+	if not name.startswith('#'): name = '#' + name
+	return 'https://github.com/jimbob88/wheelers-wort-works/wiki/' + section + name
+
+help_compatible_buttons = []
+class help_button(tk.Button):
+	def __init__(self, master, url, *args, **kwargs):
+		super(help_button, self).__init__(master, *args, **kwargs)
+		self.help_url = url
+		self.orig_command = kwargs['command']
+		self.help_mode = False
+		help_compatible_buttons.append(self)
+
+	def toggle_help(self):
+		if self.help_mode:
+			self.help_mode = False
+			self.configure(command=self.orig_command)
+			self.configure(cursor="")
+		else:
+			self.help_mode = True
+			self.configure(command=lambda: webbrowser.open_new_tab(self.help_url))
+			self.configure(cursor="question_arrow")
+
+class help_checkbutton(tk.Checkbutton):
+	def __init__(self, master, url, *args, **kwargs):
+		super(help_checkbutton, self).__init__(master, *args, **kwargs)
+		self.help_url = url
+		self.help_mode = False
+		help_compatible_buttons.append(self)
+	
+	def toggle_help(self):
+		if self.help_mode:
+			self.unbind('<Button-1>', self.bind_com)
+			self['command'] = self.orig_command
+			self.configure(cursor="")
+		else:
+			self.orig_command = self['command']
+			self['command'] = ''
+			self.bind_com = self.bind('<Button-1>', lambda e: self.get_help())
+			self.configure(cursor="question_arrow")
+		self.help_mode = not self.help_mode
+
+	def get_help(self):
+		self.toggle()
+		webbrowser.open_new_tab(self.help_url)
+
+class help_label(tk.Label):
+	def __init__(self, master, url, *args, **kwargs):
+		super(help_label, self).__init__(master, *args, **kwargs)
+		self.help_url = url
+		self.help_mode = False
+		help_compatible_buttons.append(self)
+
+	def toggle_help(self):
+		if self.help_mode:
+			self.unbind('<Button-1>', self.bind_com)
+			self.configure(cursor="")
+		else:
+			self.bind_com = self.bind('<Button-1>', lambda e: webbrowser.open_new_tab(self.help_url))
+			self.configure(cursor="question_arrow")
+		self.help_mode = not self.help_mode
+
+class help_labelframe(tk.LabelFrame):
+	def __init__(self, master, url, *args, **kwargs):
+		super(help_labelframe, self).__init__(master, *args, **kwargs)
+		self.help_url = url
+		self.help_mode = False
+		help_compatible_buttons.append(self)
+	
+	def toggle_help(self):
+		if self.help_mode:
+			self.unbind('<Button-1>', self.bind_com)
+			self.configure(cursor="")
+		else:
+			self.bind_com = self.bind('<Button-1>', lambda e: webbrowser.open_new_tab(self.help_url))
+			self.configure(cursor="question_arrow")
+		self.help_mode = not self.help_mode
+
 class beer_engine_mainwin:
 	def __init__(self, master=None):
 
@@ -331,10 +414,19 @@ class beer_engine_mainwin:
 				accelerator="Ctrl+H")
 		self.master.bind("<Control-h>", lambda e: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
 
+		self.help_menu.add_checkbutton(activebackground="#ececec",
+				activeforeground="#000000",
+				background=_bgcolor,
+				font="TkMenuFont",
+				foreground="#000000",
+				label="Help Mode",
+				command=lambda: [button.toggle_help() for button in help_compatible_buttons])
+
 		######################## First Tab ########################
 		self.first_tab.configure(background=_bgcolor)
 
-		self.recipe_name_lbl = tk.Label(self.first_tab)
+		self.recipe_name_lbl = help_label(self.first_tab,
+										  url=get_wiki('engineroom', 'recipe-name'))
 		self.recipe_name_lbl.place(relx=0.013, rely=0.021, relheight=0.0375, relwidth=0.1125)
 		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
 		self.recipe_name_lbl.configure(background=_bgcolor)
@@ -349,7 +441,8 @@ class beer_engine_mainwin:
 		self.recipe_name_ent.configure(justify='center')
 		self.recipe_name_ent.insert(0, 'No Name')
 
-		self.volume_lbl = tk.Label(self.first_tab)
+		self.volume_lbl = help_label(self.first_tab,
+									 url=get_wiki('engineroom', 'volume'))
 		self.volume_lbl.place(relx=0.417, rely=0.021, relheight=0.0375, relwidth=0.0662)
 		self.volume_lbl.configure(activebackground="#f9f9f9")
 		self.volume_lbl.configure(background=_bgcolor)
@@ -369,7 +462,8 @@ class beer_engine_mainwin:
 		self.volume_ent.bind('<Return>', lambda event: self.boil_vol.set(round(float(self.volume.get())*brew_data.constants['Boil Volume Scale'], 2)))
 		self.volume_ent.insert(0, str(brew_data.constants['Volume']))
 
-		self.boil_volume_lbl = tk.Label(self.first_tab)
+		self.boil_volume_lbl = help_label(self.first_tab,
+										  url=get_wiki('engineroom', 'boil-volume'))
 		self.boil_volume_lbl.place(relx=0.571, rely=0.021, relheight=0.0375
 				, relwidth=0.1062)
 		self.boil_volume_lbl.configure(text='''Boil Volume:''')
@@ -386,22 +480,24 @@ class beer_engine_mainwin:
 		self.boil_volume_ent.configure(textvariable=self.boil_vol)
 		self.boil_vol.set(str(brew_data.constants['Volume']*brew_data.constants['Boil Volume Scale']))
 		
-		self.ingredient_rem_butt = tk.Button(self.first_tab)
+		self.ingredient_rem_butt =help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'remove'),
+											 command=self.delete_ingredient)
 		self.ingredient_rem_butt.place(relx=0.013, rely=0.402, relheight=0.0604
 				, relwidth=0.0950)
 		self.ingredient_rem_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_rem_butt.configure(background=_bgcolor)
 		self.ingredient_rem_butt.configure(cursor="X_cursor")
 		self.ingredient_rem_butt.configure(text='''Remove''')
-		self.ingredient_rem_butt.configure(command=self.delete_ingredient)
 
-		self.ingredient_add_new_butt = tk.Button(self.first_tab)
+		self.ingredient_add_new_butt = help_button(self.first_tab,
+												   url=get_wiki('engineroom', 'add-new-button'),
+												   command=self.add_grist)
 		self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, relheight=0.0583
 				, relwidth=0.1025)
 		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_add_new_butt.configure(background=_bgcolor)
 		self.ingredient_add_new_butt.configure(text='''Add New''')
-		self.ingredient_add_new_butt.configure(command=self.add_grist)
 
 		self.adjust_weight_ing_lbl = tk.Label(self.first_tab)
 		self.adjust_weight_ing_lbl.place(relx=0.606, rely=0.169, relheight=0.0292
@@ -411,79 +507,88 @@ class beer_engine_mainwin:
 		self.adjust_weight_ing_lbl.configure(font=font9)
 		self.adjust_weight_ing_lbl.configure(text='''Adjust Weight''')
 
-		self.add_1000g_ing_butt = tk.Button(self.first_tab)
+		self.add_1000g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(1000))
 		self.add_1000g_ing_butt.place(relx=0.606, rely=0.211, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_1000g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_1000g_ing_butt.configure(background=_bgcolor)
 		self.add_1000g_ing_butt.configure(text='''+1Kg''')
-		self.add_1000g_ing_butt.configure(command=lambda: self.add_weight_ingredients(1000))
 		self.add_1000g_ing_butt.configure(font="TkFixedFont")
 
-		self.add_100g_ing_butt = tk.Button(self.first_tab)
+		self.add_100g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(100))
 		self.add_100g_ing_butt.place(relx=0.606, rely=0.275, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_100g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_100g_ing_butt.configure(background=_bgcolor)
 		self.add_100g_ing_butt.configure(text='''+100g''')
-		self.add_100g_ing_butt.configure(command=lambda: self.add_weight_ingredients(100))
 		self.add_100g_ing_butt.configure(font="TkFixedFont")
 
-		self.rem_1000g_ing_butt = tk.Button(self.first_tab)
+		self.rem_1000g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(-1000))
 		self.rem_1000g_ing_butt.place(relx=0.669, rely=0.211, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_1000g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_1000g_ing_butt.configure(background=_bgcolor)
 		self.rem_1000g_ing_butt.configure(text='''-1Kg''')
-		self.rem_1000g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-1000))
 		self.rem_1000g_ing_butt.configure(font="TkFixedFont")
 
-		self.rem_100g_ing_butt = tk.Button(self.first_tab)
+		self.rem_100g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(-100))
 		self.rem_100g_ing_butt.place(relx=0.669, rely=0.275, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_100g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_100g_ing_butt.configure(background=_bgcolor)
 		self.rem_100g_ing_butt.configure(text='''-100g''')
-		self.rem_100g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-100))
 		self.rem_100g_ing_butt.configure(font="TkFixedFont")
 
-		self.add_10g_ing_butt = tk.Button(self.first_tab)
+		self.add_10g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(10))
 		self.add_10g_ing_butt.place(relx=0.606, rely=0.338, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_10g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_10g_ing_butt.configure(background=_bgcolor)
 		self.add_10g_ing_butt.configure(text='''+10g''')
-		self.add_10g_ing_butt.configure(command=lambda: self.add_weight_ingredients(10))
 		self.add_10g_ing_butt.configure(font="TkFixedFont")
 
-		self.rem_10g_ing_butt = tk.Button(self.first_tab)
+		self.rem_10g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(-10))
 		self.rem_10g_ing_butt.place(relx=0.669, rely=0.338, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_10g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_10g_ing_butt.configure(background=_bgcolor)
 		self.rem_10g_ing_butt.configure(text='''-10g''')
-		self.rem_10g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-10))
 		self.rem_10g_ing_butt.configure(font="TkFixedFont")
 
-		self.add_1g_ing_butt = tk.Button(self.first_tab)
+		self.add_1g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(1))
 		self.add_1g_ing_butt.place(relx=0.606, rely=0.402, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_1g_ing_butt.configure(activebackground="#f9f9f9")
 		self.add_1g_ing_butt.configure(background=_bgcolor)
 		self.add_1g_ing_butt.configure(text='''+1g''')
-		self.add_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(1))
 		self.add_1g_ing_butt.configure(font="TkFixedFont")
 
-		self.rem_1g_ing_butt = tk.Button(self.first_tab)
+		self.rem_1g_ing_butt = help_button(self.first_tab,
+											 url=get_wiki('engineroom', 'adjust-weight'),
+											 command=lambda: self.add_weight_ingredients(-1))
 		self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_1g_ing_butt.configure(activebackground="#f9f9f9")
 		self.rem_1g_ing_butt.configure(background=_bgcolor)
 		self.rem_1g_ing_butt.configure(text='''-1g''')
-		self.rem_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-1))
 		self.rem_1g_ing_butt.configure(font="TkFixedFont")
 
-		self.original_gravity_lbl = tk.Label(self.first_tab)
+		self.original_gravity_lbl = help_label(self.first_tab,
+										  	   url=get_wiki('engineroom', 'original-gravity'))
 		self.original_gravity_lbl.place(relx=0.72, rely=0.085, relheight=0.0292
 				, relwidth=0.0988)
 		self.original_gravity_lbl.configure(activebackground="#f9f9f9")
@@ -498,21 +603,24 @@ class beer_engine_mainwin:
 		self.original_gravity_ent.configure(font="TkFixedFont")
 		self.original_gravity_ent.configure(selectbackground="#c4c4c4")
 		self.original_gravity_ent.configure(justify='center')
-		self.ingredient_zero_butt = tk.Button(self.first_tab)
+		
+		self.ingredient_zero_butt = help_button(self.first_tab,
+											  url=get_wiki('engineroom', 'zero'),
+											  command=self.zero_ingredients)
 		self.ingredient_zero_butt.place(relx=0.745, rely=0.211, relheight=0.0604
 				, relwidth=0.0688)
 		self.ingredient_zero_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_zero_butt.configure(background=_bgcolor)
 		self.ingredient_zero_butt.configure(text='''Zero''')
-		self.ingredient_zero_butt.configure(command=self.zero_ingredients)
 
-		self.recalc_butt = tk.Button(self.first_tab)
+		self.recalc_butt = help_button(self.first_tab,
+									 url=get_wiki('engineroom', 'the-recalculate-button'),
+									 command=self.recalculate)
 		self.recalc_butt.place(relx=0.859, rely=0.042, relheight=0.0604
 				, relwidth=0.1213)
 		self.recalc_butt.configure(activebackground="#f9f9f9")
 		self.recalc_butt.configure(background=_bgcolor)
 		self.recalc_butt.configure(text='''Recalculate''')
-		self.recalc_butt.configure(command=self.recalculate)
 
 		self.calculation_frame = ttk.Labelframe(self.first_tab)
 		self.calculation_frame.place(relx=0.833, rely=0.106, relheight=0.391
@@ -552,15 +660,17 @@ class beer_engine_mainwin:
 		self.calc_lbl.configure(state='disabled')
 		#self.calc_lbl.configure(width=97)
 
-		self.hop_add_new_butt = tk.Button(self.first_tab)
+		self.hop_add_new_butt = help_button(self.first_tab,
+											  url=get_wiki('engineroom', 'add-hop-button'),
+											  command=self.add_hop)
 		self.hop_add_new_butt.place(relx=0.707, rely=0.507, relheight=0.0604
 				, relwidth=0.1000)
 		self.hop_add_new_butt.configure(activebackground="#f9f9f9")
 		self.hop_add_new_butt.configure(background=_bgcolor)
 		self.hop_add_new_butt.configure(text='''Add Hop''')
-		self.hop_add_new_butt.configure(command=self.add_hop)
 
-		self.adjust_weight_hop_lbl = tk.Label(self.first_tab)
+		self.adjust_weight_hop_lbl = help_label(self.first_tab,
+										  url=get_wiki('engineroom', 'adjust-weight-1'))
 		self.adjust_weight_hop_lbl.place(relx=0.72, rely=0.592, relheight=0.0292
 				, relwidth=0.1138)
 		self.adjust_weight_hop_lbl.configure(activebackground="#f9f9f9")
@@ -568,87 +678,97 @@ class beer_engine_mainwin:
 		self.adjust_weight_hop_lbl.configure(font=font9)
 		self.adjust_weight_hop_lbl.configure(text='''Adjust Weight''')
 
-		self.add_100g_hop_butt = tk.Button(self.first_tab)
+		self.add_100g_hop_butt = help_button(self.first_tab,
+											  url=get_wiki('engineroom', 'adjust-weight-1'),
+											  command=lambda: self.add_weight_hops(100))
 		self.add_100g_hop_butt.place(relx=0.72, rely=0.634, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_100g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_100g_hop_butt.configure(background=_bgcolor)
 		self.add_100g_hop_butt.configure(text='''+100g''')
-		self.add_100g_hop_butt.configure(command=lambda: self.add_weight_hops(100))
 		self.add_100g_hop_butt.configure(font="TkFixedFont")
 
-		self.rem_100g_hop_butt = tk.Button(self.first_tab)
+		self.rem_100g_hop_butt = help_button(self.first_tab,
+											  url=get_wiki('engineroom', 'adjust-weight-1'),
+											  command=lambda: self.add_weight_hops(-100))
 		self.rem_100g_hop_butt.place(relx=0.783, rely=0.634, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_100g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_100g_hop_butt.configure(background=_bgcolor)
 		self.rem_100g_hop_butt.configure(text='''-100g''')
-		self.rem_100g_hop_butt.configure(command=lambda: self.add_weight_hops(-100))
 		self.rem_100g_hop_butt.configure(font="TkFixedFont")
 
-		self.add_25g_hop_butt = tk.Button(self.first_tab)
+		self.add_25g_hop_butt = help_button(self.first_tab,
+											url=get_wiki('engineroom', 'adjust-weight-1'),
+											command=lambda: self.add_weight_hops(25))
 		self.add_25g_hop_butt.place(relx=0.72, rely=0.698, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_25g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_25g_hop_butt.configure(background=_bgcolor)
 		self.add_25g_hop_butt.configure(text='''+25g''')
-		self.add_25g_hop_butt.configure(command=lambda: self.add_weight_hops(25))
 		self.add_25g_hop_butt.configure(font="TkFixedFont")
 
-		self.rem_25g_hop_butt = tk.Button(self.first_tab)
+		self.rem_25g_hop_butt = help_button(self.first_tab,
+											url=get_wiki('engineroom', 'adjust-weight-1'),
+											command=lambda: self.add_weight_hops(-25))
 		self.rem_25g_hop_butt.place(relx=0.783, rely=0.698, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_25g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_25g_hop_butt.configure(background=_bgcolor)
 		self.rem_25g_hop_butt.configure(text='''-25g''')
-		self.rem_25g_hop_butt.configure(command=lambda: self.add_weight_hops(-25))
 		self.rem_25g_hop_butt.configure(font="TkFixedFont")
 
-		self.add_10g_hop_butt = tk.Button(self.first_tab)
+		self.add_10g_hop_butt = help_button(self.first_tab,
+											url=get_wiki('engineroom', 'adjust-weight-1'),
+											command=lambda: self.add_weight_hops(10))
 		self.add_10g_hop_butt.place(relx=0.72, rely=0.761, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_10g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_10g_hop_butt.configure(background=_bgcolor)
 		self.add_10g_hop_butt.configure(text='''+10g''')
-		self.add_10g_hop_butt.configure(command=lambda: self.add_weight_hops(10))
 		self.add_10g_hop_butt.configure(font="TkFixedFont")
 
-		self.rem_10g_hop_butt = tk.Button(self.first_tab)
+		self.rem_10g_hop_butt = help_button(self.first_tab,
+											url=get_wiki('engineroom', 'adjust-weight-1'),
+											command=lambda: self.add_weight_hops(-10))
 		self.rem_10g_hop_butt.place(relx=0.783, rely=0.761, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_10g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_10g_hop_butt.configure(background=_bgcolor)
 		self.rem_10g_hop_butt.configure(text='''-10g''')
-		self.rem_10g_hop_butt.configure(command=lambda: self.add_weight_hops(-10))
 		self.rem_10g_hop_butt.configure(font="TkFixedFont")
 
-		self.add_1g_hop_butt = tk.Button(self.first_tab)
+		self.add_1g_hop_butt = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'adjust-weight-1'),
+										   command=lambda: self.add_weight_hops(1))
 		self.add_1g_hop_butt.place(relx=0.72, rely=0.825, relheight=0.0583
 				, relwidth=0.0563)
 		self.add_1g_hop_butt.configure(activebackground="#f9f9f9")
 		self.add_1g_hop_butt.configure(background=_bgcolor)
 		self.add_1g_hop_butt.configure(text='''+1g''')
-		self.add_1g_hop_butt.configure(command=lambda: self.add_weight_hops(1))
 		self.add_1g_hop_butt.configure(font="TkFixedFont")
 
-		self.rem_1g_hop_butt = tk.Button(self.first_tab)
+		self.rem_1g_hop_butt = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'adjust-weight-1'),
+										   command=lambda: self.add_weight_hops(-1))
 		self.rem_1g_hop_butt.place(relx=0.783, rely=0.825, relheight=0.0583
 				, relwidth=0.0563)
 		self.rem_1g_hop_butt.configure(activebackground="#f9f9f9")
 		self.rem_1g_hop_butt.configure(background=_bgcolor)
 		self.rem_1g_hop_butt.configure(text='''-1g''')
-		self.rem_1g_hop_butt.configure(command=lambda: self.add_weight_hops(-1))
 		self.rem_1g_hop_butt.configure(font="TkFixedFont")
 
-		self.hop_zero_butt = tk.Button(self.first_tab)
+		self.hop_zero_butt = help_button(self.first_tab,
+										 url=get_wiki('engineroom', 'zero-1'),
+										 command=self.zero_hops)
 		self.hop_zero_butt.place(relx=0.859, rely=0.634, relheight=0.0583
 				, relwidth=0.0688)
 		self.hop_zero_butt.configure(activebackground="#f9f9f9")
 		self.hop_zero_butt.configure(background=_bgcolor)
 		self.hop_zero_butt.configure(text='''Zero''')
-		self.hop_zero_butt.configure(command=self.zero_hops)
 
-		self.bitterness_ibu_lbl = tk.Label(self.first_tab)
+		self.bitterness_ibu_lbl = help_label(self.first_tab,
+										     url=get_wiki('engineroom', 'bitterness-ibus'))
 		self.bitterness_ibu_lbl.place(relx=0.846, rely=0.507, relheight=0.0583
 				, relwidth=0.0950)
 		self.bitterness_ibu_lbl.configure(activebackground="#f9f9f9")
@@ -664,87 +784,97 @@ class beer_engine_mainwin:
 		self.bitterness_ibu_ent.configure(selectbackground="#c4c4c4")
 		self.bitterness_ibu_ent.configure(justify='center')
 
-		self.hop_rem_butt = tk.Button(self.first_tab)
+		self.hop_rem_butt = help_button(self.first_tab,
+									url=get_wiki('engineroom', 'the-quit-button'),
+									command=self.delete_hop)
 		self.hop_rem_butt.place(relx=0.013, rely=0.825, relheight=0.0583
 				, relwidth=0.0950)
 		self.hop_rem_butt.configure(activebackground="#f9f9f9")
 		self.hop_rem_butt.configure(background=_bgcolor)
 		self.hop_rem_butt.configure(cursor="X_cursor")
 		self.hop_rem_butt.configure(text='''Remove''')
-		self.hop_rem_butt.configure(command=self.delete_hop)
 
-		self.quit_btt = tk.Button(self.first_tab)
+		self.quit_btt = help_button(self.first_tab,
+									url=get_wiki('engineroom', 'the-quit-button'),
+									command=self.quit)
 		self.quit_btt.place(relx=0.922, rely=0.93, relheight=0.0604
 				, relwidth=0.0663)
 		self.quit_btt.configure(activebackground="#f9f9f9")
 		self.quit_btt.configure(background=_bgcolor)
 		self.quit_btt.configure(text='''Quit''')
-		self.quit_btt.configure(command=self.quit)
 
-		self.add_time_butt_1 = tk.Button(self.first_tab)
+		self.add_time_butt_1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'time-increasedecrease'),
+										   command=lambda: self.add_time(1))
 		self.add_time_butt_1.place(relx=0.426, rely=0.825, relheight=0.0583
 				, relwidth=0.0975)
 		self.add_time_butt_1.configure(activebackground="#f9f9f9")
 		self.add_time_butt_1.configure(background=_bgcolor)
 		self.add_time_butt_1.configure(text='''Time +1''')
-		self.add_time_butt_1.configure(command=lambda: self.add_time(1))
 
-		self.rem_time_butt_1 = tk.Button(self.first_tab)
+		self.rem_time_butt_1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'time-increasedecrease'),
+										   command=lambda: self.add_time(-1))
 		self.rem_time_butt_1.place(relx=0.426, rely=0.888, relheight=0.0583
 				, relwidth=0.0975)
 		self.rem_time_butt_1.configure(activebackground="#f9f9f9")
 		self.rem_time_butt_1.configure(background=_bgcolor)
 		self.rem_time_butt_1.configure(text='''Time -1''')
-		self.rem_time_butt_1.configure(command=lambda: self.add_time(-1))
 
-		self.add_time_butt_10 = tk.Button(self.first_tab)
+		self.add_time_butt_10 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'time-increasedecrease'),
+										   command=lambda: self.add_time(10))
 		self.add_time_butt_10.place(relx=0.328, rely=0.825, relheight=0.0583
 				, relwidth=0.0975)
 		self.add_time_butt_10.configure(activebackground="#f9f9f9")
 		self.add_time_butt_10.configure(background=_bgcolor)
 		self.add_time_butt_10.configure(text='''Time +10''')
-		self.add_time_butt_10.configure(command=lambda: self.add_time(10))
 
-		self.rem_time_butt_10 = tk.Button(self.first_tab)
+		self.rem_time_butt_10 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'time-increasedecrease'),
+										   command=lambda: self.add_time(-10))
 		self.rem_time_butt_10.place(relx=0.328, rely=0.888, relheight=0.0583
 				, relwidth=0.0975)
 		self.rem_time_butt_10.configure(activebackground="#f9f9f9")
 		self.rem_time_butt_10.configure(background=_bgcolor)
 		self.rem_time_butt_10.configure(text='''Time -10''')
-		self.rem_time_butt_10.configure(command=lambda: self.add_time(-10))
 
-		self.add_alpha_butt_pt1 = tk.Button(self.first_tab)
+		self.add_alpha_butt_pt1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'alpha-increasedecrease'),
+										   command=lambda: self.add_alpha(0.1))
 		self.add_alpha_butt_pt1.place(relx=0.129, rely=0.825, relheight=0.0583
 				, relwidth=0.0975)
 		self.add_alpha_butt_pt1.configure(activebackground="#f9f9f9")
 		self.add_alpha_butt_pt1.configure(background=_bgcolor)
 		self.add_alpha_butt_pt1.configure(text='''Alpha +0.1''')
-		self.add_alpha_butt_pt1.configure(command=lambda: self.add_alpha(0.1))
 
-		self.rem_alpha_butt_pt1 = tk.Button(self.first_tab)
+		self.rem_alpha_butt_pt1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'alpha-increasedecrease'),
+										   command=lambda: self.add_alpha(-0.1))
 		self.rem_alpha_butt_pt1.place(relx=0.129, rely=0.888, relheight=0.0583
 				, relwidth=0.0975)
 		self.rem_alpha_butt_pt1.configure(activebackground="#f9f9f9")
 		self.rem_alpha_butt_pt1.configure(background=_bgcolor)
 		self.rem_alpha_butt_pt1.configure(text='''Alpha -0.1''')
-		self.rem_alpha_butt_pt1.configure(command=lambda: self.add_alpha(-0.1))
 
-		self.add_alpha_butt_1 = tk.Button(self.first_tab)
+		self.add_alpha_butt_1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'alpha-increasedecrease'),
+										   command=lambda: self.add_alpha(1))  
 		self.add_alpha_butt_1.place(relx=0.227, rely=0.825, relheight=0.0583
 				, relwidth=0.0975)
 		self.add_alpha_butt_1.configure(activebackground="#f9f9f9")
 		self.add_alpha_butt_1.configure(background=_bgcolor)
 		self.add_alpha_butt_1.configure(text='''Alpha +1''')
 		self.add_alpha_butt_1.configure(width=76)
-		self.add_alpha_butt_1.configure(command=lambda: self.add_alpha(1))
 
-		self.rem_alpha_butt_1 = tk.Button(self.first_tab)
+		self.rem_alpha_butt_1 = help_button(self.first_tab,
+										   url=get_wiki('engineroom', 'alpha-increasedecrease'),
+										   command=lambda: self.add_alpha(-1))  
 		self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, relheight=0.0583
 				, relwidth=0.0975)
 		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9")
 		self.rem_alpha_butt_1.configure(background=_bgcolor)
 		self.rem_alpha_butt_1.configure(text='''Alpha -1''')
-		self.rem_alpha_butt_1.configure(command=lambda: self.add_alpha(-1))
 
 		self.style.configure('Treeview.Heading',  font="TkDefaultFont")
 		self.style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Deja Vu Sans Mono', 9)) #Calibri
@@ -763,7 +893,8 @@ class beer_engine_mainwin:
 
 		self.hops = [] # [{'Name': 'Nelson Sauvin', 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
 
-		self.ingredients_imperial_chk_butt = tk.Checkbutton(self.first_tab)
+		self.ingredients_imperial_chk_butt = help_checkbutton(self.first_tab,
+															  url=get_wiki('engineroom', 'using-imperial-units'))
 		self.ingredients_imperial_chk_butt.place(relx=0.442, rely=0.402
 				, relheight=0.044, relwidth=0.149)
 		self.is_imperial_ingredient = tk.IntVar()
@@ -772,7 +903,8 @@ class beer_engine_mainwin:
 		self.ingredients_imperial_chk_butt.configure(command=self.ingredient_to_imperial)
 		self.ingredients_imperial_chk_butt.configure(variable=self.is_imperial_ingredient)
 
-		self.hops_imperial_chk_butt = tk.Checkbutton(self.first_tab)
+		self.hops_imperial_chk_butt = help_checkbutton(self.first_tab,
+														url=get_wiki('engineroom', 'using-imperial-units-1'))
 		self.hops_imperial_chk_butt.place(relx=0.53, rely=0.825, relheight=0.044
 			, relwidth=0.149)
 		self.is_imperial_hop = tk.IntVar()
@@ -781,7 +913,8 @@ class beer_engine_mainwin:
 		self.hops_imperial_chk_butt.configure(command=self.hop_to_imperial)
 		self.hops_imperial_chk_butt.configure(variable=self.is_imperial_hop)
 
-		self.ogfixed_chkbutton = tk.Checkbutton(self.first_tab)
+		self.ogfixed_chkbutton = help_checkbutton(self.first_tab,
+												  url=get_wiki('engineroom', 'fixed-original-gravity'))
 		self.is_ogfixed = tk.IntVar()
 		self.ogfixed_chkbutton.place(relx=0.71, rely=0.127, relheight=0.044
 				, relwidth=0.033)
@@ -791,7 +924,8 @@ class beer_engine_mainwin:
 		self.ogfixed_chkbutton.configure(variable=self.is_ogfixed)
 		self.ogfixed_chkbutton.configure(command=self.og_fixed)
 
-		self.ebufixed_chkbutton = tk.Checkbutton(self.first_tab)
+		self.ebufixed_chkbutton = help_checkbutton(self.first_tab,
+												   url=get_wiki('engineroom', 'fixed-bitterness-ibus'))
 		self.is_ebufixed = tk.IntVar()
 		self.ebufixed_chkbutton.place(relx=0.821, rely=0.55, relheight=0.044
 				, relwidth=0.033)
@@ -843,7 +977,9 @@ class beer_engine_mainwin:
 			if 'scrolled_tree_ingredient' in vars(self):
 				self.scrolled_tree_ingredient.delete(*self.scrolled_tree_ingredient.get_children())
 			else:
-				self.scrolled_tree_ingredient = ScrolledTreeView(self.frame_ingredients, style="mystyle.Treeview")
+				self.scrolled_tree_ingredient = ScrolledTreeView(self.frame_ingredients,
+																 url=get_wiki('engineroom', 'fermentable-ingredients-table'),
+																 style="mystyle.Treeview")
 				self.scrolled_tree_ingredient.grid(row=0,column=0, sticky='nsew')
 				self.ingredient_columns = ("Ebc", "Grav", "lb:oz", "Grams", "%")
 				self.scrolled_tree_ingredient.configure(columns=self.ingredient_columns)
@@ -924,7 +1060,9 @@ class beer_engine_mainwin:
 			if 'scrolled_tree_hops' in vars(self):
 				self.scrolled_tree_hops.delete(*self.scrolled_tree_hops.get_children())
 			else:
-				self.scrolled_tree_hops = ScrolledTreeView(self.frame_hops, style="mystyle.Treeview")
+				self.scrolled_tree_hops = ScrolledTreeView(self.frame_hops,
+														   url=get_wiki('engineroom', 'hop-varieties-table'),
+														   style="mystyle.Treeview")
 				self.scrolled_tree_hops.grid(row=0, column=0, sticky='nsew')
 				self.hop_columns = ("Type", "Alpha", "Time", "% Util", "IBU", "lb:oz", "Grams", "%")
 				self.scrolled_tree_hops.configure(columns=self.hop_columns)
@@ -1829,7 +1967,7 @@ class beer_engine_mainwin:
 								#notes += bytes(sublist[2],encoding='utf8')
 								notes = sublist[2]
 
-			self.seventh_tab.texpert.insert('1.0', ast.literal_eval("'"+notes.replace("'", r'\'').replace('"', r'\"')+"'"))
+			self.seventh_tab.texpert.insert('1.0', ast.literal_eval("'''"+notes.replace("'", r'\'').replace('"', r'\"')+"'''"))
 			self.refresh_hop()
 			self.refresh_grist()
 			self.sixth_tab.original_additions = sorted(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions), key=self.sixth_tab.original_additions.index)
@@ -2221,26 +2359,29 @@ class hops_editor(tk.Frame):
 		self.hop_lstbx.configure(highlightcolor="#d9d9d9")
 		self.hop_lstbx.configure(selectbackground="#c4c4c4")
 
-		self.hop_delete_butt = tk.Button(self.hop_panedwindow1)
+		self.hop_delete_butt = help_button(self.hop_panedwindow1,
+										   url=get_wiki('ingrededitors', 'the-delete-button'),
+										   command=self.delete)
 		self.hop_delete_butt.place(relx=0.025, rely=0.929, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_delete_butt.configure(takefocus="")
 		self.hop_delete_butt.configure(text='''Delete''')
-		self.hop_delete_butt.configure(command=self.delete)
 
-		self.hop_modify_butt = tk.Button(self.hop_panedwindow1)
+		self.hop_modify_butt = help_button(self.hop_panedwindow1,
+										   url=get_wiki('ingrededitors', 'the-modify-button'),
+										   command=lambda: self.input_state(1))
 		self.hop_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_modify_butt.configure(takefocus="")
 		self.hop_modify_butt.configure(text='''Modify''')
-		self.hop_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.hop_new_butt = tk.Button(self.hop_panedwindow1)
+		self.hop_new_butt = help_button(self.hop_panedwindow1,
+										url=get_wiki('ingrededitors', 'the-new-button'),
+										command=self.new)
 		self.hop_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.hop_new_butt.configure(takefocus="")
 		self.hop_new_butt.configure(text='''New''')
-		self.hop_new_butt.configure(command=self.new)
 
 		############################ Config Section ############################
 
@@ -2339,7 +2480,8 @@ class hops_editor(tk.Frame):
 		self.hop_comm_ent.configure(takefocus="")
 		self.hop_comm_ent.configure(cursor="xterm")
 
-		self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
+		self.hop_comm_lbl = help_label(self.hop_panedwindow2,
+									   url=get_wiki('ingrededitors', 'the-comments-entry'))
 		self.hop_comm_lbl.place(relx=0.056, rely=0.453, bordermode='ignore')
 		self.hop_comm_lbl.configure(background=_bgcolor)
 		self.hop_comm_lbl.configure(foreground="#000000")
@@ -2347,33 +2489,37 @@ class hops_editor(tk.Frame):
 		self.hop_comm_lbl.configure(relief='flat')
 		self.hop_comm_lbl.configure(text='''Comments:''')
 
-		self.hop_cancel_butt = tk.Button(self.hop_panedwindow2)
+		self.hop_cancel_butt = help_button(self.hop_panedwindow2,
+											url=get_wiki('ingrededitors', 'the-cancel-button'),
+											command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE)))
 		self.hop_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
 				, bordermode='ignore')
 		self.hop_cancel_butt.configure(takefocus="")
 		self.hop_cancel_butt.configure(text='''Cancel''')
-		self.hop_cancel_butt.configure(command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE)))
 
-		self.hop_clear_butt = tk.Button(self.hop_panedwindow2)
+		self.hop_clear_butt = help_button(self.hop_panedwindow2,
+										  url=get_wiki('ingrededitors', 'the-clear-form-button'),
+										  command=self.clear_form)
 		self.hop_clear_butt.place(relx=0.389, rely=0.565, height=28, width=83
 				, bordermode='ignore')
 		self.hop_clear_butt.configure(takefocus="")
 		self.hop_clear_butt.configure(text='''Clear Form''')
-		self.hop_clear_butt.configure(command=self.clear_form)
 
-		self.hop_done_butt = tk.Button(self.hop_panedwindow2)
+		self.hop_done_butt = help_button(self.hop_panedwindow2,
+										 url=get_wiki('ingrededitors', 'the-done-button'),
+										 command=self.done)
 		self.hop_done_butt.place(relx=0.75, rely=0.565, height=28, width=83
 				, bordermode='ignore')
 		self.hop_done_butt.configure(takefocus="")
 		self.hop_done_butt.configure(text='''Done''')
-		self.hop_done_butt.configure(command=self.done)
 
-		self.hop_save_data_butt = tk.Button(self.hop_panedwindow2)
+		self.hop_save_data_butt = help_button(self.hop_panedwindow2,
+											  url=get_wiki('ingrededitors', 'the-save-to-database-button'),
+											  command=self.save)
 		self.hop_save_data_butt.place(relx=0.222, rely=0.696, relwidth=0.5713
 				, relheight=0.2312, bordermode='ignore')
 		self.hop_save_data_butt.configure(takefocus="")
 		self.hop_save_data_butt.configure(text='''Save to Database''')
-		self.hop_save_data_butt.configure(command=self.save)
 
 		self.hop_lstbx.bind('<<ListboxSelect>>', self.select_listbox)
 		self.show_data(list(sorted(brew_data.hop_data.keys()))[0])
@@ -2533,26 +2679,29 @@ class grist_editor(tk.Frame):
 		self.grist_lstbx.configure(highlightcolor="#d9d9d9")
 		self.grist_lstbx.configure(selectbackground="#c4c4c4")
 
-		self.grist_delete_butt = tk.Button(self.grist_panedwindow1)
+		self.grist_delete_butt = help_button(self.grist_panedwindow1,
+											 url=get_wiki('ingrededitors', 'the-delete-button'),
+											 command=self.delete)
 		self.grist_delete_butt.place(relx=0.025, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_delete_butt.configure(takefocus="")
 		self.grist_delete_butt.configure(text='''Delete''')
-		self.grist_delete_butt.configure(command=self.delete)
 
-		self.grist_modify_butt = tk.Button(self.grist_panedwindow1)
+		self.grist_modify_butt = help_button(self.grist_panedwindow1,
+											 url=get_wiki('ingrededitors', 'the-modify-button'),
+											 command=lambda: self.input_state(1))
 		self.grist_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_modify_butt.configure(takefocus="")
 		self.grist_modify_butt.configure(text='''Modify''')
-		self.grist_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.grist_new_butt = tk.Button(self.grist_panedwindow1)
+		self.grist_new_butt = help_button(self.grist_panedwindow1,
+										  url=get_wiki('ingrededitors', 'the-new-button'),
+										  command=self.new)
 		self.grist_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.grist_new_butt.configure(takefocus="")
 		self.grist_new_butt.configure(text='''New''')
-		self.grist_new_butt.configure(command=self.new)
 
 		############################ Config Section ############################
 
@@ -2687,7 +2836,8 @@ class grist_editor(tk.Frame):
 		self.grist_type_combo_values.append([grist['Type'] for key, grist in brew_data.grist_data.items() if grist['Type'] not in [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
 		self.grist_type_combo.configure(values=self.grist_type_combo_values)
 
-		self.grist_comm_lbl = tk.Label(self.grist_panedwindow2)
+		self.grist_comm_lbl = help_label(self.grist_panedwindow2,
+									   url=get_wiki('ingrededitors', ''))
 		self.grist_comm_lbl.place(relx=0.056, rely=0.543, bordermode='ignore')
 		self.grist_comm_lbl.configure(background=_bgcolor)
 		self.grist_comm_lbl.configure(foreground="#000000")
@@ -2702,34 +2852,37 @@ class grist_editor(tk.Frame):
 		self.grist_comm_ent.configure(takefocus="")
 		self.grist_comm_ent.configure(cursor="xterm")
 
-		self.grist_cancel_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_cancel_butt = help_button(self.grist_panedwindow2,
+											 url=get_wiki('ingrededitors', 'the-cancel-button'),
+											 command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
 		self.grist_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.grist_cancel_butt.configure(takefocus="")
 		self.grist_cancel_butt.configure(text='''Cancel''')
-		self.grist_cancel_butt.configure(command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
 
-		self.grist_clear_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_clear_butt = help_button(self.grist_panedwindow2,
+											url=get_wiki('ingrededitors', 'the-clear-form-button'),
+											command=self.clear_form)
 		self.grist_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.grist_clear_butt.configure(takefocus="")
 		self.grist_clear_butt.configure(text='''Clear Form''')
-		self.grist_clear_butt.configure(command=self.clear_form)
 
-		self.grist_done_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_done_butt = help_button(self.grist_panedwindow2,
+										   url=get_wiki('ingrededitors', 'the-done-button'),
+										   command=self.done)
 		self.grist_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.grist_done_butt.configure(takefocus="")
 		self.grist_done_butt.configure(text='''Done''')
-		self.grist_done_butt.configure(command=self.done)
 
-		self.grist_save_data_butt = tk.Button(self.grist_panedwindow2)
+		self.grist_save_data_butt = help_button(self.grist_panedwindow2,
+											    url=get_wiki('ingrededitors', 'the-save-to-database-button'),
+												command=self.save)
 		self.grist_save_data_butt.place(relx=0.222, rely=0.739, relwidth=0.5713
 				, relheight=0.2312, bordermode='ignore')
 		self.grist_save_data_butt.configure(takefocus="")
 		self.grist_save_data_butt.configure(text='''Save to Database''')
-		self.grist_save_data_butt.configure(command=self.save)
-
 
 		self.input_state(0)
 
@@ -2878,7 +3031,8 @@ class defaults_editor(tk.Frame):
 		self.style.map('.',background=
 			[('selected', _compcolor), ('active',_ana2color)])
 
-		self.target_vol_lbl = tk.Label(self)
+		self.target_vol_lbl = help_label(self,
+										 url=get_wiki('defaults', 'target-volume'))
 		self.target_vol_lbl.place(relx=0.038, rely=0.063, height=19, width=118)
 		self.target_vol_lbl.configure(background=_bgcolor)
 		self.target_vol_lbl.configure(foreground="#000000")
@@ -2886,7 +3040,8 @@ class defaults_editor(tk.Frame):
 		self.target_vol_lbl.configure(relief='flat')
 		self.target_vol_lbl.configure(text='''Target Volume:''')
 
-		self.boil_vol_lbl = tk.Label(self)
+		self.boil_vol_lbl = help_label(self,
+									   url=get_wiki('defaults', 'boil-volume-scale'))
 		self.boil_vol_lbl.place(relx=0.038, rely=0.148, height=19, width=143)
 		self.boil_vol_lbl.configure(background=_bgcolor)
 		self.boil_vol_lbl.configure(foreground="#000000")
@@ -2894,7 +3049,8 @@ class defaults_editor(tk.Frame):
 		self.boil_vol_lbl.configure(relief='flat')
 		self.boil_vol_lbl.configure(text='''Boil Volume Scale:''')
 
-		self.liquor_to_grist_lbl = tk.Label(self)
+		self.liquor_to_grist_lbl = help_label(self,
+											  url=get_wiki('defaults', 'liquor-to-grist-ratio'))
 		self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317, height=19
 				, width=165)
 		self.liquor_to_grist_lbl.configure(background=_bgcolor)
@@ -2934,7 +3090,8 @@ class defaults_editor(tk.Frame):
 		self.target_vol_litres_lbl.configure(relief='flat')
 		self.target_vol_litres_lbl.configure(text='''Litres''')
 
-		self.mash_efficiency_lbl = tk.Label(self)
+		self.mash_efficiency_lbl = help_label(self,
+											  url=get_wiki('defaults', 'mash-efficiency'))
 		self.mash_efficiency_lbl.place(relx=0.038, rely=0.233, height=19
 				, width=125)
 		self.mash_efficiency_lbl.configure(background=_bgcolor)
@@ -2977,25 +3134,30 @@ class defaults_editor(tk.Frame):
 		self.liquor_to_grist_lperkg_lbl.configure(relief='flat')
 		self.liquor_to_grist_lperkg_lbl.configure(text='''L/kg''')
 
-		self.save_all_butt = tk.Button(self)
+		self.save_all_butt = help_button(self,
+										 url=get_wiki('defaults', 'save-all-as-defaults'),
+										 command=self.save_all)
 		self.save_all_butt.place(relx=0.808, rely=0.93, height=28, width=143)
 		self.save_all_butt.configure(takefocus="")
 		self.save_all_butt.configure(text='''Save All As Defaults''')
-		self.save_all_butt.configure(command=self.save_all)
+		self.save_all_butt.configure()
 
-		self.done_button = tk.Button(self)
+		self.done_button = help_button(self,
+									   url=get_wiki('defaults', 'done'),
+									   command=self.temp_save)
 		self.done_button.place(relx=0.694, rely=0.93, height=28, width=83)
 		self.done_button.configure(takefocus="")
 		self.done_button.configure(text='''Done''')
-		self.done_button.configure(command=self.temp_save)
 
-		self.reset_to_defaults_butt = tk.Button(self)
+		self.reset_to_defaults_butt = help_button(self,
+									   			  url=get_wiki('defaults', 'reset-to-local-database'),
+									   			  command=self.reset_to_defaults)
 		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=190)
 		self.reset_to_defaults_butt.configure(takefocus="")
 		self.reset_to_defaults_butt.configure(text='''Reset to Local Database''')
-		self.reset_to_defaults_butt.configure(command=self.reset_to_defaults)
 
-		self.attenuation_defaults_lbl= tk.Label(self)
+		self.attenuation_defaults_lbl= help_label(self,
+												  url=get_wiki('defaults', 'attenuation-default'))
 		self.attenuation_defaults_lbl.place(relx=0.038, rely=0.402, height=19
 				, width=155)
 		self.attenuation_defaults_lbl.configure(background=_bgcolor)
@@ -3021,7 +3183,8 @@ class defaults_editor(tk.Frame):
 		self.attenuation_temp_combo.configure(width=57)
 		self.attenuation_temp_combo.configure(takefocus="")
 
-		self.save_on_close_lbl = tk.Label(self)
+		self.save_on_close_lbl = help_label(self,
+											url=get_wiki('defaults', 'save-on-close'))
 		self.save_on_close_lbl.place(relx=0.038, rely=0.486)
 		self.save_on_close_lbl.configure(background=_bgcolor)
 		self.save_on_close_lbl.configure(foreground="#000000")
@@ -3036,7 +3199,8 @@ class defaults_editor(tk.Frame):
 		self.save_on_close_combo.configure(width=97)
 		self.save_on_close_combo.configure(takefocus="")
 
-		self.default_boil_time_lbl = tk.Label(self)
+		self.default_boil_time_lbl = help_label(self,
+												url=get_wiki('defaults', 'default-boil-time'))
 		self.default_boil_time_lbl.place(relx=0.038, rely=0.571)
 		self.default_boil_time_lbl.configure(background=_bgcolor)
 		self.default_boil_time_lbl.configure(foreground="#000000")
@@ -3143,6 +3307,7 @@ class defaults_editor(tk.Frame):
 		self.liquor_to_grist_ent.insert(0,  brew_data.constants['Liquor To Grist Ratio'])
 		self.default_boil_time_spinbox.insert(0, brew_data.constants['Default Boil Time'])
 		self.replace_default_vars_variable.set(not brew_data.constants['Replace Defaults'])
+
 class special_editor(tk.Frame):
 	def __init__(self, parent):
 		tk.Frame.__init__(self, parent, background=_bgcolor)
@@ -3197,7 +3362,8 @@ class special_editor(tk.Frame):
 		  'low-72': 44, 'med-72': 51, 'high-72': 57
 		}
 
-		self.attenuation_frame = tk.LabelFrame(self)
+		self.attenuation_frame = help_labelframe(self,
+												 url=get_wiki('attenuation', 'the-yeast-attenuation-pane'))
 		self.attenuation_frame.place(relx=0.013, rely=0.021, relheight=0.591
 			, relwidth=0.227)
 		#self.attenuation_frame.configure(relief='')
@@ -3636,12 +3802,13 @@ class special_editor(tk.Frame):
 
 		########################################### Water Chemistry ###########################################
 
-		self.water_chem_add_frame = ttk.Labelframe(self)
+		self.water_chem_add_frame = help_labelframe(self,
+													url=get_wiki('attenuation', 'water-chemistry-additions-pane'))
 		self.water_chem_add_frame.place(relx=0.253, rely=0.021, relheight=0.591 #relheight=0.591
 				, relwidth=0.568)
-		self.water_chem_add_frame.configure(relief='')
+		# self.water_chem_add_frame.configure(relief='')
 		self.water_chem_add_frame.configure(text='''Water Chemistry Additions''')
-		self.water_chem_add_frame.configure(width=450)
+		# self.water_chem_add_frame.configure(width=450)
 
 		self.water_chem_orig_lstbx = ScrolledListBox(self.water_chem_add_frame)
 		self.water_chem_orig_lstbx.place(relx=0.022, rely=0.073, relheight=0.865
@@ -3650,7 +3817,7 @@ class special_editor(tk.Frame):
 		self.water_chem_orig_lstbx.configure(font="TkFixedFont")
 		self.water_chem_orig_lstbx.configure(highlightcolor="#d9d9d9")
 		self.water_chem_orig_lstbx.configure(selectbackground="#c4c4c4")
-		self.water_chem_orig_lstbx.configure(width=10)
+		# self.water_chem_orig_lstbx.configure(width=10)
 
 		self.water_chem_new = tk.Button(self.water_chem_add_frame)
 		self.water_chem_new.place(relx=0.444, rely=0.073, height=28, width=53
@@ -3697,12 +3864,13 @@ class special_editor(tk.Frame):
 		self.water_chem_added_lstbx.configure(width=10)
 
 		#########################################################################################
-		self.water_boil_frame = ttk.Labelframe(self)
+		self.water_boil_frame = help_labelframe(self,
+												url=get_wiki('attenuation', 'water-boil-pane'))
 		self.water_boil_frame.place(relx=0.013, rely=0.613, relheight=0.159
 				, relwidth=0.227)
-		self.water_boil_frame.configure(relief='')
+		# self.water_boil_frame.configure(relief='')
 		self.water_boil_frame.configure(text='''Water Boil:''')
-		self.water_boil_frame.configure(width=180)
+		# self.water_boil_frame.configure(width=180)
 
 		self.water_boil_disable = tk.Checkbutton(self.water_boil_frame)
 		self.water_boil_is_disabled = tk.IntVar()
@@ -3874,26 +4042,29 @@ class yeast_editor(tk.Frame):
 		self.yeast_lstbx.configure(highlightcolor="#d9d9d9")
 		self.yeast_lstbx.configure(selectbackground="#c4c4c4")
 
-		self.yeast_delete_butt = tk.Button(self.yeast_panedwindow1)
+		self.yeast_delete_butt = help_button(self.yeast_panedwindow1,
+											 url=get_wiki('ingrededitors', 'the-delete-button'),
+											 command=self.delete)
 		self.yeast_delete_butt.place(relx=0.025, rely=0.929, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_delete_butt.configure(takefocus="")
 		self.yeast_delete_butt.configure(text='''Delete''')
-		self.yeast_delete_butt.configure(command=self.delete)
 
-		self.yeast_modify_butt = tk.Button(self.yeast_panedwindow1)
+		self.yeast_modify_butt = help_button(self.yeast_panedwindow1,
+											 url=get_wiki('ingrededitors', 'the-modify-button'),
+											 command=lambda: self.input_state(1))
 		self.yeast_modify_butt.place(relx=0.35, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_modify_butt.configure(takefocus="")
 		self.yeast_modify_butt.configure(text='''Modify''')
-		self.yeast_modify_butt.configure(command=lambda: self.input_state(1))
 
-		self.yeast_new_butt = tk.Button(self.yeast_panedwindow1)
+		self.yeast_new_butt = help_button(self.yeast_panedwindow1,
+										  url=get_wiki('ingrededitors', 'the-new-button'),
+										  command=self.new)
 		self.yeast_new_butt.place(relx=0.725, rely=0.93, relheight=0.0589, relwidth=0.2075
 				, bordermode='ignore')
 		self.yeast_new_butt.configure(takefocus="")
 		self.yeast_new_butt.configure(text='''New''')
-		self.yeast_new_butt.configure(command=self.new)
 
 		############################ Config Section ############################
 
@@ -4044,34 +4215,37 @@ class yeast_editor(tk.Frame):
 		self.yeast_comm_ent.configure(takefocus="")
 		self.yeast_comm_ent.configure(cursor="xterm")
 
-		self.yeast_cancel_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_cancel_butt = help_button(self.yeast_panedwindow2,
+											 url=get_wiki('ingrededitors', 'the-cancel-button'),
+											 command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
 		self.yeast_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.yeast_cancel_butt.configure(takefocus="")
 		self.yeast_cancel_butt.configure(text='''Cancel''')
-		self.yeast_cancel_butt.configure(command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
 
-		self.yeast_clear_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_clear_butt = help_button(self.yeast_panedwindow2,
+											url=get_wiki('ingrededitors', 'the-clear-form-button'),
+											command=self.clear_form)
 		self.yeast_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.yeast_clear_butt.configure(takefocus="")
 		self.yeast_clear_butt.configure(text='''Clear Form''')
-		self.yeast_clear_butt.configure(command=self.clear_form)
 
-		self.yeast_done_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_done_butt = help_button(self.yeast_panedwindow2,
+										   url=get_wiki('ingrededitors', 'the-done-button'),
+										   command=self.done)
 		self.yeast_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
 				, bordermode='ignore')
 		self.yeast_done_butt.configure(takefocus="")
 		self.yeast_done_butt.configure(text='''Done''')
-		self.yeast_done_butt.configure(command=self.done)
 
-		self.yeast_save_data_butt = tk.Button(self.yeast_panedwindow2)
+		self.yeast_save_data_butt = help_button(self.yeast_panedwindow2,
+											    url=get_wiki('ingrededitors', 'the-save-to-database-button'),
+												command=self.save)
 		self.yeast_save_data_butt.place(relx=0.222, rely=0.739, relwidth=0.5713
 				, relheight=0.2312, bordermode='ignore')
 		self.yeast_save_data_butt.configure(takefocus="")
 		self.yeast_save_data_butt.configure(text='''Save to Database''')
-		self.yeast_save_data_butt.configure(command=self.save)
-
 
 		self.yeast_lstbx.bind('<<ListboxSelect>>', self.select_listbox)
 		self.input_state(0)
@@ -4375,10 +4549,13 @@ class ScrolledTreeView(AutoScroll, ttk.Treeview):
 	'''A standard ttk Treeview widget with scrollbars that will
 	automatically show/hide as needed.'''
 	@_create_container
-	def __init__(self, master, custom_insert=True, **kw):
+	def __init__(self, master, url, custom_insert=True, **kw):
 		ttk.Treeview.__init__(self, master, **kw)
 		AutoScroll.__init__(self, master)
 		self.custom_insert = custom_insert
+		self.help_url = url
+		self.help_mode = False
+		help_compatible_buttons.append(self)
 
 	def insert(self, parent, index, iid=None, **kw):
 		opts = ttk._format_optdict(kw)
@@ -4393,6 +4570,15 @@ class ScrolledTreeView(AutoScroll, ttk.Treeview):
 			else:
 				res = self.tk.call(self._w, "insert", parent, index, *opts)
 		return res
+	
+	def toggle_help(self):
+		if self.help_mode:
+			self.unbind('<Button-1>', self.bind_com)
+			self.configure(cursor="")
+		else:
+			self.bind_com = self.bind('<Button-1>', lambda e: webbrowser.open_new_tab(self.help_url))
+			self.configure(cursor="question_arrow")
+		self.help_mode = not self.help_mode
 
 class ScrolledListBox(AutoScroll, tk.Listbox):
 	'''A standard Tkinter Text widget with scrollbars that will
@@ -4494,9 +4680,9 @@ def main(file=None, update_available=False):
 		editmenu = tk.Menu(tearoff=0)
 		editmenu.add_command(
 			label="Copy",
-			command=lambda: copy_command(root, command),
+			command=lambda: command_box.event_generate("<<Copy>>"),
 			accelerator="Ctrl+C")
-		command_box.bind("<Control-Key-c>", lambda event: copy_command(root, command))
+		command_box.bind("<Control-Key-c>", lambda event: command_box.event_generate("<<Copy>>"))
 		command_box.bind("<Button-3>", lambda event: editmenu.tk_popup(event.x_root, event.y_root))
 
 		tk.Button(update_win, text='Okay', command=update_win.destroy).grid(row=2, column=1, sticky='nsew')		
@@ -4510,4 +4696,4 @@ def main(file=None, update_available=False):
 
 
 if __name__ == '__main__':
-	main()
+	main(update_available=True)
