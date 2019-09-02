@@ -70,7 +70,7 @@ if __name__ == u'__main__':
 	try:
 		with urlopen(u'https://github.com/jimbob88/wheelers-wort-works') as response:
 			text =response.read().decode(u'utf-8')
-			sec = (''.join(text[text.find(u'<a class="commit-tease-sha"'):].partition(u'</a>')[0:2]))
+			sec = (''.join(text[text.find(u'<a class="commit-tease-sha mr-1"'):].partition(u'</a>')[0:2]))
 			commit = (sec.split(u'"')[3].split(u'/')[-1])
 			if os.path.isfile(resource_path(u'commit.txt')):
 				prev_commit = [line for line in open(resource_path(u'commit.txt'), 'r')][0]
