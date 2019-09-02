@@ -960,7 +960,7 @@ class beer_engine_mainwin:
 
 	def refresh_tab_onclick(self, event):
 		tab = self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab", event.x, event.y)
-		print(tab, type(tab))
+		# print(tab, type(tab))
 		if tab == 0:
 			self.refresh_all()
 		elif tab == 1:
