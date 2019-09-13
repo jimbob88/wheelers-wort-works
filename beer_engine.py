@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-try:
-	import tkinter as tk
-	import tkinter.ttk as ttk
-	from tkinter import filedialog, messagebox
-except:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog, messagebox
 import sys
 import brew_data
 import platform
@@ -1841,6 +1835,9 @@ class beer_engine_mainwin:
 						 "*.*")))
 		if file_str == '' or file_str is None or type(file_str) == tuple:
 			return
+		if self.is_clear():
+			self.open_file(file_str)
+			return
 		dialog = tk.Toplevel(self.master)
 		dialog.resizable(0, 0)
 		dialog.title("Open")
@@ -2322,6 +2319,16 @@ class beer_engine_mainwin:
 					backups.insert(curr_insert, 'end', text='{file_start}.txt'.format(file_start=file_start), iid='{file_start}{iid}'.format(file_start=file_start, iid=curr_insert))
 		backups_res_butt = tk.Button(restore_backup_dia, text='Restore', command = restore)
 		backups_res_butt.grid(row=0,column=1)
+	
+	def is_clear(self):
+		is_changed = False
+		if any(map(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])):
+			is_changed = True
+		if self.recipe_name_ent.get() != 'No Name':
+			is_changed = True
+		if self.seventh_tab.texpert.get('1.0', tk.END) != '\n':
+			is_changed = True
+		return not is_changed
 
 class hops_editor(tk.Frame):
 	def __init__(self, parent):
