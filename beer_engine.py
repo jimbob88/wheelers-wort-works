@@ -2674,13 +2674,10 @@ class beer_engine_mainwin:
 	
 	def is_clear(self):
 		is_changed = False
-		print(list(map(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])))
 		if any(map(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])):
 			is_changed = True
-		print(repr(self.recipe_name_ent.get()), self.recipe_name_ent.get() != 'No Name')
 		if self.recipe_name_ent.get() != 'No Name':
 			is_changed = True
-		print(rf"{repr(self.seventh_tab.texpert.get('1.0', tk.END))}", len(self.seventh_tab.texpert.get('1.0', tk.END)), self.seventh_tab.texpert.get('1.0', tk.END) != '\n')
 		if self.seventh_tab.texpert.get('1.0', tk.END) != '\n':
 			is_changed = True
 		return not is_changed
