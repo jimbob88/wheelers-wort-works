@@ -2176,6 +2176,9 @@ class beer_engine_mainwin:
 						 "*.*")))
 		if file_str == '' or file_str is None or type(file_str) == tuple:
 			return
+		if self.is_clear():
+			self.open_file(file_str)
+			return
 		dialog = tk.Toplevel(self.master)
 		dialog.resizable(0, 0)
 		dialog.title("Open")
@@ -2668,6 +2671,19 @@ class beer_engine_mainwin:
 			self.rem_1g_ing_butt.configure(font="TkFixedFont")
 		else:
 			self.ingredient_to_imperial()
+	
+	def is_clear(self):
+		is_changed = False
+		print(list(map(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])))
+		if any(map(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])):
+			is_changed = True
+		print(repr(self.recipe_name_ent.get()), self.recipe_name_ent.get() != 'No Name')
+		if self.recipe_name_ent.get() != 'No Name':
+			is_changed = True
+		print(rf"{repr(self.seventh_tab.texpert.get('1.0', tk.END))}", len(self.seventh_tab.texpert.get('1.0', tk.END)), self.seventh_tab.texpert.get('1.0', tk.END) != '\n')
+		if self.seventh_tab.texpert.get('1.0', tk.END) != '\n':
+			is_changed = True
+		return not is_changed
 
 
 class hops_editor(tk.Frame):

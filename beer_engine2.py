@@ -8,15 +8,11 @@ from __future__ import division
 from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
-try:
-	import Tkinter as tk
-	import tkinter.ttk as ttk
-	from Tkinter import filedialog, messagebox
-except BaseException:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+from itertools import imap
+import Tkinter as tk
+import ttk
+import tkFileDialog as filedialog
+import tkMessageBox as messagebox
 import sys
 import platform
 import math
@@ -2180,6 +2176,9 @@ class beer_engine_mainwin(object):
 						 u"*.*")))
 		if file_str == u'' or file_str is None or type(file_str) == tuple:
 			return
+		if self.is_clear():
+			self.open_file(file_str)
+			return
 		dialog = tk.Toplevel(self.master)
 		dialog.resizable(0, 0)
 		dialog.title(u"Open")
@@ -2672,6 +2671,19 @@ class beer_engine_mainwin(object):
 			self.rem_1g_ing_butt.configure(font=u"TkFixedFont")
 		else:
 			self.ingredient_to_imperial()
+	
+	def is_clear(self):
+		is_changed = False
+		print list(imap(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions]))
+		if any(imap(lambda x: len(x) > 0, [self.ingredients, self.hops, self.sixth_tab.added_additions])):
+			is_changed = True
+		print repr(self.recipe_name_ent.get()), self.recipe_name_ent.get() != u'No Name'
+		if self.recipe_name_ent.get() != u'No Name':
+			is_changed = True
+		print rf"{repr(self.seventh_tab.texpert.get('1.0', tk.END))}", len(self.seventh_tab.texpert.get(u'1.0', tk.END)), self.seventh_tab.texpert.get(u'1.0', tk.END) != u'\n'
+		if self.seventh_tab.texpert.get(u'1.0', tk.END) != u'\n':
+			is_changed = True
+		return not is_changed
 
 
 class hops_editor(tk.Frame):
