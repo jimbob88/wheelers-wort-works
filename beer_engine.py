@@ -1198,7 +1198,8 @@ class beer_engine_mainwin:
 
 		add_grist_gui = tk.Toplevel()
 		add_grist_gui.resizable(0, 0)
-		grist_options = ScrolledTreeView(add_grist_gui, show="tree", columns=("EBC"))
+		grist_options = ScrolledTreeView(add_grist_gui, url=get_wiki('engineroom', 'the-dialogue')
+														, show="tree", columns=("EBC"))
 		grist_options.column(column="EBC",width=80)
 		grist_options.grid(row=1,column=0)
 		for grist in sorted(brew_data.grist_data):
@@ -1250,7 +1251,7 @@ class beer_engine_mainwin:
 						treeview.yview(n)
 		add_hop_gui = tk.Toplevel()
 		add_hop_gui.resizable(0, 0)
-		hop_options = ScrolledTreeView(add_hop_gui, show="tree", columns=("Form"))
+		hop_options = ScrolledTreeView(add_hop_gui, url=get_wiki('engineroom', 'the-dialogue-1'), show="tree", columns=("Form"))
 		hop_options.column(column="Form",width=80)
 		hop_options.grid(row=1, column=0)
 		for hop in sorted(brew_data.hop_data):
@@ -2299,7 +2300,7 @@ class beer_engine_mainwin:
 
 		restore_backup_dia = tk.Toplevel()
 		restore_backup_dia.resizable(0, 0)
-		backups = ScrolledTreeView(restore_backup_dia, custom_insert=False, show="tree")
+		backups = ScrolledTreeView(restore_backup_dia, url='', custom_insert=False, show="tree")
 		backups.grid(row=0,column=0)
 		if os.path.isfile(resource_path('backups.txt')):
 			backup_list = [backup.strip() for backup in open(resource_path('backups.txt')).readlines()]
