@@ -1827,7 +1827,7 @@ class beer_engine_mainwin:
 		
 		file_str = filedialog.askopenfilename(
 					initialdir=os.path.expanduser(
-						'~/.config/Wheelers-Wort-Works/recipes/' if __mode__ == 'deb' else '.'),
+						'~/.config/Wheelers-Wort-Works-ce/recipes/' if __mode__ == 'deb' else '.'),
 					title="Select file",
 					filetypes=(
 						("BERF",
