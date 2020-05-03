@@ -52,7 +52,7 @@ Wheeler's Wort Works now comes built-in with the ability to control certain area
 
 A general idea of each command is provided with the help command:
 ```bash
-$ wheelers-wort-works -h
+$ wheelers-wort-works-ce -h
 usage: main.py [-h] [-f FILE] [-u] [-U] [-l] [-d]
 
 Arguments
