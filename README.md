@@ -28,7 +28,7 @@ If this command fails, attempt to install the file with:
 ```
 sudo apt install ./wheelers-wort-works-ce_0.2_all.deb
 ```
-It is also recommended to run the command `sudo wheelers-wort-works --coreupdate save` so as to get the most out of Wheeler's Wort Works - it is recommended to run this command whenever an update is released on Github (Perhaps getting in the habit of updating once or twice per week).
+It is also recommended to run the command `sudo wheelers-wort-works --coreupdate` so as to get the most out of Wheeler's Wort Works - it is recommended to run this command whenever an update is released on Github (Perhaps getting in the habit of updating once or twice per week).
 #### Other
 Download the latest addition of Wheeler's Wort Works [here](https://github.com/jimbob88/wheelers-wort-works/archive/master.zip "Latest ZIP File"), then unzip
 the `wheelers-wort-works-master.zip` file with your Archive Manager of choice and you should have a new folder named `wheelers-wort-works-master`, on opening this folder you may see another folder named wheelers-wort-works-master if so simply open this and continue.
