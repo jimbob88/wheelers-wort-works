@@ -26,8 +26,7 @@ If you're running Ubuntu (or an Ubuntu Variant i.e. Xubuntu, Lubuntu, Kubuntu) o
 Download the file, navigate to your download folder typically `~/Downloads/` by running the command `cd ~/Downloads`. Then run the command `sudo apt-get install ./wheelers-wort-works_2.4.2_all.deb`.
 If this command fails, attempt to install the file with:
 ```
-sudo dpkg -i wheelers-wort-works_2.4.2_all.deb
-sudo apt-get install -f
+sudo apt install ./wheelers-wort-works_2.4.8_all.deb
 ```
 It is also recommended to run the command `sudo wheelers-wort-works --coreupdate save` so as to get the most out of Wheeler's Wort Works - it is recommended to run this command whenever an update is released on Github (Perhaps getting in the habit of updating once or twice per week).
 #### Other
