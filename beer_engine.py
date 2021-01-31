@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Wheeler's Wort Works, an autupdating beer engine clone
+Wheeler's Wort Works, an auto-updating beer engine clone
 '''
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
