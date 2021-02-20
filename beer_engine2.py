@@ -9,10 +9,15 @@ from __future__ import with_statement
 from __future__ import absolute_import
 from io import open
 from itertools import imap
-import Tkinter as tk
-import ttk
-import tkFileDialog as filedialog
-import tkMessageBox as messagebox
+try:
+	import Tkinter as tk
+	import tkinter.ttk as ttk
+	from Tkinter import filedialog, messagebox
+except BaseException:
+	import Tkinter as tk
+	import ttk
+	import tkFileDialog as filedialog
+	import tkMessageBox as messagebox
 import sys
 import platform
 import math
@@ -1308,7 +1313,7 @@ class beer_engine_mainwin(object):
 						treeview.yview(n)
 					else:
 						# has not found it so loop from top
-						for n in xrange(len(list_data)):
+						for n, _ in enumerate(list_data):
 							item = list_data[n]
 							if item[0].lower() == key.lower():
 								treeview.yview(n)
@@ -1389,7 +1394,7 @@ class beer_engine_mainwin(object):
 						treeview.yview(n)
 					else:
 						# has not found it so loop from top
-						for n in xrange(len(list_data)):
+						for n, _ in enumerate(list_data):
 							item = list_data[n]
 							if item[0].lower() == key.lower():
 								treeview.yview(n)
@@ -1424,15 +1429,15 @@ class beer_engine_mainwin(object):
 		u''' Add/Remove Mass to/from Ingredients '''
 		try:
 			selection = self.scrolled_tree_ingredient.selection()[0]
-			id = int(unicode(selection)[1:], 16)
+			ingred_id = int(unicode(selection)[1:], 16)
 			#print(id, selection)
-			grams = self.ingredients[id - 1][u'Values'][u'Grams'] + weight
+			grams = self.ingredients[ingred_id - 1][u'Values'][u'Grams'] + weight
 			if grams < 0:
 				grams = 0
 			lb = grams / brew_data.constants[u'Conversion'][u'lb-g']
 			oz = (lb - int(lb)) * 16
-			self.ingredients[id - 1][u'Values'][u'Grams'] = grams
-			self.ingredients[id - 1][u'Values'][u'lb:oz'] = (lb, oz)
+			self.ingredients[ingred_id - 1][u'Values'][u'Grams'] = grams
+			self.ingredients[ingred_id - 1][u'Values'][u'lb:oz'] = (lb, oz)
 			self.refresh_grist()
 			self.recalculate()
 			self.scrolled_tree_ingredient.focus_set()
@@ -1445,14 +1450,14 @@ class beer_engine_mainwin(object):
 		u''' Add/Remove Mass to/from Hops '''
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
-			id = int(unicode(selection)[1:], 16)
+			hop_id = int(unicode(selection)[1:], 16)
 			grams = self.hops[id - 1][u'Values'][u'Grams'] + weight
 			if grams < 0:
 				grams = 0
 			lb = grams / brew_data.constants[u'Conversion'][u'lb-g']
 			oz = (lb - int(lb)) * 16
-			self.hops[id - 1][u'Values'][u'Grams'] = grams
-			self.hops[id - 1][u'Values'][u'lb:oz'] = (lb, oz)
+			self.hops[hop_id - 1][u'Values'][u'Grams'] = grams
+			self.hops[hop_id - 1][u'Values'][u'lb:oz'] = (lb, oz)
 			self.refresh_hop()
 			self.recalculate()
 			self.scrolled_tree_hops.focus_set()
@@ -1468,10 +1473,10 @@ class beer_engine_mainwin(object):
 				selection = self.scrolled_tree_ingredient.selection()[0]
 			else:
 				selection = curr_selection
-			id = int(unicode(selection)[1:], 16)
+			ingred_id = int(unicode(selection)[1:], 16)
 			EBC = int(
-				brew_data.grist_data[self.ingredients[id - 1][u'Name']][u'EBC'])
-			self.ingredients[id - 1] = {u'Name': self.ingredients[id - 1][u'Name'], u'Values': {
+				brew_data.grist_data[self.ingredients[ingred_id - 1][u'Name']][u'EBC'])
+			self.ingredients[ingred_id - 1] = {u'Name': self.ingredients[ingred_id - 1][u'Name'], u'Values': {
 				u'EBC': EBC, u'Grav': 0.0, u'lb:oz': (0.0, 0.0), u'Grams': 0, u'Percent': 0.0}}
 			self.refresh_grist()
 			self.recalculate()
@@ -1485,10 +1490,10 @@ class beer_engine_mainwin(object):
 		u''' Zero Data Values in Hop '''
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
-			id = int(unicode(selection)[1:], 16)
-			alpha = brew_data.hop_data[self.hops[id - 1][u'Name']][u'Alpha']
-			type = brew_data.hop_data[self.hops[id - 1][u'Name']][u'Form']
-			self.hops[id - 1] = {u'Name': self.hops[id - 1][u'Name'],
+			hop_id = int(unicode(selection)[1:], 16)
+			alpha = brew_data.hop_data[self.hops[hop_id - 1][u'Name']][u'Alpha']
+			type = brew_data.hop_data[self.hops[hop_id - 1][u'Name']][u'Form']
+			self.hops[hop_id - 1] = {u'Name': self.hops[hop_id - 1][u'Name'],
 								 u'Values': {u'Type': type,
 											u'Alpha': alpha,
 											u'Time': 0.0,
@@ -1510,8 +1515,8 @@ class beer_engine_mainwin(object):
 		u''' Remove Ingredient '''
 		try:
 			selection = self.scrolled_tree_ingredient.selection()[0]
-			id = int(unicode(selection)[1:], 16)
-			del self.ingredients[id - 1]
+			ingred_id = int(unicode(selection)[1:], 16)
+			del self.ingredients[ingred_id - 1]
 			self.refresh_grist()
 			self.recalculate()
 		except IndexError:
@@ -1521,8 +1526,8 @@ class beer_engine_mainwin(object):
 		u''' Remove Hop '''
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
-			id = int(unicode(selection)[1:], 16)
-			del self.hops[id - 1]
+			hop_id = int(unicode(selection)[1:], 16)
+			del self.hops[hop_id - 1]
 			self.refresh_hop()
 			self.recalculate()
 		except IndexError:
@@ -1532,11 +1537,11 @@ class beer_engine_mainwin(object):
 		u''' Add/Remove Time to/from Hops '''
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
-			id = int(unicode(selection)[1:], 16)
+			hop_id = int(unicode(selection)[1:], 16)
 			time = round(self.hops[id - 1][u'Values'][u'Time'] + time, 1)
 			if time < 0:
 				time = 0
-			self.hops[id - 1][u'Values'][u'Time'] = time
+			self.hops[hop_id - 1][u'Values'][u'Time'] = time
 			self.refresh_hop()
 			self.recalculate()
 			self.scrolled_tree_hops.focus_set()
@@ -1550,10 +1555,10 @@ class beer_engine_mainwin(object):
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
 			id = int(unicode(selection)[1:], 16)
-			alpha = round(self.hops[id - 1][u'Values'][u'Alpha'] + alpha, 1)
+			alpha = round(self.hops[hop_id - 1][u'Values'][u'Alpha'] + alpha, 1)
 			if alpha < 0:
 				alpha = 0
-			self.hops[id - 1][u'Values'][u'Alpha'] = alpha
+			self.hops[hop_id - 1][u'Values'][u'Alpha'] = alpha
 			self.refresh_hop()
 			self.recalculate()
 			self.scrolled_tree_hops.focus_set()
@@ -1845,10 +1850,11 @@ class beer_engine_mainwin(object):
 				u'low-72': 44, u'med-72': 51, u'high-72': 57
 			}
 			# print(table_dict[self.fifth_tab.current_attenuation.get()])
-			return table_dict[self.sixth_tab.current_attenuation.get()]
+			atten = table_dict[self.sixth_tab.current_attenuation.get()]
 		else:
 			# print('else')
-			return brew_data.grist_data[ingredient[u'Name']][u'Fermentability']
+			atten = brew_data.grist_data[ingredient[u'Name']][u'Fermentability']
+		return atten
 
 	def sort_by_grist(self, column):
 		u''' Sort Each Column reverse/inverse '''
@@ -2174,7 +2180,7 @@ class beer_engine_mainwin(object):
 						 u"*.berf *.berfx"),
 						(u"all files",
 						 u"*.*")))
-		if file_str == u'' or file_str is None or type(file_str) == tuple:
+		if file_str == u'' or file_str is None or isinstance(file_str, tuple):
 			return
 		if self.is_clear():
 			self.open_file(file_str)
@@ -2551,11 +2557,11 @@ class beer_engine_mainwin(object):
 				selection = self.scrolled_tree_ingredient.selection()[0]
 			else:
 				selection = curr_selection
-			id = int(unicode(selection)[1:], 16)
-			percent = self.ingredients[id - 1][u'Values'][u'Percent'] + amount
+			ingred_id = int(unicode(selection)[1:], 16)
+			percent = self.ingredients[ingred_id - 1][u'Values'][u'Percent'] + amount
 			if percent < 0:
 				percent = 0
-			self.ingredients[id - 1][u'Values'][u'Percent'] = percent
+			self.ingredients[ingred_id - 1][u'Values'][u'Percent'] = percent
 			self.refresh_grist()
 			self.scrolled_tree_ingredient.focus_set()
 			self.scrolled_tree_ingredient.see(selection)
@@ -2570,11 +2576,11 @@ class beer_engine_mainwin(object):
 				selection = self.scrolled_tree_hops.selection()[0]
 			else:
 				selection = curr_selection
-			id = int(unicode(selection)[1:], 16)
-			percent = self.hops[id - 1][u'Values'][u'Percent'] + amount
+			hop_id = int(unicode(selection)[1:], 16)
+			percent = self.hops[hop_id - 1][u'Values'][u'Percent'] + amount
 			if percent < 0:
 				percent = 0
-			self.hops[id - 1][u'Values'][u'Percent'] = percent
+			self.hops[hop_id - 1][u'Values'][u'Percent'] = percent
 			self.refresh_hop()
 			self.scrolled_tree_hops.focus_set()
 			self.scrolled_tree_hops.see(selection)
@@ -3075,15 +3081,15 @@ class hops_editor(tk.Frame):
 		with open(resource_path(u'hop_data.txt'), u'w') as f:
 			for hop, value in brew_data.hop_data.items():
 				name = hop
-				type = value[u'Form']
+				form = value[u'Form']
 				origin = value[u'Origin']
 				alpha = value[u'Alpha']
 				use = value[u'Use']
 				description = value[u'Description']
 				f.write(
-					u'{name}\t{type}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(
+					u'{name}\t{form}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(
 						name=name,
-						type=type,
+						form=form,
 						origin=origin,
 						alpha=alpha,
 						use=use,
@@ -3460,7 +3466,7 @@ class grist_editor(tk.Frame):
 		moisture = brew_data.grist_data[name][u'Moisture']
 		fermentability = brew_data.grist_data[name][u'Fermentability']
 		description = brew_data.grist_data[name][u'Description']
-		type = int(float(brew_data.grist_data[name][u'Type']))
+		grist_type = int(float(brew_data.grist_data[name][u'Type']))
 
 		self.input_state(1)
 		self.grist_name_ent.delete(0, tk.END)
@@ -3476,7 +3482,7 @@ class grist_editor(tk.Frame):
 		self.grist_colour_ent.insert(0, colour)
 		self.grist_moisture_ent.insert(0, moisture)
 		self.grist_ferment_ent.insert(0, fermentability)
-		self.grist_type_combo.set(self.grist_type_combo_values[type - 1])
+		self.grist_type_combo.set(self.grist_type_combo_values[grist_type - 1])
 
 		self.input_state(0)
 
@@ -3566,12 +3572,12 @@ class grist_editor(tk.Frame):
 		moisture = float(self.grist_moisture_ent.get())
 		fermentability = float(self.grist_ferment_ent.get())
 		description = self.grist_comm_ent.get()
-		type = self.grist_type_combo_values.index(
+		grist_type = self.grist_type_combo_values.index(
 			self.grist_type_combo.get()) + 1
 		del brew_data.grist_data[self.name]
 		brew_data.grist_data[name] = {
 			u'EBC': colour,
-			u'Type': type,
+			u'Type': grist_type,
 			u'Extract': extract,
 			u'Description': description,
 			u'Moisture': moisture,
@@ -3855,9 +3861,9 @@ class defaults_editor(tk.Frame):
 				elif constants[0] == u'LGratio':
 					self.liquor_to_grist_ent.insert(0, float(constants[1]))
 				elif constants[0] == u'attenuation':
-					type = constants[1].split(u'-')[0]
+					atten_type = constants[1].split(u'-')[0]
 					self.attenuation_type_var.set(
-						type if type != u'med' else u'Medium')
+						atten_type if atten_type != u'med' else u'Medium')
 					temp = constants[1].split(u'-')[1]
 					self.attenuation_temp_var.set(temp)
 				elif constants[0] == u'save_close':
@@ -5708,17 +5714,18 @@ def resource_path(relative_path):
 		# except Exception:
 		base_path = os.path.abspath(u".")
 
-		return os.path.join(base_path, relative_path)
+		path = os.path.join(base_path, relative_path)
 	elif __mode__ == u'deb':
 		if os.path.basename(relative_path) == u'logo.png':
-			return u'/usr/include/wheelers-wort-works/logo.png'
+			path = u'/usr/include/wheelers-wort-works/logo.png'
 		elif os.path.splitext(os.path.basename(relative_path))[1] == u'.html':
-			return os.path.join(
+			path = os.path.join(
 				os.path.expanduser(u'~/.config/Wheelers-Wort-Works/recipes/html'),
 				relative_path)
-		return os.path.join(
+		path = os.path.join(
 			os.path.expanduser(u'~/.config/Wheelers-Wort-Works/'),
 			relative_path)
+	return path
 
 def copy_command(root, command):
 	root.clipboard_clear()
