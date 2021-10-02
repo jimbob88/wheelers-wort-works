@@ -11,6 +11,9 @@ if sys.version_info >= (3, 0):
 else:
 	from urllib2 import urlopen
 	os.getcwd = os.getcwdu
+import json
+locale = 'en'
+_ = json.load(open('lang.json', 'r'))[locale]
 
 def resource_path(relative_path):
 	u""" Get absolute path to resource, works for dev and for PyInstaller """
@@ -36,23 +39,28 @@ def get_args():
 						required=False,
 						action=u'store',
 						default=None,
-						help=u'The file to open `--file file_name.berf[x]`')
+						help=_[u'The file to open `--file file_name.berf[x]`'])
+	parser.add_argument(u'-L', u'--locale',
+						required=False,
+						action=u'store',
+						default='en',
+						help=_[u'Change the language [fr, en]'])
 	parser.add_argument(u'-u', u'--update',
 						required=False,
 						action=u'store_true',
-						help=u'Using the current `update.py`, download the latest GitHub files')
+						help=_[u'Using the current `update.py`, download the latest GitHub files'])
 	parser.add_argument(u'-U', u'--coreupdate',
 						required=False,
 						action=u'store_true',
-						help=u'Pull `update.py` from GitHub, then download the latest GitHub files')
+						help=_[u'Pull `update.py` from GitHub, then download the latest GitHub files'])
 	parser.add_argument(u'-l', u'--local',
 						required=False,
 						action=u'store_true',
-						help='Use the local mode')
+						help=_['Use the local mode'])
 	parser.add_argument(u'-d', u'--deb',
 						required=False,
 						action=u'store_true',
-						help=u'Use the debian mode (only use on a Debian/Ubuntu system)')
+						help=_[u'Use the debian mode (only use on a Debian/Ubuntu system)'])
 
 	args = parser.parse_args()
 	return args
@@ -107,7 +115,7 @@ if __name__ == u'__main__':
 		if os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
 			beer_engine.__mode__ = __mode__
 			file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
-			beer_engine.main(file=file, update_available=update_available)
+			beer_engine.main(file=file, update_available=update_available, locale=args.locale)
 	else:
 		beer_engine.__mode__ = __mode__
-		beer_engine.main(update_available=update_available)
+		beer_engine.main(update_available=update_available, locale=args.locale)
