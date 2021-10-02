@@ -101,11 +101,11 @@ if __name__ == u'__main__':
 			with open(resource_path(u'commit.txt'), 'w') as f:
 				f.write(commit)
 		if args.coreupdate and update:
-			with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/update.py') as response:
+			with urlopen(u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/update.py') as response:
 				update_text = response.read().decode(u'utf-8')
 				exec(update_text)
 			update()
-			print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/update.py'))
+			print(u'Updating {file} from {url}'.format(file=u'update.py', url=u'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/update.py'))
 			with open(resource_path('update.py'), 'w') as f:
 				f.write(update_text)
 			with open(resource_path(u'commit.txt'), 'w') as f:

@@ -1,9 +1,10 @@
 def update():
     files = {
-        'beer_engine.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/beer_engine.py',
-        'beer_engine2.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/beer_engine2.py',
-        'brew_data.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/brew_data.py',
-        'main.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/community_edition/main.py',
+        'beer_engine.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/beer_engine.py',
+        'beer_engine2.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/beer_engine2.py',
+        'brew_data.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/brew_data.py',
+        'main.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/ce_lang_beta/main.py',
+        'lang.json': 'https://github.com/jimbob88/wheelers-wort-works/blob/ce_lang_beta/lang.json'
     }
 
     for file, url in files.items():
