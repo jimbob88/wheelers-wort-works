@@ -113,6 +113,8 @@ class beer_engine_mainwin:
 		_ana2color = '#ececec' # Closest X11 color: 'gray92'
 		font9 = "-family {DejaVu Sans} -size 7 -weight normal -slant "  \
 			"roman -underline 0 -overstrike 0"
+		font6 = "-family {DejaVu Sans} -size 7 -weight normal "  \
+			" -underline 0 -overstrike 0"
 		self.style = ttk.Style()
 
 		if not os.path.isfile(resource_path('defaults.txt')):
@@ -422,13 +424,13 @@ class beer_engine_mainwin:
 
 		self.recipe_name_lbl = help_label(self.first_tab,
 										  url=get_wiki('engineroom', 'recipe-name'))
-		self.recipe_name_lbl.place(relx=0.013, rely=0.021, relheight=0.0375, relwidth=0.1125)
+		self.recipe_name_lbl.place(relx=0.013, rely=0.021, relheight=0.0375, relwidth=0.15)
 		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
 		self.recipe_name_lbl.configure(background=_bgcolor)
 		self.recipe_name_lbl.configure(text=_['''Recipe Name:'''])
 
 		self.recipe_name_ent = tk.Entry(self.first_tab)
-		self.recipe_name_ent.place(relx=0.126, rely=0.021, relheight=0.0479
+		self.recipe_name_ent.place(relx=0.166, rely=0.021, relheight=0.0479
 				, relwidth=0.28)
 		self.recipe_name_ent.configure(background="white")
 		self.recipe_name_ent.configure(font="TkFixedFont")
@@ -438,14 +440,14 @@ class beer_engine_mainwin:
 
 		self.volume_lbl = help_label(self.first_tab,
 									 url=get_wiki('engineroom', 'volume'))
-		self.volume_lbl.place(relx=0.417, rely=0.021, relheight=0.0375, relwidth=0.0662)
+		self.volume_lbl.place(relx=0.450, rely=0.021, relheight=0.0375, relwidth=0.0662)
 		self.volume_lbl.configure(activebackground="#f9f9f9")
 		self.volume_lbl.configure(background=_bgcolor)
 		self.volume_lbl.configure(text=_['''Volume:'''])
 
 		self.volume = tk.StringVar()
 		self.volume_ent = tk.Entry(self.first_tab)
-		self.volume_ent.place(relx=0.492, rely=0.021, relheight=0.0479
+		self.volume_ent.place(relx=0.52, rely=0.021, relheight=0.0479
 				, relwidth=0.07) #relwidth=0.045
 		self.volume_ent.configure(background="white")
 		self.volume_ent.configure(font="TkFixedFont")
@@ -459,14 +461,14 @@ class beer_engine_mainwin:
 
 		self.boil_volume_lbl = help_label(self.first_tab,
 										  url=get_wiki('engineroom', 'boil-volume'))
-		self.boil_volume_lbl.place(relx=0.571, rely=0.021, relheight=0.0375
-				, relwidth=0.1062)
+		self.boil_volume_lbl.place(relx=0.6, rely=0.021, relheight=0.0375
+				, relwidth=0.15)
 		self.boil_volume_lbl.configure(text=_['''Boil Volume:'''])
 		self.boil_volume_lbl.configure(background=_bgcolor)
 
 		self.boil_vol = tk.StringVar()
 		self.boil_volume_ent = tk.Entry(self.first_tab)
-		self.boil_volume_ent.place(relx=0.682, rely=0.021, relheight=0.0479
+		self.boil_volume_ent.place(relx=0.76, rely=0.021, relheight=0.0479
 				, relwidth=0.070)
 		self.boil_volume_ent.configure(background="white")
 		self.boil_volume_ent.configure(font="TkFixedFont")
@@ -488,10 +490,11 @@ class beer_engine_mainwin:
 		self.ingredient_add_new_butt = help_button(self.first_tab,
 												   url=get_wiki('engineroom', 'add-new-button'),
 												   command=self.add_grist)
-		self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, relheight=0.0583
-				, relwidth=0.1025)
+		self.ingredient_add_new_butt.place(relx=0.596, rely=0.085, relheight=0.0583
+				, relwidth=0.1125)
 		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9")
 		self.ingredient_add_new_butt.configure(background=_bgcolor)
+		self.ingredient_add_new_butt.configure(font=font6)
 		self.ingredient_add_new_butt.configure(text=_['''Add New'''])
 
 		self.adjust_weight_ing_lbl = tk.Label(self.first_tab)
@@ -584,8 +587,8 @@ class beer_engine_mainwin:
 
 		self.original_gravity_lbl = help_label(self.first_tab,
 										  	   url=get_wiki('engineroom', 'original-gravity'))
-		self.original_gravity_lbl.place(relx=0.72, rely=0.085, relheight=0.0292
-				, relwidth=0.0988)
+		self.original_gravity_lbl.place(relx=0.715, rely=0.085, relheight=0.0292
+				, relwidth=0.1)
 		self.original_gravity_lbl.configure(activebackground="#f9f9f9")
 		self.original_gravity_lbl.configure(background=_bgcolor)
 		self.original_gravity_lbl.configure(font=font9)
@@ -658,8 +661,8 @@ class beer_engine_mainwin:
 		self.hop_add_new_butt = help_button(self.first_tab,
 											  url=get_wiki('engineroom', 'add-hop-button'),
 											  command=self.add_hop)
-		self.hop_add_new_butt.place(relx=0.707, rely=0.507, relheight=0.0604
-				, relwidth=0.1000)
+		self.hop_add_new_butt.place(relx=0.69, rely=0.507, relheight=0.0604
+				, relwidth=0.1200)
 		self.hop_add_new_butt.configure(activebackground="#f9f9f9")
 		self.hop_add_new_butt.configure(background=_bgcolor)
 		self.hop_add_new_butt.configure(text=_['''Add Hop'''])
@@ -2501,7 +2504,7 @@ class hops_editor(tk.Frame):
 		self.hop_cancel_butt = help_button(self.hop_panedwindow2,
 											url=get_wiki('ingrededitors', 'the-cancel-button'),
 											command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE)))
-		self.hop_cancel_butt.place(relx=0.028, rely=0.565, height=28, width=83
+		self.hop_cancel_butt.place(relx=0.028, rely=0.565, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.hop_cancel_butt.configure(takefocus="")
 		self.hop_cancel_butt.configure(text=_['''Cancel'''])
@@ -2509,7 +2512,7 @@ class hops_editor(tk.Frame):
 		self.hop_clear_butt = help_button(self.hop_panedwindow2,
 										  url=get_wiki('ingrededitors', 'the-clear-form-button'),
 										  command=self.clear_form)
-		self.hop_clear_butt.place(relx=0.389, rely=0.565, height=28, width=83
+		self.hop_clear_butt.place(relx=0.3, rely=0.565, height=28, relwidth=0.4
 				, bordermode='ignore')
 		self.hop_clear_butt.configure(takefocus="")
 		self.hop_clear_butt.configure(text=_['''Clear Form'''])
@@ -2517,7 +2520,7 @@ class hops_editor(tk.Frame):
 		self.hop_done_butt = help_button(self.hop_panedwindow2,
 										 url=get_wiki('ingrededitors', 'the-done-button'),
 										 command=self.done)
-		self.hop_done_butt.place(relx=0.75, rely=0.565, height=28, width=83
+		self.hop_done_butt.place(relx=0.75, rely=0.565, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.hop_done_butt.configure(takefocus="")
 		self.hop_done_butt.configure(text=_['''Done'''])
@@ -2864,7 +2867,7 @@ class grist_editor(tk.Frame):
 		self.grist_cancel_butt = help_button(self.grist_panedwindow2,
 											 url=get_wiki('ingrededitors', 'the-cancel-button'),
 											 command=lambda: self.show_data(self.grist_lstbx.get(tk.ACTIVE)))
-		self.grist_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
+		self.grist_cancel_butt.place(relx=0.028, rely=0.652, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.grist_cancel_butt.configure(takefocus="")
 		self.grist_cancel_butt.configure(text=_['''Cancel'''])
@@ -2872,7 +2875,7 @@ class grist_editor(tk.Frame):
 		self.grist_clear_butt = help_button(self.grist_panedwindow2,
 											url=get_wiki('ingrededitors', 'the-clear-form-button'),
 											command=self.clear_form)
-		self.grist_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
+		self.grist_clear_butt.place(relx=0.3, rely=0.652, height=28, relwidth=0.4
 				, bordermode='ignore')
 		self.grist_clear_butt.configure(takefocus="")
 		self.grist_clear_butt.configure(text=_['''Clear Form'''])
@@ -2880,7 +2883,7 @@ class grist_editor(tk.Frame):
 		self.grist_done_butt = help_button(self.grist_panedwindow2,
 										   url=get_wiki('ingrededitors', 'the-done-button'),
 										   command=self.done)
-		self.grist_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
+		self.grist_done_butt.place(relx=0.75, rely=0.652, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.grist_done_butt.configure(takefocus="")
 		self.grist_done_butt.configure(text=_['''Done'''])
@@ -3042,56 +3045,24 @@ class defaults_editor(tk.Frame):
 
 		self.target_vol_lbl = help_label(self,
 										 url=get_wiki('defaults', 'target-volume'))
-		self.target_vol_lbl.place(relx=0.038, rely=0.063, height=19, width=118)
+		self.target_vol_lbl.place(relx=0.038, rely=0.063)
 		self.target_vol_lbl.configure(background=_bgcolor)
 		self.target_vol_lbl.configure(foreground="#000000")
 		self.target_vol_lbl.configure(font=font9)
 		self.target_vol_lbl.configure(relief='flat')
 		self.target_vol_lbl.configure(text=_['''Target Volume:'''])
 
-		self.boil_vol_lbl = help_label(self,
-									   url=get_wiki('defaults', 'boil-volume-scale'))
-		self.boil_vol_lbl.place(relx=0.038, rely=0.148, height=19, width=143)
-		self.boil_vol_lbl.configure(background=_bgcolor)
-		self.boil_vol_lbl.configure(foreground="#000000")
-		self.boil_vol_lbl.configure(font=font9)
-		self.boil_vol_lbl.configure(relief='flat')
-		self.boil_vol_lbl.configure(text=_['''Boil Volume Scale:'''])
-
-		self.liquor_to_grist_lbl = help_label(self,
-											  url=get_wiki('defaults', 'liquor-to-grist-ratio'))
-		self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317, height=19
-				, width=165)
-		self.liquor_to_grist_lbl.configure(background=_bgcolor)
-		self.liquor_to_grist_lbl.configure(foreground="#000000")
-		self.liquor_to_grist_lbl.configure(font=font9)
-		self.liquor_to_grist_lbl.configure(relief='flat')
-		self.liquor_to_grist_lbl.configure(text=_['''Liquor To Grist Ratio:'''])
 
 		self.target_vol_ent = tk.Entry(self)
-		self.target_vol_ent.place(relx=0.202, rely=0.063, relheight=0.044
+		self.target_vol_ent.place(relx=0.427, rely=0.063, relheight=0.044
 				, relwidth=0.106)
 		self.target_vol_ent.configure(justify='center')
 		self.target_vol_ent.configure(width=84)
 		self.target_vol_ent.configure(takefocus="")
 		self.target_vol_ent.configure(cursor="xterm")
-
-		self.boil_vol_ent = tk.Entry(self)
-		self.boil_vol_ent.place(relx=0.227, rely=0.148, relheight=0.044
-				, relwidth=0.106)
-		self.boil_vol_ent.configure(justify='center')
-		self.boil_vol_ent.configure(takefocus="")
-		self.boil_vol_ent.configure(cursor="xterm")
-
-		self.liquor_to_grist_ent = tk.Entry(self)
-		self.liquor_to_grist_ent.place(relx=0.253, rely=0.317, relheight=0.044
-				, relwidth=0.106)
-		self.liquor_to_grist_ent.configure(justify='center')
-		self.liquor_to_grist_ent.configure(takefocus="")
-		self.liquor_to_grist_ent.configure(cursor="xterm")
-
+  
 		self.target_vol_litres_lbl = tk.Label(self)
-		self.target_vol_litres_lbl.place(relx=0.316, rely=0.063, height=19
+		self.target_vol_litres_lbl.place(relx=0.530, rely=0.063, height=19
 				, width=46)
 		self.target_vol_litres_lbl.configure(background=_bgcolor)
 		self.target_vol_litres_lbl.configure(foreground="#000000")
@@ -3099,10 +3070,59 @@ class defaults_editor(tk.Frame):
 		self.target_vol_litres_lbl.configure(relief='flat')
 		self.target_vol_litres_lbl.configure(text=_['''Litres'''])
 
+		self.boil_vol_lbl = help_label(self,
+									   url=get_wiki('defaults', 'boil-volume-scale'))
+		self.boil_vol_lbl.place(relx=0.038, rely=0.148)
+		self.boil_vol_lbl.configure(background=_bgcolor)
+		self.boil_vol_lbl.configure(foreground="#000000")
+		self.boil_vol_lbl.configure(font=font9)
+		self.boil_vol_lbl.configure(relief='flat')
+		self.boil_vol_lbl.configure(text=_['''Boil Volume Scale:'''])
+
+		self.boil_vol_ent = tk.Entry(self)
+		self.boil_vol_ent.place(relx=0.427, rely=0.148, relheight=0.044
+				, relwidth=0.106)
+		self.boil_vol_ent.configure(justify='center')
+		self.boil_vol_ent.configure(takefocus="")
+		self.boil_vol_ent.configure(cursor="xterm")
+ 
+		self.boil_vol_percent_lbl = tk.Label(self)
+		self.boil_vol_percent_lbl.place(relx=0.530, rely=0.148, height=19
+				, width=15)
+		self.boil_vol_percent_lbl.configure(background=_bgcolor)
+		self.boil_vol_percent_lbl.configure(foreground="#000000")
+		self.boil_vol_percent_lbl.configure(font=font9)
+		self.boil_vol_percent_lbl.configure(relief='flat')
+		self.boil_vol_percent_lbl.configure(text='''%''')
+ 
+		self.liquor_to_grist_lbl = help_label(self,
+											  url=get_wiki('defaults', 'liquor-to-grist-ratio'))
+		self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317)
+		self.liquor_to_grist_lbl.configure(background=_bgcolor)
+		self.liquor_to_grist_lbl.configure(foreground="#000000")
+		self.liquor_to_grist_lbl.configure(font=font9)
+		self.liquor_to_grist_lbl.configure(relief='flat')
+		self.liquor_to_grist_lbl.configure(text=_['''Liquor To Grist Ratio:'''])
+
+		self.liquor_to_grist_ent = tk.Entry(self)
+		self.liquor_to_grist_ent.place(relx=0.427, rely=0.317, relheight=0.044
+				, relwidth=0.106)
+		self.liquor_to_grist_ent.configure(justify='center')
+		self.liquor_to_grist_ent.configure(takefocus="")
+		self.liquor_to_grist_ent.configure(cursor="xterm")
+
+		self.liquor_to_grist_lperkg_lbl = tk.Label(self)
+		self.liquor_to_grist_lperkg_lbl.place(relx=0.530, rely=0.317)
+		self.liquor_to_grist_lperkg_lbl.configure(background=_bgcolor)
+		self.liquor_to_grist_lperkg_lbl.configure(foreground="#000000")
+		self.liquor_to_grist_lperkg_lbl.configure(font=font9)
+		self.liquor_to_grist_lperkg_lbl.configure(relief='flat')
+		self.liquor_to_grist_lperkg_lbl.configure(text='''L/kg''')
+		
+
 		self.mash_efficiency_lbl = help_label(self,
 											  url=get_wiki('defaults', 'mash-efficiency'))
-		self.mash_efficiency_lbl.place(relx=0.038, rely=0.233, height=19
-				, width=125)
+		self.mash_efficiency_lbl.place(relx=0.038, rely=0.233)
 		self.mash_efficiency_lbl.configure(background=_bgcolor)
 		self.mash_efficiency_lbl.configure(foreground="#000000")
 		self.mash_efficiency_lbl.configure(font=font9)
@@ -3110,23 +3130,15 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_lbl.configure(text=_['''Mash Efficiency:'''])
 
 		self.mash_efficiency_ent = tk.Entry(self)
-		self.mash_efficiency_ent.place(relx=0.215, rely=0.233, relheight=0.044
+		self.mash_efficiency_ent.place(relx=0.427, rely=0.233, relheight=0.044
 				, relwidth=0.106)
 		self.mash_efficiency_ent.configure(justify='center')
 		self.mash_efficiency_ent.configure(takefocus="")
 		self.mash_efficiency_ent.configure(cursor="xterm")
 
-		self.boil_vol_percent_lbl = tk.Label(self)
-		self.boil_vol_percent_lbl.place(relx=0.341, rely=0.148, height=19
-				, width=15)
-		self.boil_vol_percent_lbl.configure(background=_bgcolor)
-		self.boil_vol_percent_lbl.configure(foreground="#000000")
-		self.boil_vol_percent_lbl.configure(font=font9)
-		self.boil_vol_percent_lbl.configure(relief='flat')
-		self.boil_vol_percent_lbl.configure(text='''%''')
 
 		self.mash_efficiency_percent_lbl = tk.Label(self)
-		self.mash_efficiency_percent_lbl.place(relx=0.328, rely=0.233, height=19
+		self.mash_efficiency_percent_lbl.place(relx=0.530, rely=0.233, height=19
 				, width=15)
 		self.mash_efficiency_percent_lbl.configure(background=_bgcolor)
 		self.mash_efficiency_percent_lbl.configure(foreground="#000000")
@@ -3134,19 +3146,12 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_percent_lbl.configure(relief='flat')
 		self.mash_efficiency_percent_lbl.configure(text='''%''')
 
-		self.liquor_to_grist_lperkg_lbl = tk.Label(self)
-		self.liquor_to_grist_lperkg_lbl.place(relx=0.366, rely=0.317, height=19
-				, width=35)
-		self.liquor_to_grist_lperkg_lbl.configure(background=_bgcolor)
-		self.liquor_to_grist_lperkg_lbl.configure(foreground="#000000")
-		self.liquor_to_grist_lperkg_lbl.configure(font=font9)
-		self.liquor_to_grist_lperkg_lbl.configure(relief='flat')
-		self.liquor_to_grist_lperkg_lbl.configure(text='''L/kg''')
+		
 
 		self.save_all_butt = help_button(self,
 										 url=get_wiki('defaults', 'save-all-as-defaults'),
 										 command=self.save_all)
-		self.save_all_butt.place(relx=0.808, rely=0.93, height=28, width=143)
+		self.save_all_butt.place(relx=0.70, rely=0.93, height=28, relwidth=0.25)
 		self.save_all_butt.configure(takefocus="")
 		self.save_all_butt.configure(text=_['''Save All As Defaults'''])
 		self.save_all_butt.configure()
@@ -3154,43 +3159,16 @@ class defaults_editor(tk.Frame):
 		self.done_button = help_button(self,
 									   url=get_wiki('defaults', 'done'),
 									   command=self.temp_save)
-		self.done_button.place(relx=0.694, rely=0.93, height=28, width=83)
+		self.done_button.place(relx=0.594, rely=0.93, height=28, relwidth=0.1)
 		self.done_button.configure(takefocus="")
 		self.done_button.configure(text=_['''Done'''])
 
 		self.reset_to_defaults_butt = help_button(self,
 									   			  url=get_wiki('defaults', 'reset-to-local-database'),
 									   			  command=self.reset_to_defaults)
-		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=190)
+		self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, relwidth=0.3)
 		self.reset_to_defaults_butt.configure(takefocus="")
 		self.reset_to_defaults_butt.configure(text=_['''Reset to Local Database'''])
-
-		self.attenuation_defaults_lbl= help_label(self,
-												  url=get_wiki('defaults', 'attenuation-default'))
-		self.attenuation_defaults_lbl.place(relx=0.038, rely=0.402, height=19
-				, width=155)
-		self.attenuation_defaults_lbl.configure(background=_bgcolor)
-		self.attenuation_defaults_lbl.configure(foreground="#000000")
-		self.attenuation_defaults_lbl.configure(font=font9)
-		self.attenuation_defaults_lbl.configure(relief='flat')
-		self.attenuation_defaults_lbl.configure(text=_['''Attenuation Default:'''])
-		self.attenuation_defaults_lbl.configure(width=155)
-
-		self.attenuation_types = ['Low', 'Medium', 'High']
-		self.attenuation_type_var = tk.StringVar()
-		self.attenuation_type_combo = tk.OptionMenu(self, self.attenuation_type_var, *self.attenuation_types)
-		self.attenuation_type_combo.place(relx=0.253, rely=0.402, relheight=0.064
-				, relwidth=0.16)
-		self.attenuation_type_combo.configure(width=127)
-		self.attenuation_type_combo.configure(takefocus="")
-
-		self.attenuation_temps = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]
-		self.attenuation_temp_var = tk.StringVar()
-		self.attenuation_temp_combo = tk.OptionMenu(self, self.attenuation_temp_var, *self.attenuation_temps)
-		self.attenuation_temp_combo.place(relx=0.429, rely=0.402, relheight=0.064
-				, relwidth=0.072)
-		self.attenuation_temp_combo.configure(width=57)
-		self.attenuation_temp_combo.configure(takefocus="")
 
 		self.save_on_close_lbl = help_label(self,
 											url=get_wiki('defaults', 'save-on-close'))
@@ -3200,13 +3178,38 @@ class defaults_editor(tk.Frame):
 		self.save_on_close_lbl.configure(font=font9)
 		self.save_on_close_lbl.configure(relief='flat')
 		self.save_on_close_lbl.configure(text=_['''Save on Close:'''])
-
+  
 		self.save_on_close_var = tk.StringVar()
 		self.save_on_close_combo = tk.OptionMenu(self, self.save_on_close_var, 'True', 'False')
-		self.save_on_close_combo.place(relx=0.202, rely=0.486, relheight=0.064
+		self.save_on_close_combo.place(relx=0.427, rely=0.486, relheight=0.064
 				, relwidth=0.122)
 		self.save_on_close_combo.configure(width=97)
 		self.save_on_close_combo.configure(takefocus="")
+
+		self.attenuation_defaults_lbl= help_label(self,
+												  url=get_wiki('defaults', 'attenuation-default'))
+		self.attenuation_defaults_lbl.place(relx=0.038, rely=0.402)
+		self.attenuation_defaults_lbl.configure(background=_bgcolor)
+		self.attenuation_defaults_lbl.configure(foreground="#000000")
+		self.attenuation_defaults_lbl.configure(font=font9)
+		self.attenuation_defaults_lbl.configure(relief='flat')
+		self.attenuation_defaults_lbl.configure(text=_['''Attenuation Default:'''])
+
+		self.attenuation_types = ['Low', 'Medium', 'High']
+		self.attenuation_type_var = tk.StringVar()
+		self.attenuation_type_combo = tk.OptionMenu(self, self.attenuation_type_var, *self.attenuation_types)
+		self.attenuation_type_combo.place(relx=0.427, rely=0.402, relheight=0.064
+				, relwidth=0.16)
+		self.attenuation_type_combo.configure(takefocus="")
+
+		self.attenuation_temps = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]
+		self.attenuation_temp_var = tk.StringVar()
+		self.attenuation_temp_combo = tk.OptionMenu(self, self.attenuation_temp_var, *self.attenuation_temps)
+		self.attenuation_temp_combo.place(relx=0.600, rely=0.402, relheight=0.064
+				, relwidth=0.072)
+		self.attenuation_temp_combo.configure(width=57)
+		self.attenuation_temp_combo.configure(takefocus="")
+
 
 		self.default_boil_time_lbl = help_label(self,
 												url=get_wiki('defaults', 'default-boil-time'))
@@ -3218,7 +3221,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_lbl.configure(text=_['''Default Boil Time:'''])
 
 		self.default_boil_time_spinbox = tk.Spinbox(self, from_=1.0, to=100.0)
-		self.default_boil_time_spinbox.place(relx=0.227, rely=0.571, relheight=0.049
+		self.default_boil_time_spinbox.place(relx=0.427, rely=0.571, relheight=0.049
 				, relwidth=0.086)
 		self.default_boil_time_spinbox.configure(activebackground="#f9f9f9")
 		self.default_boil_time_spinbox.configure(background="white")
@@ -3227,7 +3230,7 @@ class defaults_editor(tk.Frame):
 		self.default_boil_time_spinbox.configure(width=68)
 
 		self.default_boil_time_min_lbl = tk.Label(self)
-		self.default_boil_time_min_lbl.place(relx=0.328, rely=0.571, height=19
+		self.default_boil_time_min_lbl.place(relx=0.528, rely=0.571, height=19
 				, width=65)
 		self.default_boil_time_min_lbl.configure(background=_bgcolor)
 		self.default_boil_time_min_lbl.configure(foreground="#000000")
@@ -3390,7 +3393,7 @@ class special_editor(tk.Frame):
 		self.attenuation_low_lbl.configure(text=_['''Low'''])
 
 		self.attenuation_med_lbl = tk.Label(self.attenuation_frame)
-		self.attenuation_med_lbl.place(relx=0.5, rely=0.109, height=19, width=30
+		self.attenuation_med_lbl.place(relx=0.45, rely=0.109, height=19, relwidth=0.3
 			, bordermode='ignore')
 		self.attenuation_med_lbl.configure(background=_bgcolor)
 		self.attenuation_med_lbl.configure(foreground="#000000")
@@ -3876,21 +3879,21 @@ class special_editor(tk.Frame):
 		self.water_boil_frame = help_labelframe(self,
 												url=get_wiki('attenuation', 'water-boil-pane'))
 		self.water_boil_frame.place(relx=0.013, rely=0.613, relheight=0.159
-				, relwidth=0.227)
+				, relwidth=0.3)
 		# self.water_boil_frame.configure(relief='')
 		self.water_boil_frame.configure(text=_['''Water Boil:'''])
 		# self.water_boil_frame.configure(width=180)
 
 		self.water_boil_disable = tk.Checkbutton(self.water_boil_frame)
 		self.water_boil_is_disabled = tk.IntVar()
-		self.water_boil_disable.place(relx=0.778, rely=0.4, relheight=0.307
-				, relwidth=0.15, bordermode='ignore')
+		self.water_boil_disable.place(relx=0.89, rely=0.4, relheight=0.307
+				, relwidth=0.1, bordermode='ignore')
 		self.water_boil_disable.configure(justify='left')
 		self.water_boil_disable.configure(variable=self.water_boil_is_disabled)
 		self.water_boil_disable.configure(command=self.water_boil_check)
 
 		self.water_boil_time_spinbx = tk.Spinbox(self.water_boil_frame, from_=1.0, to=9999.0)
-		self.water_boil_time_spinbx.place(relx=0.444, rely=0.4, relheight=0.307, relwidth=0.322
+		self.water_boil_time_spinbx.place(relx=0.55, rely=0.4, relheight=0.307, relwidth=0.322
 				, bordermode='ignore')
 		self.water_boil_time_spinbx.configure(activebackground="#f9f9f9")
 		self.water_boil_time_spinbx.configure(background="white")
@@ -3902,8 +3905,7 @@ class special_editor(tk.Frame):
 		self.water_boil_time_spinbx.insert(0,brew_data.constants['Default Boil Time'])
 
 		self.water_boil_time_lbl = tk.Label(self.water_boil_frame)
-		self.water_boil_time_lbl.place(relx=0.056, rely=0.4, height=17, width=65
-				, bordermode='ignore')
+		self.water_boil_time_lbl.place(relx=0.025, rely=0.4, bordermode='ignore')
 		self.water_boil_time_lbl.configure(background=_bgcolor)
 		self.water_boil_time_lbl.configure(foreground="#000000")
 		self.water_boil_time_lbl.configure(font=font9)
@@ -4143,19 +4145,16 @@ class yeast_editor(tk.Frame):
 		self.yeast_origin_ent.configure(cursor="xterm")
 
 		self.yeast_flocc_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_flocc_lbl.place(relx=0.056, rely=0.348, height=19, width=100
-				, bordermode='ignore')
+		self.yeast_flocc_lbl.place(relx=0.056, rely=0.348, bordermode='ignore')
 		self.yeast_flocc_lbl.configure(background=_bgcolor)
 		self.yeast_flocc_lbl.configure(foreground="#000000")
 		self.yeast_flocc_lbl.configure(font=font9)
 		self.yeast_flocc_lbl.configure(relief='flat')
 		self.yeast_flocc_lbl.configure(text=_['''Flocculation:'''])
-		self.yeast_flocc_lbl.configure(width=100)
 
 		self.yeast_flocc_combo = ttk.Combobox(self.yeast_panedwindow2)
 		self.yeast_flocc_combo.place(relx=0.361, rely=0.348, relheight=0.046
 				, relwidth=0.381, bordermode='ignore')
-		self.yeast_flocc_combo.configure(width=137)
 		self.yeast_flocc_combo_values = ['Low', 'Low/Medium', 'Medium', 'Medium/High', 'High']
 		self.yeast_flocc_combo.configure(values=self.yeast_flocc_combo_values)
 		self.yeast_flocc_combo.configure(takefocus="")
@@ -4170,8 +4169,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_attenuation_lbl.configure(text=_['''Attenuation:'''])
 
 		self.yeast_temperature_lbl = tk.Label(self.yeast_panedwindow2)
-		self.yeast_temperature_lbl.place(relx=0.056, rely=0.478, height=19
-				, width=110, bordermode='ignore')
+		self.yeast_temperature_lbl.place(relx=0.056, rely=0.478, bordermode='ignore')
 		self.yeast_temperature_lbl.configure(background=_bgcolor)
 		self.yeast_temperature_lbl.configure(foreground="#000000")
 		self.yeast_temperature_lbl.configure(font=font9)
@@ -4227,7 +4225,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_cancel_butt = help_button(self.yeast_panedwindow2,
 											 url=get_wiki('ingrededitors', 'the-cancel-button'),
 											 command=lambda: self.show_data(self.yeast_lstbx.get(tk.ACTIVE)))
-		self.yeast_cancel_butt.place(relx=0.028, rely=0.652, height=28, width=83
+		self.yeast_cancel_butt.place( relx=0.028, rely=0.652, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.yeast_cancel_butt.configure(takefocus="")
 		self.yeast_cancel_butt.configure(text=_['''Cancel'''])
@@ -4235,7 +4233,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_clear_butt = help_button(self.yeast_panedwindow2,
 											url=get_wiki('ingrededitors', 'the-clear-form-button'),
 											command=self.clear_form)
-		self.yeast_clear_butt.place(relx=0.389, rely=0.652, height=28, width=83
+		self.yeast_clear_butt.place(relx=0.3, rely=0.652, height=28, relwidth=0.4
 				, bordermode='ignore')
 		self.yeast_clear_butt.configure(takefocus="")
 		self.yeast_clear_butt.configure(text=_['''Clear Form'''])
@@ -4243,7 +4241,7 @@ class yeast_editor(tk.Frame):
 		self.yeast_done_butt = help_button(self.yeast_panedwindow2,
 										   url=get_wiki('ingrededitors', 'the-done-button'),
 										   command=self.done)
-		self.yeast_done_butt.place(relx=0.75, rely=0.652, height=28, width=83
+		self.yeast_done_butt.place( relx=0.75, rely=0.652, height=28, relwidth=0.2
 				, bordermode='ignore')
 		self.yeast_done_butt.configure(takefocus="")
 		self.yeast_done_butt.configure(text=_['''Done'''])
@@ -4668,7 +4666,7 @@ def resource_path(relative_path):
 			return os.path.join(os.path.expanduser('~/.config/Wheelers-Wort-Works-ce/'), relative_path)
 def main(file=None, update_available=False, locale='en'):
 	global _
-	_ = json.load(open('lang.json', 'r'))[locale]
+	_ = json.load(open('lang.json', 'r', encoding="utf-8"))[locale]
 	root = tk.Tk()
 	gui = beer_engine_mainwin(root)
 	root.config(cursor="arrow")

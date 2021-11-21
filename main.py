@@ -13,7 +13,7 @@ else:
 	os.getcwd = os.getcwdu
 import json
 locale = 'en'
-_ = json.load(open('lang.json', 'r'))[locale]
+_ = json.load(open('lang.json', 'r', encoding="utf-8"))[locale]
 
 def resource_path(relative_path):
 	u""" Get absolute path to resource, works for dev and for PyInstaller """
