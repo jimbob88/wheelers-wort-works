@@ -15,6 +15,7 @@ import webbrowser
 import ast
 import brew_data
 import contextlib
+import database
 
 with contextlib.suppress(ImportError):
 	import bs4
@@ -36,130 +37,23 @@ class beer_engine_mainwin:
 		self.style = ttk.Style()
 
 		if not os.path.isfile(resource_path('defaults.txt')):
-			with open(resource_path('defaults.txt'), 'w', encoding="utf-8") as f:
-				volume = brew_data.constants['Volume']
-				efficiency = brew_data.constants['Efficiency'] * 100
-				evaporation = round(
-					(brew_data.constants['Boil Volume Scale'] - 1) * 100, 1)
-				LGratio = brew_data.constants['Liquor To Grist Ratio']
-				attenuation = brew_data.constants['Attenuation Default']
-				save_close = brew_data.constants['Save On Close']
-				boil_time = brew_data.constants['Default Boil Time']
-				replace_defaults = brew_data.constants['Replace Defaults']
-				f.write(('efficiency={efficiency}\n'
-						 'volume={volume}\n'
-						 'evaporation={evaporation}\n'
-						 'LGratio={LGratio}\n'
-						 'attenuation={attenuation}\n'
-						 'save_close={save_close}\n'
-						 'boil_time={boil_time}\n'
-						 'replace_defaults={replace_defaults}').format(
-							 efficiency=efficiency, volume=volume, evaporation=evaporation, 
-							 LGratio=LGratio, attenuation=attenuation, save_close=save_close, 
-							 boil_time=boil_time, replace_defaults=replace_defaults))
+			database.write_defaults_data(brew_data.constants)
 		else:
-			with open(resource_path('defaults.txt'), 'r', encoding="utf-8") as f:
-				data = [line.strip().split('=') for line in f]
-				for constants in data:
-					if constants[0] == 'efficiency':
-						brew_data.constants['Efficiency'] = float(
-							constants[1]) / 100
-					elif constants[0] == 'volume':
-						brew_data.constants['Volume'] = float(constants[1])
-					elif constants[0] == 'evaporation':
-						brew_data.constants['Boil Volume Scale'] = (
-							float(constants[1]) / 100) + 1
-					elif constants[0] == 'LGratio':
-						brew_data.constants['Liquor To Grist Ratio'] = float(
-							constants[1])
-					elif constants[0] == 'attenuation':
-						brew_data.constants['Attenuation Default'] = constants[1]
-					elif constants[0] == 'save_close':
-						brew_data.constants['Save On Close'] = True if constants[1] == 'True' else False
-					elif constants[0] == 'boil_time':
-						brew_data.constants['Default Boil Time'] = int(
-							constants[1])
-					elif constants[0] == 'replace_defaults':
-						brew_data.constants['Replace Defaults'] = True if constants[1] == 'True' else False
+			brew_data.constants = database.read_defaults_data(brew_data.constants)
 
 		if not os.path.isfile(resource_path('hop_data.txt')):
-			with open(resource_path('hop_data.txt'), 'w', encoding="utf-8") as f:
-				for hop, value in brew_data.hop_data.items():
-					name = hop
-					hop_type = value['Form']
-					origin = value['Origin']
-					alpha = value['Alpha']
-					use = value['Use']
-					description = value['Description']
-					f.write(
-						'{name}\t{hop_type}\t{origin}\t{alpha}\t{use}\t{description}\n'.format(
-							name=name,
-							hop_type=hop_type,
-							origin=origin,
-							alpha=alpha,
-							use=use,
-							description=description))
+			database.write_hop_data(brew_data.hop_data)
 		else:
-			with open(resource_path('hop_data.txt'), 'r', encoding="utf-8") as f:
-				if brew_data.constants['Replace Defaults']:
+			if brew_data.constants['Replace Defaults']:
 					brew_data.hop_data = {}
-				data = [line.strip().split('\t') for line in f]
-				for hop in data:
-					# 'Nelson Sauvin': {'Form': 'Whole', 'Origin': 'New Zeland', 'Description': '', 'Use': 'General Purpose', 'Alpha': 12.7}
-					name = hop[0]
-					hop_type = hop[1]
-					origin = hop[2]
-					alpha = float(hop[3])
-					use = hop[4]
-					description = hop[5] if len(hop) >= 6 else 'No Description'
-					brew_data.hop_data[name] = {
-						'Form': hop_type,
-						'Origin': origin,
-						'Alpha': alpha,
-						'Use': use,
-						'Description': description}
-				#print('hop_data =', brew_data.hop_data)
+			brew_data.hop_data = database.read_hop_data(brew_data.hop_data)
+
 		if not os.path.isfile(resource_path('grain_data.txt')):
-			with open(resource_path('grain_data.txt'), 'w', encoding="utf-8") as f:
-				for ingredient, value in brew_data.grist_data.items():
-					name = ingredient
-					ebc = value['EBC']
-					grain_type = value['Type']
-					extract = value['Extract']
-					moisture = value['Moisture']
-					fermentability = value['Fermentability']
-					description = value['Description']
-					f.write(
-						'{name}\t{ebc}\t{grain_type}\t{extract}\t{moisture}\t{fermentability}\t{description}\n'.format(
-							name=name,
-							ebc=ebc,
-							grain_type=grain_type,
-							extract=extract,
-							moisture=moisture,
-							fermentability=fermentability,
-							description=description))
+			database.write_grain_data(brew_data.grist_data)
 		else:
-			with open(resource_path('grain_data.txt'), 'r', encoding="utf-8") as f:
-				if brew_data.constants['Replace Defaults']:
-					brew_data.grain_data = {}
-				data = [line.strip().split('\t') for line in f]
-				for ingredient in data:
-					# {'Wheat Flour': {'EBC': 0.0, 'Type': 3.0, 'Extract': 304.0, 'Description': 'No Description', 'Moisture': 11.0, 'Fermentability': 62.0}}
-					name = ingredient[0]
-					ebc = float(ingredient[1])
-					grain_type = float(ingredient[2])
-					extract = float(ingredient[3])
-					moisture = float(ingredient[4])
-					fermentability = float(ingredient[5])
-					description = ingredient[6]
-					brew_data.grist_data[name] = {
-						'EBC': ebc,
-						'Type': grain_type,
-						'Extract': extract,
-						'Description': description,
-						'Moisture': moisture,
-						'Fermentability': fermentability}
-				#print('grist_data =', brew_data.grist_data)
+			if brew_data.constants['Replace Defaults']:
+				brew_data.grist_data = {}
+			brew_data.grist_data = database.read_grain_data(brew_data.grist_data)
 
 		if not os.path.isfile(resource_path('yeast_data.txt')):
 			with open(resource_path('yeast_data.txt'), 'w', encoding="utf-8") as f:
@@ -1000,34 +894,29 @@ class beer_engine_mainwin:
 						column, text=column, command=lambda c=column: self.sort_by_grist(c))
 					self.scrolled_tree_ingredient.column(
 						column, anchor="center")
-					if column != 'lb:oz' and column != '%' and column != 'EBC':
-						self.scrolled_tree_ingredient.column(column, width=40)
-					elif column == 'lb:oz':
-						if len(self.ingredients) > 0:
-							self.scrolled_tree_ingredient.column(
-								'lb:oz',
-								width=max(
-									[
-										len(
-											'{lb}:{oz}'.format(
-												lb=int(
-													ingredient['Values']['lb:oz'][0]),
-												oz=round(
-													ingredient['Values']['lb:oz'][1],
-													1))) for ingredient in self.ingredients]) *
-								7)
-						else:
-							self.scrolled_tree_ingredient.column(
-								column, width=40)
+					if column in ['lb:oz', '%', 'EBC'
+					              ] and column == 'lb:oz' and len(self.ingredients) > 0:
+						self.scrolled_tree_ingredient.column(
+						    'lb:oz',
+						    width=(max(
+						        len('{lb}:{oz}'.format(
+						            lb=int(ingredient['Values']['lb:oz'][0]),
+						            oz=round(ingredient['Values']['lb:oz'][1], 1)))
+						        for ingredient in self.ingredients) * 7))
+					elif column in ['lb:oz', '%', 'EBC'] and column == 'lb:oz' or column not in [
+					      'lb:oz', '%', 'EBC'
+					  ]:
+						self.scrolled_tree_ingredient.column(
+							column, width=40)
 					elif column == 'EBC':
 						self.scrolled_tree_ingredient.column(column, width=28)
-					elif column == '%':
+					else:
 						self.scrolled_tree_ingredient.column(column, width=35)
 
 		def refresh_percentage():
 			''' Refresh Percentage based off weight '''
-			total_weight = sum([ingredient['Values']['Grams']
-								for ingredient in self.ingredients])
+			total_weight = sum(
+			    ingredient['Values']['Grams'] for ingredient in self.ingredients)
 			if total_weight > 0:
 				for ingredient in self.ingredients:
 					weight = ingredient['Values']['Grams']
@@ -1038,8 +927,11 @@ class beer_engine_mainwin:
 			''' Refresh Original Gravity '''
 			non_mashables = [6.0, 5.0]
 			volume = float(self.volume.get())
-			points = sum([(brew_data.grist_data[ingredient['Name']]['Extract'] * (ingredient['Values']['Grams']) / 1000) * (
-				1 if brew_data.grist_data[ingredient['Name']]['Type'] in non_mashables else brew_data.constants['Efficiency']) for ingredient in self.ingredients])
+			points = sum((brew_data.grist_data[ingredient['Name']]['Extract'] *
+			              (ingredient['Values']['Grams']) / 1000) *
+			             (1 if brew_data.grist_data[ingredient['Name']]['Type'] in
+			              non_mashables else brew_data.constants['Efficiency'])
+			             for ingredient in self.ingredients)
 
 			orig_grav = ((points) / volume) + 1000
 			self.og = orig_grav
@@ -1149,7 +1041,7 @@ class beer_engine_mainwin:
 
 		def refresh_percentage():
 			''' Refresh Percentage based off weight '''
-			total_weight = sum([hop['Values']['Grams'] for hop in self.hops])
+			total_weight = sum(hop['Values']['Grams'] for hop in self.hops)
 			if total_weight > 0:
 				for hop in self.hops:
 					weight = hop['Values']['Grams']
@@ -1161,8 +1053,8 @@ class beer_engine_mainwin:
 			def boil_grav():
 				''' Get Boil Gravity of Recipe'''
 				volume = float(self.boil_vol.get())
-				points = sum([brew_data.grist_data[ingredient['Name']]['Extract'] * (
-					ingredient['Values']['Grams']) / 1000 for ingredient in self.ingredients])
+				points = sum(brew_data.grist_data[ingredient['Name']]['Extract'] * (
+					ingredient['Values']['Grams']) / 1000 for ingredient in self.ingredients)
 				boil_grav = (
 					(points * brew_data.constants['Efficiency']) / volume) + 1000
 				return boil_grav
@@ -1278,37 +1170,36 @@ class beer_engine_mainwin:
 			key = event.keysym
 			if key == 'Escape':
 				add_grist_gui.destroy()
-			if len(key) <= 1:
-				if key in string.ascii_lowercase:
-					try:
-						start_n = int(treeview.focus()[1:], 16) - 1
-					except IndexError:
-						start_n = -1
-					# clear the selection.
-					treeview.selection_clear()
-					# start from previous selection +1
-					for n in range(start_n + 1, len(list_data)):
+			if len(key) <= 1 and key in string.ascii_lowercase:
+				try:
+					start_n = int(treeview.focus()[1:], 16) - 1
+				except IndexError:
+					start_n = -1
+				# clear the selection.
+				treeview.selection_clear()
+				# start from previous selection +1
+				for n in range(start_n + 1, len(list_data)):
+					item = list_data[n]
+					if item[0].lower() == key.lower():
+						treeview.selection_set(
+							'I{iid}'.format(iid=format(n + 1, '03x')))
+						treeview.focus('I{iid}'.format(
+							iid=format(n + 1, '03x')))
+						treeview.yview(n)
+						return
+					treeview.yview(n)
+				else:
+					# has not found it so loop from top
+					for n, _ in enumerate(list_data):
 						item = list_data[n]
 						if item[0].lower() == key.lower():
+							treeview.yview(n)
 							treeview.selection_set(
 								'I{iid}'.format(iid=format(n + 1, '03x')))
 							treeview.focus('I{iid}'.format(
 								iid=format(n + 1, '03x')))
-							treeview.yview(n)
 							return
-						treeview.yview(n)
-					else:
-						# has not found it so loop from top
-						for n, _ in enumerate(list_data):
-							item = list_data[n]
-							if item[0].lower() == key.lower():
-								treeview.yview(n)
-								treeview.selection_set(
-									'I{iid}'.format(iid=format(n + 1, '03x')))
-								treeview.focus('I{iid}'.format(
-									iid=format(n + 1, '03x')))
-								return
-						treeview.yview(n)
+					treeview.yview(n)
 
 		add_grist_gui = tk.Toplevel()
 		add_grist_gui.resizable(0, 0)
