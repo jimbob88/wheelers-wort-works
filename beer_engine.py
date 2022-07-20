@@ -40,7 +40,6 @@ class beer_engine_mainwin:
         """Tab creation + 1st tab creation"""
         _fgcolor = "#000000"  # X11 color: 'black'
         _compcolor = "#d9d9d9"  # X11 color: 'gray85'
-        _ana1color = "#d9d9d9"  # X11 color: 'gray85'
         _ana2color = "#ececec"  # Closest X11 color: 'gray92'
         font9 = (
             "-family {DejaVu Sans} -size 7 -weight normal -slant "
@@ -125,46 +124,28 @@ class beer_engine_mainwin:
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
 
-        ######################## Emtpy Defs #######################
+        # Empty Defs
         self.ingredients = []
         self.hops = []
 
-        ######################### Menu ############################
+        # Menu
         self.setup_menu(_fgcolor)
 
-        ######################## First Tab ########################
+        # First Tab
         self.setup_main_tab(font9, _bgcolor)
 
         self.refresh_grist()
         self.refresh_hop()
-        # self.tabbed_frame.bind('<Button-1>', lambda event: self.refresh_all()
-        # if self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
-        # event.x, event.y) == 1 else False) #
-        # print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
-        # "tab", event.x, event.y))
+
         self.tabbed_frame.bind("<Button-1>", self.refresh_tab_onclick)
 
-        ######################## Second Tab ########################
-        # for hop in sorted(brew_data.hop_data):
-        # 	self.second_tab.hop_lstbx.insert(tk.END, hop)
+        # Second Tab
         self.second_tab.reinsert()
 
-        ######################### Third Tab #########################
-        # for grist in sorted(brew_data.grist_data):
-        # 	self.third_tab.grist_lstbx.insert(tk.END, grist)
+        # Third Tab
         self.third_tab.reinsert()
 
-        ######################### Fifth Tab ##########################
-        # self.tabbed_frame.bind('<Button-1>', lambda event:
-        # self.fifth_tab.refresh_all() if
-        # self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
-        # event.x, event.y) == 5 else False) #
-        # print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
-        # "tab", event.x, event.y))
-
-        ######################### Fourth Tab ##########################
-        # for yeast in sorted(brew_data.yeast_data):
-        # 	self.fourth_tab.yeast_lstbx.insert(tk.END, yeast)
+        # Fourth Tab
         self.fourth_tab.reinsert()
 
     def setup_menu(self, _fgcolor: str):
@@ -576,7 +557,10 @@ class beer_engine_mainwin:
             wrap=tk.WORD,
         )
 
-        default_text = """Efficiency: {efficiency}%{enter}Final Gravity: {final_gravity}{enter}Alcohol (ABV): {abv}{enter}Colour: {colour}EBC{enter}Mash Liquor: {mash_liquor}L{enter}IBU:GU: {ibu_gu}""".format(
+        default_text = ("Efficiency: {efficiency}%{enter}Final Gravity: {final_gravity}{enter}"
+                        "Alcohol (ABV): {abv}{enter}"
+                        "Colour: {colour}EBC{enter}"
+                        "Mash Liquor: {mash_liquor}L{enter}IBU:GU: {ibu_gu}").format(
             efficiency=brew_data.constants["Efficiency"] * 100,
             final_gravity=1.000,
             abv=0,
@@ -1154,11 +1138,11 @@ class beer_engine_mainwin:
                 return ((points * brew_data.constants["Efficiency"]) / volume) + 1000
 
             """
-			Utilization = f(G) x f(T)
-			f(G) = 1.65 x 0.000125^(Gb - 1)
-			f(T) = [1 - e^(-0.04 x T)] / 4.15
-			Where Gb is boil gravity and T is time
-			"""
+            Utilization = f(G) x f(T)
+            f(G) = 1.65 x 0.000125^(Gb - 1)
+            f(T) = [1 - e^(-0.04 x T)] / 4.15
+            Where Gb is boil gravity and T is time
+            """
             for hop in self.hops:
                 boil_gravity = boil_grav() / 1000  # Temporary Solution
                 time = hop["Values"]["Time"]
@@ -1553,7 +1537,6 @@ class beer_engine_mainwin:
 
         def colour_ebc():
             """Calculate the EBC (COLOUR) of Recipe"""
-            # [{'Name:': 'Wheat Flour', 'Values': {'EBC:': 0.0, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
             def formula(ingredient, efficiency):
                 """Defines the formula for calulation (cleaner)"""
                 ebc = ingredient["Values"]["EBC"]
@@ -1571,12 +1554,12 @@ class beer_engine_mainwin:
             )
 
         """
-		MCU = color rating of the malt °L x weight(lb)
-			°SRM = MCU 					(Traditional)
-			°SRM = 0.3 x MCU + 4.7		(Mosher)
-			°SRM = 0.2 x MCU + 8.4		(Daniels)
-			°SRM = 1.49 x MCU ^ 0.69	(Morey)
-		"""
+        MCU = color rating of the malt °L x weight(lb)
+            °SRM = MCU 					(Traditional)
+            °SRM = 0.3 x MCU + 4.7		(Mosher)
+            °SRM = 0.2 x MCU + 8.4		(Daniels)
+            °SRM = 1.49 x MCU ^ 0.69	(Morey)
+        """
         self.refresh_hop()
         self.refresh_grist()
 
@@ -1829,8 +1812,7 @@ class beer_engine_mainwin:
 
     def sort_by_grist(self, column):
         """Sort Each Column reverse/inverse"""
-        # [{'Name:': 'Wheat Flour', 'Values': {'EBC:': 0.0, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
-        ################################### Grist #############################
+        # Grist
         old_ingred = self.ingredients
 
         if column == "Fermentable Ingredient":
@@ -2352,7 +2334,6 @@ class beer_engine_mainwin:
                                 name=key, data=water_chem
                             )
                         )
-                    # for key, constant in brew_data.constants.items(): f.write('database\xa7constant\xa7{name}\t{data}\n'.format(name=key, data=constant))
                     f.write(
                         "database\xa7constant\xa7{constants}".format(
                             constants=brew_data.constants
@@ -3399,20 +3380,20 @@ class special_editor(tk.Frame):
             ".", background=[("selected", _compcolor), ("active", _ana2color)]
         )
         """
-		 	Low	Med	High
-		C	54	62	70
-		62	51	59	66
-		63	52	60	68
-		64	53	61	69
-		65	53	61	69
-		66	53	61	69
-		67	53	61	69
-		68	52	60	67
-		69	51	58	66
-		70	49	56	63
-		71	47	54	61
-		72	44	51	57
-		"""
+         	Low	Med	High
+        C	54	62	70
+        62	51	59	66
+        63	52	60	68
+        64	53	61	69
+        65	53	61	69
+        66	53	61	69
+        67	53	61	69
+        68	52	60	67
+        69	51	58	66
+        70	49	56	63
+        71	47	54	61
+        72	44	51	57
+        """
         self.table_dict = {
             "low-62": 51,
             "med-62": 59,
