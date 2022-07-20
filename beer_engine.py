@@ -56,73 +56,18 @@ class beer_engine_mainwin:
 			brew_data.grist_data = database.read_grain_data(brew_data.grist_data)
 
 		if not os.path.isfile(resource_path('yeast_data.txt')):
-			with open(resource_path('yeast_data.txt'), 'w', encoding="utf-8") as f:
-				if brew_data.constants['Replace Defaults']:
-					brew_data.yeast_data = {}
-				for yeast, value in brew_data.yeast_data.items():
-					name = yeast
-					yeast_type = value['Type']
-					lab = value['Lab']
-					flocculation = value['Flocculation']
-					attenuation = value['Attenuation']
-					temperature = value['Temperature']
-					origin = value['Origin']
-					description = value['Description']
-					f.write(
-						'{name}\t{yeast_type}\t{lab}\t{flocculation}\t{attenuation}\t{temperature}\t{origin}\t{description}\n'.format(
-							name=name,
-							yeast_type=yeast_type,
-							lab=lab,
-							flocculation=flocculation,
-							attenuation=attenuation,
-							temperature=temperature,
-							origin=origin,
-							description=description))
+			if brew_data.constants['Replace Defaults']:
+				brew_data.yeast_data = {}
+			database.write_yeast_data(brew_data.yeast_data)
 		else:
-			with open(resource_path('yeast_data.txt'), 'r', encoding="utf-8") as f:
-				data = [line.strip().split('\t') for line in f]
-				for yeast in data:
-					name = yeast[0]
-					yeast_type = yeast[1]
-					lab = yeast[2]
-					flocculation = yeast[3]
-					attenuation = yeast[4]
-					temperature = yeast[5]
-					origin = yeast[6]
-					description = yeast[7]
-					brew_data.yeast_data[name] = {
-						'Type': yeast_type,
-						'Lab': lab,
-						'Flocculation': flocculation,
-						'Attenuation': attenuation,
-						'Temperature': temperature,
-						'Description': description,
-						'Origin': origin}
+			brew_data.yeast_data = database.read_yeast_data(brew_data.yeast_data)
 
 		if not os.path.isfile(resource_path('water_chem_data.txt')):
-			with open(resource_path('water_chem_data.txt'), 'w', encoding="utf-8") as f:
-				for water_chem, values in brew_data.water_chemistry_additions.items():
-					value = values['Values']
-					name = water_chem
-					time = value['Time'] if 'Time' in value else 'N/A'
-					# print(value)
-					water_chem_type = value['Type']
-					f.write('{name}\t{time}\t{water_chem_type}\n'.format(
-						name=name, time=time, water_chem_type=water_chem_type))
+			database.write_water_chem_data(brew_data.water_chemistry_additions)
 		else:
-			with open(resource_path('water_chem_data.txt'), 'r', encoding="utf-8") as f:
-				if brew_data.constants['Replace Defaults']:
-					brew_data.water_chemistry_additions = {}
-				data = [line.strip().split('\t') for line in f]
-				for water_chem in data:
-					name = water_chem[0]
-					time = float(
-						water_chem[1]) if water_chem[1] != 'N/A' else water_chem[1]
-					water_chem_type = water_chem[2]
-					brew_data.water_chemistry_additions[name] = {
-						'Values': {'Type': water_chem_type}}
-					if time != 'N/A':
-						brew_data.water_chemistry_additions[name]['Values']['Time'] = time
+			if brew_data.constants['Replace Defaults']:
+				brew_data.water_chemistry_additions = {}
+			database.write_water_chem_data(brew_data.water_chemistry_additions)
 
 		self.style.configure('.', background=_bgcolor)
 		self.style.configure('.', foreground=_fgcolor)

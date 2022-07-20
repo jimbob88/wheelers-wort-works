@@ -162,3 +162,65 @@ def read_grain_data(grist_data: Union[List[Dict], None] = None) -> List[Dict]:
                 "Fermentability": float(ingredient[5]),
             }
     return grist_data
+
+
+def write_yeast_data(yeast_data: Union[List[Dict], None] = None):
+    if yeast_data is None:
+        yeast_data = {}
+    with open(resource_path("yeast_data.txt"), "w", encoding="utf-8") as f:
+        for yeast, value in yeast_data.items():
+            name = yeast
+            yeast_type = value["Type"]
+            lab = value["Lab"]
+            flocculation = value["Flocculation"]
+            attenuation = value["Attenuation"]
+            temperature = value["Temperature"]
+            origin = value["Origin"]
+            description = value["Description"]
+            f.write(
+                f"{name}\t{yeast_type}\t{lab}\t{flocculation}\t{attenuation}\t{temperature}\t{origin}\t{description}\n"
+            )
+
+def read_yeast_data(yeast_data: Union[List[Dict], None] = None) -> List[Dict]:
+    if yeast_data is None:
+        yeast_data = {}
+    with open(resource_path('yeast_data.txt'), 'r', encoding="utf-8") as f:
+        data = [line.strip().split('\t') for line in f]
+        for yeast in data:
+            name = yeast[0]
+            yeast_data[name] = {
+                'Type': yeast[1],
+                'Lab': yeast[2],
+                'Flocculation': yeast[3],
+                'Attenuation': yeast[4],
+                'Temperature': yeast[5],
+                'Description': yeast[7],
+                'Origin': yeast[6]}
+    return yeast_data
+
+def write_water_chem_data(water_chemistry_additions: Union[List[Dict], None] = None):
+    if water_chemistry_additions is None:
+        water_chemistry_additions = {}
+    with open(resource_path('water_chem_data.txt'), 'w', encoding="utf-8") as f:
+        for water_chem, values in water_chemistry_additions.items():
+            value = values['Values']
+            name = water_chem
+            time = value['Time'] if 'Time' in value else 'N/A'
+            water_chem_type = value['Type']
+            f.write(f'{name}\t{time}\t{water_chem_type}\n')
+
+def read_water_chem_data(water_chemistry_additions: Union[List[Dict], None] = None):
+    if water_chemistry_additions is None:
+        water_chemistry_additions = {}
+    with open(resource_path('water_chem_data.txt'), 'r', encoding="utf-8") as f:
+        data = [line.strip().split('\t') for line in f]
+        for water_chem in data:
+            name = water_chem[0]
+            time = float(
+                water_chem[1]) if water_chem[1] != 'N/A' else water_chem[1]
+            water_chem_type = water_chem[2]
+            water_chemistry_additions[name] = {
+                'Values': {'Type': water_chem_type}}
+            if time != 'N/A':
+                water_chemistry_additions[name]['Values']['Time'] = time
+    return water_chemistry_additions
