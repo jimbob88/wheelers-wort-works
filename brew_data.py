@@ -107,7 +107,7 @@ hop_data = {
 	 'Northern Brewer': {'Form': 'Whole', 'Origin': 'German', 'Alpha': 8.2, 'Use': 'General Purpose', 'Description': 'Dual purpose similar to Northdown with excellent bittering properties and a pleasant aroma.'},
 	 'Warrior': {'Form': 'Whole', 'Origin': 'American', 'Alpha': 8.0, 'Use': 'Bittering', 'Description': 'No Description'},
 	 'Fuggle': {'Form': 'Whole', 'Origin': 'English', 'Alpha': 4.9, 'Use': 'Aroma', 'Description': 'English Fuggle is a traditional hop; one of the most famous hops in the world which, along with Golding, made English ales famous. Delicate, minty, grassy slightly floral aroma. Traditionally used with Golding to provide a fully rounded flavour.'},
-	 'Bramling Cross': {'Form': 'Whole', 'Origin': 'English', 'Alpha': 6.3, 'Use': 'Aroma', 'Description': u"A Golding cross with a distinctive 'American' aroma which often does not find favour with British drinkers. Strong spicy, blackcurrant or lemon flavour."},
+	 'Bramling Cross': {'Form': 'Whole', 'Origin': 'English', 'Alpha': 6.3, 'Use': 'Aroma', 'Description': "A Golding cross with a distinctive 'American' aroma which often does not find favour with British drinkers. Strong spicy, blackcurrant or lemon flavour."},
 	 'Centennial': {'Form': 'Whole', 'Origin': 'American', 'Alpha': 10.5, 'Use': 'Bittering', 'Description': 'New variety, quite floral qualities similar to Cascade'},
 	 'Susan': {'Form': 'Whole', 'Origin': 'English', 'Alpha': 9.0, 'Use': 'Aroma', 'Description': 'Fresh flowers with hints of lemon spices. clean and aromatic.'},
 	 'Ahtanum': {'Form': 'Whole', 'Origin': 'American', 'Alpha': 6.0, 'Use': 'Aroma', 'Description': 'Distinctive aromatic with moderate bittering.'},
@@ -141,10 +141,10 @@ hop_data = {
 }
 
 water_chemistry_additions = {
-	u'Gypsum': {'Values': {'Type': 'Malt'}}, 					#{'EBC': 0.0, 'Type': 0.0, 'Extract': 0.0, 'Description': 'No Description', 'Moisture': 0.0, 'Fermentability': 0.0},
-	u'Calcium Sulphate': {'Values': {'Type': 'Malt'}}, 			#{'EBC': 0.0, 'Type': 0.0, 'Extract': 0.0, 'Description': 'No Description', 'Moisture': 0.0, 'Fermentability': 0.0},
-	u'Irish Moss': {'Values': {'Time': 10, 'Type': 'Hop'}},		# {'Form': 'Whole', 'Origin': 'Unknown', 'Description': 'No Description', 'Use': 'N/A', 'Alpha': 0},
-	u'Nutrient': {'Values': {'Time': 10, 'Type': 'Hop'}} 		#{'Form': 'Whole', 'Origin': 'Unknown', 'Description': 'No Description', 'Use': 'N/A', 'Alpha': 0}
+	'Gypsum': {'Values': {'Type': 'Malt'}}, 					#{'EBC': 0.0, 'Type': 0.0, 'Extract': 0.0, 'Description': 'No Description', 'Moisture': 0.0, 'Fermentability': 0.0},
+	'Calcium Sulphate': {'Values': {'Type': 'Malt'}}, 			#{'EBC': 0.0, 'Type': 0.0, 'Extract': 0.0, 'Description': 'No Description', 'Moisture': 0.0, 'Fermentability': 0.0},
+	'Irish Moss': {'Values': {'Time': 10, 'Type': 'Hop'}},		# {'Form': 'Whole', 'Origin': 'Unknown', 'Description': 'No Description', 'Use': 'N/A', 'Alpha': 0},
+	'Nutrient': {'Values': {'Time': 10, 'Type': 'Hop'}} 		#{'Form': 'Whole', 'Origin': 'Unknown', 'Description': 'No Description', 'Use': 'N/A', 'Alpha': 0}
 }
 
 yeast_data = {'Abbaye Belgian Ale': {'Type': 'D', 'Lab': 'Lallemand', 'Flocculation': 'Low', 'Attenuation': 'High', 'Temperature': '19-22°', 'Description': 'Abbaye is an ale yeast of Belgian origin selected for its ability to produce great Belgian style beers including high gravity beers such as Dubbel, Trippel and Quads.', 'Origin': 'Unknown'},
@@ -248,14 +248,14 @@ yeast_data = {'Abbaye Belgian Ale': {'Type': 'D', 'Lab': 'Lallemand', 'Flocculat
 	 'Denny\'s Favorite 50 1450': {'Type': 'L', 'Lab': 'Wyeast', 'Flocculation': 'Low', 'Attenuation': 'Medium', 'Temperature': '16-21°', 'Description': ' Can be used for almost any beer style. Accentuates malt, caramel, or fruit character.', 'Origin': 'Unknown'},
 	 'Dry English ale WLP007': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'High', 'Attenuation': '70-80%', 'Temperature': '18-21°', 'Description': ' Good for high gravity ales with no residuals.', 'Origin': 'Whitbread - dry'},
 	 'Dusseldorf Alt WLP036': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Medium', 'Attenuation': '65-72%', 'Temperature': '18-21°', 'Description': ' Produces clean, slightly sweet alt beers.', 'Origin': 'D�sseldorf (Zum Uerige)'},
-	 'East Coast Ale WLP008': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Low/Med', 'Attenuation': '70-75%', 'Temperature': '20-23°', 'Description': ' Very clean and low esters.', 'Origin': u"Sam Adam's"},
+	 'East Coast Ale WLP008': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Low/Med', 'Attenuation': '70-75%', 'Temperature': '20-23°', 'Description': ' Very clean and low esters.', 'Origin': "Sam Adam's"},
 	 'East Midlands Ale WLP039': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Med/High', 'Attenuation': 'Medium', 'Temperature': '19-21°', 'Description': ' Available Sept-Oct. Medium to low fusel fruit and alcohol production.', 'Origin': 'UK, chosen from multistrain - same as Danstar Nottingham'},
-	 'Edinburgh Ale WLP028': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Medium', 'Attenuation': '70-75%', 'Temperature': '18-21°', 'Description': ' Malty, strong Scottish ales.', 'Origin': u"McEwan's"},
+	 'Edinburgh Ale WLP028': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Medium', 'Attenuation': '70-75%', 'Temperature': '18-21°', 'Description': ' Malty, strong Scottish ales.', 'Origin': "McEwan's"},
 	 'English Ale Blend WLP085': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Med/High', 'Attenuation': '69-76%', 'Temperature': '20-22°', 'Description': ' Moderate fruitiness and mineral-like.', 'Origin': 'Unknown'},
 	 'English Ale BRY 264': {'Type': 'L', 'Lab': 'Siebel Inst.', 'Flocculation': 'Medium', 'Attenuation': 'High', 'Temperature': '15-20°', 'Description': ' Clean ale with slightly nutty and estery character.', 'Origin': 'Unknown'},
 	 'English Ale WLP002': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Very High', 'Attenuation': '63-70%', 'Temperature': '18-20°', 'Description': ' Very clear with some residual sweetness.', 'Origin': 'Fullers'},
 	 'English Special Bitter 1768-PC': {'Type': 'L', 'Lab': 'Wyeast', 'Flocculation': 'High', 'Attenuation': 'Low', 'Temperature': '18-22°', 'Description': ' Seasonal Availability. Produces light fruit and ethanol aromas along with soft, nutty flavours.', 'Origin': 'Unknown'},
-	 'Essex Ale Yeast WLP022': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Med/High', 'Attenuation': '71-76%', 'Temperature': '19-21°', 'Description': ' Drier finish than many British ale yeasts', 'Origin': u"Ridley's Ale near Chelmsford, UK"},
+	 'Essex Ale Yeast WLP022': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Med/High', 'Attenuation': '71-76%', 'Temperature': '19-21°', 'Description': ' Drier finish than many British ale yeasts', 'Origin': "Ridley's Ale near Chelmsford, UK"},
 	 'European Ale WLP011': {'Type': 'L', 'Lab': 'White Labs', 'Flocculation': 'Medium', 'Attenuation': '65-70%', 'Temperature': '18-21°', 'Description': ' Low ester production, giving a clean profile.', 'Origin': 'Wisenschaftliche Station #338 (Munich)'},
 	 'European Lager 2247-PC': {'Type': 'L', 'Lab': 'Wyeast', 'Flocculation': 'Low', 'Attenuation': 'Medium', 'Temperature': '8-13°', 'Description': ' Seasonal Availability. Exhibits a clean and dry flavour profile often found in aggressively hopped lagers.', 'Origin': 'Unknown'},
 	 'Farmhouse Ale 3726-PC': {'Type': 'L', 'Lab': 'Wyeast', 'Flocculation': 'Medium', 'Attenuation': 'Medium', 'Temperature': '21-29°', 'Description': ' Seasonal Availability. Complex esters balanced with earthy/spicy notes.', 'Origin': 'Unknown'},
@@ -383,14 +383,14 @@ table_dict = {
 }
 
 constants = {
-	u'Efficiency': 0.75,
-	u'Hop Time': 60,
-	u'Conversion': {'lb-g': 453.592, 'oz-g': 28.35, 'usg-l': 3.785411784},
-	u'Volume': 10,
-	u'Boil Volume Scale': 1.1,
-	u'Liquor To Grist Ratio': 2.5,
-	u'Attenuation Default': 'med-66',
-	u'Save On Close': True,
-	u'Default Boil Time': 90,
-	u'Replace Defaults': False
+	'Efficiency': 0.75,
+	'Hop Time': 60,
+	'Conversion': {'lb-g': 453.592, 'oz-g': 28.35, 'usg-l': 3.785411784},
+	'Volume': 10,
+	'Boil Volume Scale': 1.1,
+	'Liquor To Grist Ratio': 2.5,
+	'Attenuation Default': 'med-66',
+	'Save On Close': True,
+	'Default Boil Time': 90,
+	'Replace Defaults': False
 }
