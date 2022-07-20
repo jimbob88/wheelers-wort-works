@@ -17,6 +17,7 @@ import brew_data
 import contextlib
 import database
 from typing import Union
+from ScrolledWidgets import ScrolledListBox, ScrolledTreeView, ScrolledText
 
 with contextlib.suppress(ImportError):
     import bs4
@@ -29,6 +30,7 @@ class beer_engine_mainwin:
     """WWW Main Window Creation"""
 
     def __init__(self, master: Union[None, tk.Tk] = None):
+        # sourcery skip: hoist-similar-statement-from-if, merge-nested-ifs
         """Tab creation + 1st tab creation"""
         _fgcolor = "#000000"  # X11 color: 'black'
         _compcolor = "#d9d9d9"  # X11 color: 'gray85'
@@ -84,7 +86,7 @@ class beer_engine_mainwin:
         self.current_file = ""
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", self.quit)
-        if not platform.system() == "Darwin":
+        if platform.system() != "Darwin":
             self.master.tk.call(
                 "wm",
                 "iconphoto",
@@ -2986,381 +2988,6 @@ class beer_engine_mainwin:
         return not is_changed
 
 
-class hops_editor(tk.Frame):
-    """Editor for Hop values brew_data.hop_data"""
-
-    def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
-
-        self.widgets()
-
-    def widgets(self):
-        """This class configures and populates the toplevel window.
-        top is the toplevel containing window."""
-        _fgcolor = "#000000"  # X11 color: 'black'
-        _compcolor = "#d9d9d9"  # X11 color: 'gray85'
-        _ana1color = "#d9d9d9"  # X11 color: 'gray85'
-        _ana2color = "#ececec"  # Closest X11 color: 'gray92'
-        font9 = (
-            "-family {DejaVu Sans} -size 10 -weight bold -slant "
-            "roman -underline 0 -overstrike 0"
-        )
-        self.style = ttk.Style()
-        self.style.configure(".", background=_bgcolor)
-        self.style.configure(".", foreground=_fgcolor)
-        self.style.configure(".", font="TkDefaultFont")
-        self.style.map(
-            ".", background=[("selected", _compcolor), ("active", _ana2color)]
-        )
-
-        self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal")
-        self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973, relwidth=0.966)
-        self.TPanedwindow1.configure(width=800)
-        self.hop_panedwindow1 = tk.LabelFrame(
-            width=400, text="Hops:", background=_bgcolor
-        )
-        self.TPanedwindow1.add(self.hop_panedwindow1)
-        self.hop_panedwindow2 = tk.LabelFrame(
-            text="Modifications:", background=_bgcolor
-        )
-        self.TPanedwindow1.add(self.hop_panedwindow2)
-
-        self.hop_lstbx = ScrolledListBox(self.hop_panedwindow1)
-        self.hop_lstbx.place(
-            relx=0.025, rely=0.043, relheight=0.887, relwidth=0.94, bordermode="ignore"
-        )
-        self.hop_lstbx.configure(background="white")
-        self.hop_lstbx.configure(font="TkFixedFont")
-        self.hop_lstbx.configure(highlightcolor="#d9d9d9")
-        self.hop_lstbx.configure(selectbackground="#c4c4c4")
-        self.hop_lstbx.configure(width=10)
-
-        self.hop_delete_butt = tk.Button(self.hop_panedwindow1)
-        self.hop_delete_butt.place(
-            relx=0.025, rely=0.929, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_delete_butt.configure(takefocus="")
-        self.hop_delete_butt.configure(text="""Delete""")
-        self.hop_delete_butt.configure(command=self.delete)
-
-        self.hop_modify_butt = tk.Button(self.hop_panedwindow1)
-        self.hop_modify_butt.place(
-            relx=0.35, rely=0.929, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_modify_butt.configure(takefocus="")
-        self.hop_modify_butt.configure(text="""Modify""")
-        self.hop_modify_butt.configure(command=lambda: self.input_state(1))
-
-        self.hop_new_butt = tk.Button(self.hop_panedwindow1)
-        self.hop_new_butt.place(
-            relx=0.725, rely=0.929, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_new_butt.configure(takefocus="")
-        self.hop_new_butt.configure(text="""New""")
-        self.hop_new_butt.configure(command=self.new)
-
-        ############################ Config Section ###########################
-
-        self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_name_lbl.place(relx=0.056, rely=0.087, bordermode="ignore")
-        self.hop_name_lbl.configure(background=_bgcolor)
-        self.hop_name_lbl.configure(foreground="#000000")
-        self.hop_name_lbl.configure(font=font9)
-        self.hop_name_lbl.configure(relief="flat")
-        self.hop_name_lbl.configure(text="""Name:""")
-
-        self.hop_name_ent = tk.Entry(self.hop_panedwindow2)
-        self.hop_name_ent.place(
-            relx=0.222, rely=0.087, relheight=0.046, relwidth=0.511, bordermode="ignore"
-        )
-        self.hop_name_ent.configure(justify="center")
-        self.hop_name_ent.configure(width=184)
-        self.hop_name_ent.configure(foreground="#000000")
-        self.hop_name_ent.configure(takefocus="")
-        self.hop_name_ent.configure(cursor="xterm")
-
-        self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_form_lbl.place(relx=0.056, rely=0.152, bordermode="ignore")
-        self.hop_form_lbl.configure(background=_bgcolor)
-        self.hop_form_lbl.configure(foreground="#000000")
-        self.hop_form_lbl.configure(font=font9)
-        self.hop_form_lbl.configure(relief="flat")
-        self.hop_form_lbl.configure(text="""Form:""")
-
-        self.hop_form_combo = ttk.Combobox(self.hop_panedwindow2)
-        self.hop_form_combo.place(
-            relx=0.222, rely=0.152, relheight=0.046, relwidth=0.511, bordermode="ignore"
-        )
-        self.hop_form_combo.configure(justify="center")
-        self.hop_form_combo.configure(width=187)
-        self.hop_form_combo.configure(takefocus="")
-        self.hop_form_combo_values = ["Whole", "Pellet"]
-        self.hop_form_combo.configure(values=self.hop_form_combo_values)
-
-        self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_origin_lbl.place(relx=0.056, rely=0.217, bordermode="ignore")
-        self.hop_origin_lbl.configure(background=_bgcolor)
-        self.hop_origin_lbl.configure(foreground="#000000")
-        self.hop_origin_lbl.configure(font=font9)
-        self.hop_origin_lbl.configure(relief="flat")
-        self.hop_origin_lbl.configure(text="""Origin:""")
-
-        self.hop_origin_ent = tk.Entry(self.hop_panedwindow2)
-        self.hop_origin_ent.place(
-            relx=0.222, rely=0.217, relheight=0.046, relwidth=0.511, bordermode="ignore"
-        )
-        self.hop_origin_ent.configure(justify="center")
-        self.hop_origin_ent.configure(width=184)
-        self.hop_origin_ent.configure(takefocus="")
-        self.hop_origin_ent.configure(cursor="xterm")
-
-        self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_alpha_lbl.place(relx=0.056, rely=0.283, bordermode="ignore")
-        self.hop_alpha_lbl.configure(background=_bgcolor)
-        self.hop_alpha_lbl.configure(foreground="#000000")
-        self.hop_alpha_lbl.configure(font=font9)
-        self.hop_alpha_lbl.configure(relief="flat")
-        self.hop_alpha_lbl.configure(text="""Alpha:""")
-
-        self.hop_alpha_ent = tk.Entry(self.hop_panedwindow2)
-        self.hop_alpha_ent.place(
-            relx=0.222, rely=0.283, relheight=0.046, relwidth=0.456, bordermode="ignore"
-        )
-        self.hop_alpha_ent.configure(justify="center")
-        self.hop_alpha_ent.configure(takefocus="")
-        self.hop_alpha_ent.configure(cursor="xterm")
-
-        self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
-        self.hop_alpha_percent.place(relx=0.694, rely=0.283, bordermode="ignore")
-        self.hop_alpha_percent.configure(background=_bgcolor)
-        self.hop_alpha_percent.configure(foreground="#000000")
-        self.hop_alpha_percent.configure(font=font9)
-        self.hop_alpha_percent.configure(relief="flat")
-        self.hop_alpha_percent.configure(text="""%""")
-
-        self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_use_lbl.place(relx=0.056, rely=0.348, bordermode="ignore")
-        self.hop_use_lbl.configure(background=_bgcolor)
-        self.hop_use_lbl.configure(foreground="#000000")
-        self.hop_use_lbl.configure(font=font9)
-        self.hop_use_lbl.configure(relief="flat")
-        self.hop_use_lbl.configure(text="""Use:""")
-
-        self.hop_use_combo = ttk.Combobox(self.hop_panedwindow2)
-        self.hop_use_combo.place(
-            relx=0.222, rely=0.348, relheight=0.046, relwidth=0.511, bordermode="ignore"
-        )
-        self.hop_use_combo.configure(justify="center")
-        self.hop_use_combo_values = ["Bittering", "Aroma", "General Purpose"]
-        self.hop_use_combo.configure(values=self.hop_use_combo_values)
-        self.hop_use_combo.configure(takefocus="")
-        self.hop_comm_ent = tk.Entry(self.hop_panedwindow2)
-        self.hop_comm_ent.place(
-            relx=0.028, rely=0.5, relheight=0.046, relwidth=0.956, bordermode="ignore"
-        )
-        self.hop_comm_ent.configure(width=344)
-        self.hop_comm_ent.configure(takefocus="")
-        self.hop_comm_ent.configure(cursor="xterm")
-
-        self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
-        self.hop_comm_lbl.place(relx=0.056, rely=0.453, bordermode="ignore")
-        self.hop_comm_lbl.configure(background=_bgcolor)
-        self.hop_comm_lbl.configure(foreground="#000000")
-        self.hop_comm_lbl.configure(font=font9)
-        self.hop_comm_lbl.configure(relief="flat")
-        self.hop_comm_lbl.configure(text="""Comments:""")
-
-        self.hop_cancel_butt = tk.Button(self.hop_panedwindow2)
-        self.hop_cancel_butt.place(
-            relx=0.028, rely=0.565, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_cancel_butt.configure(takefocus="")
-        self.hop_cancel_butt.configure(text="""Cancel""")
-        self.hop_cancel_butt.configure(
-            command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE))
-        )
-
-        self.hop_clear_butt = tk.Button(self.hop_panedwindow2)
-        self.hop_clear_butt.place(
-            relx=0.389, rely=0.565, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_clear_butt.configure(takefocus="")
-        self.hop_clear_butt.configure(text="""Clear Form""")
-        self.hop_clear_butt.configure(command=self.clear_form)
-
-        self.hop_done_butt = tk.Button(self.hop_panedwindow2)
-        self.hop_done_butt.place(
-            relx=0.75, rely=0.565, height=28, width=83, bordermode="ignore"
-        )
-        self.hop_done_butt.configure(takefocus="")
-        self.hop_done_butt.configure(text="""Done""")
-        self.hop_done_butt.configure(command=self.done)
-
-        self.hop_save_data_butt = tk.Button(self.hop_panedwindow2)
-        self.hop_save_data_butt.place(
-            relx=0.222, rely=0.696, height=108, width=213, bordermode="ignore"
-        )
-        self.hop_save_data_butt.configure(takefocus="")
-        self.hop_save_data_butt.configure(text="""Save to Database""")
-        self.hop_save_data_butt.configure(width=213)
-        self.hop_save_data_butt.configure(command=self.save)
-
-        self.hop_lstbx.bind("<<ListboxSelect>>", self.select_listbox)
-        self.show_data(list(sorted(brew_data.hop_data.keys()))[0])
-
-    def __adjust_sash0(self, event):
-        paned = event.widget
-        pos = [
-            400,
-        ]
-        i = 0
-        for sash in pos:
-            paned.sashpos(i, sash)
-            i += 1
-        paned.unbind("<map>", self.__funcid0)
-        del self.__funcid0
-
-    def select_listbox(self, event):
-        """On listbox item selection fill data values"""
-        try:
-            self.show_data(self.hop_lstbx.get(self.hop_lstbx.curselection()))
-        except BaseException:
-            pass
-
-    def show_data(self, hop):
-        """Show data values ready for editing"""
-        self.input_state(1)
-        self.name = hop
-        name = hop
-        form = brew_data.hop_data[name]["Form"]
-        origin = brew_data.hop_data[name]["Origin"]
-        description = brew_data.hop_data[name]["Description"]
-        use = brew_data.hop_data[name]["Use"]
-        alpha = brew_data.hop_data[name]["Alpha"]
-
-        self.hop_name_ent.delete(0, tk.END)
-        self.hop_origin_ent.delete(0, tk.END)
-        self.hop_alpha_ent.delete(0, tk.END)
-        self.hop_comm_ent.delete(0, tk.END)
-
-        if form not in self.hop_form_combo_values:
-            self.hop_form_combo_values.append(form)
-            self.hop_form_combo.configure(values=self.hop_form_combo_values)
-
-        if use not in self.hop_use_combo_values:
-            self.hop_use_combo_values.append(use)
-            self.hop_use_combo.configure(values=self.hop_use_combo_values)
-
-        self.hop_name_ent.insert(0, name)
-        self.hop_origin_ent.insert(0, origin)
-        self.hop_alpha_ent.insert(0, alpha)
-        self.hop_comm_ent.insert(0, description)
-
-        self.hop_form_combo.set(form)
-        self.hop_use_combo.set(use)
-
-        self.input_state(0)
-
-    def input_state(self, state):
-        """Enable or disable editable data points"""
-        state = "disabled" if state == 0 else "normal"
-
-        self.hop_name_ent.configure(state=state)
-        self.hop_origin_ent.configure(state=state)
-        self.hop_alpha_ent.configure(state=state)
-        self.hop_comm_ent.configure(state=state)
-
-        self.hop_form_combo.configure(state=state)
-        self.hop_use_combo.configure(state=state)
-
-        self.hop_done_butt.configure(state=state)
-        self.hop_clear_butt.configure(state=state)
-        self.hop_cancel_butt.configure(state=state)
-
-    def done(self):
-        """Save data values to temporary variable"""
-        name = self.hop_name_ent.get()
-        form = self.hop_form_combo.get()
-        origin = self.hop_origin_ent.get()
-        alpha = float(self.hop_alpha_ent.get())
-        use = self.hop_use_combo.get()
-        description = self.hop_comm_ent.get()
-        del brew_data.hop_data[self.name]
-        brew_data.hop_data[name] = {
-            "Form": form,
-            "Origin": origin,
-            "Description": description,
-            "Use": use,
-            "Alpha": alpha,
-        }
-        idx = list(sorted(brew_data.hop_data.keys())).index(name)
-        self.reinsert()
-        self.show_data(name)
-
-    def clear_form(self):
-        """Reset all entries to nothing"""
-        self.hop_name_ent.delete(0, tk.END)
-        self.hop_origin_ent.delete(0, tk.END)
-        self.hop_alpha_ent.delete(0, tk.END)
-        self.hop_comm_ent.delete(0, tk.END)
-
-    def delete(self):
-        """Delete hop from data set"""
-        del brew_data.hop_data[self.hop_lstbx.get(self.hop_lstbx.curselection())]
-        self.hop_lstbx.delete(self.hop_lstbx.curselection())
-
-    def new(self):
-        """Add a New Hop to dataset"""
-        name = "New Hop {num}".format(
-            num=sum("New Hop" in s for s in brew_data.hop_data)
-        )
-        self.hop_lstbx.insert(tk.END, name)
-        try:
-            brew_data.hop_data[name] = brew_data.hop_data[
-                self.hop_lstbx.get(self.hop_lstbx.curselection())
-            ]
-        except BaseException:
-            try:
-                brew_data.hop_data[name] = brew_data.hop_data[tk.ACTIVE]
-            except BaseException:
-                brew_data.hop_data[name] = {
-                    "Form": "Whole",
-                    "Origin": "Unknown",
-                    "Description": "",
-                    "Use": "General Purpose",
-                    "Alpha": 12.7,
-                }
-        self.show_data(name)
-        self.hop_lstbx.select_set(tk.END)
-        self.hop_lstbx.activate(tk.END)
-        self.hop_lstbx.yview(tk.END)
-
-    def save(self):
-        """Saves current temporary variables to file"""
-        with open(resource_path("hop_data.txt"), "w", encoding="utf-8") as f:
-            for hop, value in brew_data.hop_data.items():
-                name = hop
-                form = value["Form"]
-                origin = value["Origin"]
-                alpha = value["Alpha"]
-                use = value["Use"]
-                description = value["Description"]
-                f.write(
-                    "{name}\t{form}\t{origin}\t{alpha}\t{use}\t{description}\n".format(
-                        name=name,
-                        form=form,
-                        origin=origin,
-                        alpha=alpha,
-                        use=use,
-                        description=description,
-                    )
-                )
-
-    def reinsert(self):
-        """Rebuild listbox with current datacollection"""
-        self.hop_lstbx.delete(0, tk.END)
-        for hop in sorted(brew_data.hop_data, key=lambda kv: kv.lower()):
-            self.hop_lstbx.insert(tk.END, hop)
 
 
 class grist_editor(tk.Frame):
@@ -5578,176 +5205,371 @@ class notes_area(tk.Frame):
         return "break"
 
 
-class AutoScroll(object):
-    """Configure the scrollbars for a widget."""
 
-    def __init__(self, master):
-        #  Rozen. Added the try-except clauses so that this class
-        #  could be used for scrolled entry widget for which vertical
-        #  scrolling is not supported. 5/7/14.
+class hops_editor(tk.Frame):
+    """Editor for Hop values brew_data.hop_data"""
+
+    def __init__(self, parent):
+        tk.Frame.__init__(self, parent)
+
+        self.widgets()
+
+    def widgets(self):
+        """This class configures and populates the toplevel window.
+        top is the toplevel containing window."""
+        _fgcolor = "#000000"  # X11 color: 'black'
+        _compcolor = "#d9d9d9"  # X11 color: 'gray85'
+        _ana1color = "#d9d9d9"  # X11 color: 'gray85'
+        _ana2color = "#ececec"  # Closest X11 color: 'gray92'
+        font9 = (
+            "-family {DejaVu Sans} -size 10 -weight bold -slant "
+            "roman -underline 0 -overstrike 0"
+        )
+        self.style = ttk.Style()
+        self.style.configure(".", background=_bgcolor)
+        self.style.configure(".", foreground=_fgcolor)
+        self.style.configure(".", font="TkDefaultFont")
+        self.style.map(
+            ".", background=[("selected", _compcolor), ("active", _ana2color)]
+        )
+
+        self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal")
+        self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973, relwidth=0.966)
+        self.TPanedwindow1.configure(width=800)
+        self.hop_panedwindow1 = tk.LabelFrame(
+            width=400, text="Hops:", background=_bgcolor
+        )
+        self.TPanedwindow1.add(self.hop_panedwindow1)
+        self.hop_panedwindow2 = tk.LabelFrame(
+            text="Modifications:", background=_bgcolor
+        )
+        self.TPanedwindow1.add(self.hop_panedwindow2)
+
+        self.hop_lstbx = ScrolledListBox(self.hop_panedwindow1)
+        self.hop_lstbx.place(
+            relx=0.025, rely=0.043, relheight=0.887, relwidth=0.94, bordermode="ignore"
+        )
+        self.hop_lstbx.configure(background="white")
+        self.hop_lstbx.configure(font="TkFixedFont")
+        self.hop_lstbx.configure(highlightcolor="#d9d9d9")
+        self.hop_lstbx.configure(selectbackground="#c4c4c4")
+        self.hop_lstbx.configure(width=10)
+
+        self.hop_delete_butt = tk.Button(self.hop_panedwindow1)
+        self.hop_delete_butt.place(
+            relx=0.025, rely=0.929, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_delete_butt.configure(takefocus="")
+        self.hop_delete_butt.configure(text="""Delete""")
+        self.hop_delete_butt.configure(command=self.delete)
+
+        self.hop_modify_butt = tk.Button(self.hop_panedwindow1)
+        self.hop_modify_butt.place(
+            relx=0.35, rely=0.929, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_modify_butt.configure(takefocus="")
+        self.hop_modify_butt.configure(text="""Modify""")
+        self.hop_modify_butt.configure(command=lambda: self.input_state(1))
+
+        self.hop_new_butt = tk.Button(self.hop_panedwindow1)
+        self.hop_new_butt.place(
+            relx=0.725, rely=0.929, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_new_butt.configure(takefocus="")
+        self.hop_new_butt.configure(text="""New""")
+        self.hop_new_butt.configure(command=self.new)
+
+        ############################ Config Section ###########################
+
+        self.hop_name_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_name_lbl.place(relx=0.056, rely=0.087, bordermode="ignore")
+        self.hop_name_lbl.configure(background=_bgcolor)
+        self.hop_name_lbl.configure(foreground="#000000")
+        self.hop_name_lbl.configure(font=font9)
+        self.hop_name_lbl.configure(relief="flat")
+        self.hop_name_lbl.configure(text="""Name:""")
+
+        self.hop_name_ent = tk.Entry(self.hop_panedwindow2)
+        self.hop_name_ent.place(
+            relx=0.222, rely=0.087, relheight=0.046, relwidth=0.511, bordermode="ignore"
+        )
+        self.hop_name_ent.configure(justify="center")
+        self.hop_name_ent.configure(width=184)
+        self.hop_name_ent.configure(foreground="#000000")
+        self.hop_name_ent.configure(takefocus="")
+        self.hop_name_ent.configure(cursor="xterm")
+
+        self.hop_form_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_form_lbl.place(relx=0.056, rely=0.152, bordermode="ignore")
+        self.hop_form_lbl.configure(background=_bgcolor)
+        self.hop_form_lbl.configure(foreground="#000000")
+        self.hop_form_lbl.configure(font=font9)
+        self.hop_form_lbl.configure(relief="flat")
+        self.hop_form_lbl.configure(text="""Form:""")
+
+        self.hop_form_combo = ttk.Combobox(self.hop_panedwindow2)
+        self.hop_form_combo.place(
+            relx=0.222, rely=0.152, relheight=0.046, relwidth=0.511, bordermode="ignore"
+        )
+        self.hop_form_combo.configure(justify="center")
+        self.hop_form_combo.configure(width=187)
+        self.hop_form_combo.configure(takefocus="")
+        self.hop_form_combo_values = ["Whole", "Pellet"]
+        self.hop_form_combo.configure(values=self.hop_form_combo_values)
+
+        self.hop_origin_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_origin_lbl.place(relx=0.056, rely=0.217, bordermode="ignore")
+        self.hop_origin_lbl.configure(background=_bgcolor)
+        self.hop_origin_lbl.configure(foreground="#000000")
+        self.hop_origin_lbl.configure(font=font9)
+        self.hop_origin_lbl.configure(relief="flat")
+        self.hop_origin_lbl.configure(text="""Origin:""")
+
+        self.hop_origin_ent = tk.Entry(self.hop_panedwindow2)
+        self.hop_origin_ent.place(
+            relx=0.222, rely=0.217, relheight=0.046, relwidth=0.511, bordermode="ignore"
+        )
+        self.hop_origin_ent.configure(justify="center")
+        self.hop_origin_ent.configure(width=184)
+        self.hop_origin_ent.configure(takefocus="")
+        self.hop_origin_ent.configure(cursor="xterm")
+
+        self.hop_alpha_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_alpha_lbl.place(relx=0.056, rely=0.283, bordermode="ignore")
+        self.hop_alpha_lbl.configure(background=_bgcolor)
+        self.hop_alpha_lbl.configure(foreground="#000000")
+        self.hop_alpha_lbl.configure(font=font9)
+        self.hop_alpha_lbl.configure(relief="flat")
+        self.hop_alpha_lbl.configure(text="""Alpha:""")
+
+        self.hop_alpha_ent = tk.Entry(self.hop_panedwindow2)
+        self.hop_alpha_ent.place(
+            relx=0.222, rely=0.283, relheight=0.046, relwidth=0.456, bordermode="ignore"
+        )
+        self.hop_alpha_ent.configure(justify="center")
+        self.hop_alpha_ent.configure(takefocus="")
+        self.hop_alpha_ent.configure(cursor="xterm")
+
+        self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
+        self.hop_alpha_percent.place(relx=0.694, rely=0.283, bordermode="ignore")
+        self.hop_alpha_percent.configure(background=_bgcolor)
+        self.hop_alpha_percent.configure(foreground="#000000")
+        self.hop_alpha_percent.configure(font=font9)
+        self.hop_alpha_percent.configure(relief="flat")
+        self.hop_alpha_percent.configure(text="""%""")
+
+        self.hop_use_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_use_lbl.place(relx=0.056, rely=0.348, bordermode="ignore")
+        self.hop_use_lbl.configure(background=_bgcolor)
+        self.hop_use_lbl.configure(foreground="#000000")
+        self.hop_use_lbl.configure(font=font9)
+        self.hop_use_lbl.configure(relief="flat")
+        self.hop_use_lbl.configure(text="""Use:""")
+
+        self.hop_use_combo = ttk.Combobox(self.hop_panedwindow2)
+        self.hop_use_combo.place(
+            relx=0.222, rely=0.348, relheight=0.046, relwidth=0.511, bordermode="ignore"
+        )
+        self.hop_use_combo.configure(justify="center")
+        self.hop_use_combo_values = ["Bittering", "Aroma", "General Purpose"]
+        self.hop_use_combo.configure(values=self.hop_use_combo_values)
+        self.hop_use_combo.configure(takefocus="")
+        self.hop_comm_ent = tk.Entry(self.hop_panedwindow2)
+        self.hop_comm_ent.place(
+            relx=0.028, rely=0.5, relheight=0.046, relwidth=0.956, bordermode="ignore"
+        )
+        self.hop_comm_ent.configure(width=344)
+        self.hop_comm_ent.configure(takefocus="")
+        self.hop_comm_ent.configure(cursor="xterm")
+
+        self.hop_comm_lbl = tk.Label(self.hop_panedwindow2)
+        self.hop_comm_lbl.place(relx=0.056, rely=0.453, bordermode="ignore")
+        self.hop_comm_lbl.configure(background=_bgcolor)
+        self.hop_comm_lbl.configure(foreground="#000000")
+        self.hop_comm_lbl.configure(font=font9)
+        self.hop_comm_lbl.configure(relief="flat")
+        self.hop_comm_lbl.configure(text="""Comments:""")
+
+        self.hop_cancel_butt = tk.Button(self.hop_panedwindow2)
+        self.hop_cancel_butt.place(
+            relx=0.028, rely=0.565, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_cancel_butt.configure(takefocus="")
+        self.hop_cancel_butt.configure(text="""Cancel""")
+        self.hop_cancel_butt.configure(
+            command=lambda: self.show_data(self.hop_lstbx.get(tk.ACTIVE))
+        )
+
+        self.hop_clear_butt = tk.Button(self.hop_panedwindow2)
+        self.hop_clear_butt.place(
+            relx=0.389, rely=0.565, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_clear_butt.configure(takefocus="")
+        self.hop_clear_butt.configure(text="""Clear Form""")
+        self.hop_clear_butt.configure(command=self.clear_form)
+
+        self.hop_done_butt = tk.Button(self.hop_panedwindow2)
+        self.hop_done_butt.place(
+            relx=0.75, rely=0.565, height=28, width=83, bordermode="ignore"
+        )
+        self.hop_done_butt.configure(takefocus="")
+        self.hop_done_butt.configure(text="""Done""")
+        self.hop_done_butt.configure(command=self.done)
+
+        self.hop_save_data_butt = tk.Button(self.hop_panedwindow2)
+        self.hop_save_data_butt.place(
+            relx=0.222, rely=0.696, height=108, width=213, bordermode="ignore"
+        )
+        self.hop_save_data_butt.configure(takefocus="")
+        self.hop_save_data_butt.configure(text="""Save to Database""")
+        self.hop_save_data_butt.configure(width=213)
+        self.hop_save_data_butt.configure(command=self.save)
+
+        self.hop_lstbx.bind("<<ListboxSelect>>", self.select_listbox)
+        self.show_data(list(sorted(brew_data.hop_data.keys()))[0])
+
+    def select_listbox(self, event):
+        """On listbox item selection fill data values"""
+        with contextlib.suppress(BaseException):
+            self.show_data(self.hop_lstbx.get(self.hop_lstbx.curselection()))
+
+    def show_data(self, hop):
+        """Show data values ready for editing"""
+        self.input_state(1)
+        self.name = hop
+        name = hop
+        form = brew_data.hop_data[name]["Form"]
+        origin = brew_data.hop_data[name]["Origin"]
+        description = brew_data.hop_data[name]["Description"]
+        use = brew_data.hop_data[name]["Use"]
+        alpha = brew_data.hop_data[name]["Alpha"]
+
+        self.hop_name_ent.delete(0, tk.END)
+        self.hop_origin_ent.delete(0, tk.END)
+        self.hop_alpha_ent.delete(0, tk.END)
+        self.hop_comm_ent.delete(0, tk.END)
+
+        if form not in self.hop_form_combo_values:
+            self.hop_form_combo_values.append(form)
+            self.hop_form_combo.configure(values=self.hop_form_combo_values)
+
+        if use not in self.hop_use_combo_values:
+            self.hop_use_combo_values.append(use)
+            self.hop_use_combo.configure(values=self.hop_use_combo_values)
+
+        self.hop_name_ent.insert(0, name)
+        self.hop_origin_ent.insert(0, origin)
+        self.hop_alpha_ent.insert(0, alpha)
+        self.hop_comm_ent.insert(0, description)
+
+        self.hop_form_combo.set(form)
+        self.hop_use_combo.set(use)
+
+        self.input_state(0)
+
+    def input_state(self, state):
+        """Enable or disable editable data points"""
+        state = "disabled" if state == 0 else "normal"
+
+        self.hop_name_ent.configure(state=state)
+        self.hop_origin_ent.configure(state=state)
+        self.hop_alpha_ent.configure(state=state)
+        self.hop_comm_ent.configure(state=state)
+
+        self.hop_form_combo.configure(state=state)
+        self.hop_use_combo.configure(state=state)
+
+        self.hop_done_butt.configure(state=state)
+        self.hop_clear_butt.configure(state=state)
+        self.hop_cancel_butt.configure(state=state)
+
+    def done(self):
+        """Save data values to temporary variable"""
+        name = self.hop_name_ent.get()
+        form = self.hop_form_combo.get()
+        origin = self.hop_origin_ent.get()
+        alpha = float(self.hop_alpha_ent.get())
+        use = self.hop_use_combo.get()
+        description = self.hop_comm_ent.get()
+        del brew_data.hop_data[self.name]
+        brew_data.hop_data[name] = {
+            "Form": form,
+            "Origin": origin,
+            "Description": description,
+            "Use": use,
+            "Alpha": alpha,
+        }
+        idx = list(sorted(brew_data.hop_data.keys())).index(name)
+        self.reinsert()
+        self.show_data(name)
+
+    def clear_form(self):
+        """Reset all entries to nothing"""
+        self.hop_name_ent.delete(0, tk.END)
+        self.hop_origin_ent.delete(0, tk.END)
+        self.hop_alpha_ent.delete(0, tk.END)
+        self.hop_comm_ent.delete(0, tk.END)
+
+    def delete(self):
+        """Delete hop from data set"""
+        del brew_data.hop_data[self.hop_lstbx.get(self.hop_lstbx.curselection())]
+        self.hop_lstbx.delete(self.hop_lstbx.curselection())
+
+    def new(self):
+        """Add a New Hop to dataset"""
+        name = "New Hop {num}".format(
+            num=sum("New Hop" in s for s in brew_data.hop_data)
+        )
+        self.hop_lstbx.insert(tk.END, name)
         try:
-            vsb = ttk.Scrollbar(master, orient="vertical", command=self.yview)
+            brew_data.hop_data[name] = brew_data.hop_data[
+                self.hop_lstbx.get(self.hop_lstbx.curselection())
+            ]
         except BaseException:
-            pass
-        hsb = ttk.Scrollbar(master, orient="horizontal", command=self.xview)
+            try:
+                brew_data.hop_data[name] = brew_data.hop_data[tk.ACTIVE]
+            except BaseException:
+                brew_data.hop_data[name] = {
+                    "Form": "Whole",
+                    "Origin": "Unknown",
+                    "Description": "",
+                    "Use": "General Purpose",
+                    "Alpha": 12.7,
+                }
+        self.show_data(name)
+        self.hop_lstbx.select_set(tk.END)
+        self.hop_lstbx.activate(tk.END)
+        self.hop_lstbx.yview(tk.END)
 
-        # self.configure(yscrollcommand=_autoscroll(vsb),
-        #    xscrollcommand=_autoscroll(hsb))
-        try:
-            self.configure(yscrollcommand=self._autoscroll(vsb))
-        except BaseException:
-            pass
-        self.configure(xscrollcommand=self._autoscroll(hsb))
+    def save(self):
+        """Saves current temporary variables to file"""
+        with open(resource_path("hop_data.txt"), "w", encoding="utf-8") as f:
+            for hop, value in brew_data.hop_data.items():
+                name = hop
+                form = value["Form"]
+                origin = value["Origin"]
+                alpha = value["Alpha"]
+                use = value["Use"]
+                description = value["Description"]
+                f.write(
+                    "{name}\t{form}\t{origin}\t{alpha}\t{use}\t{description}\n".format(
+                        name=name,
+                        form=form,
+                        origin=origin,
+                        alpha=alpha,
+                        use=use,
+                        description=description,
+                    )
+                )
 
-        self.grid(column=0, row=0, sticky="nsew")
-        try:
-            vsb.grid(column=1, row=0, sticky="ns")
-        except BaseException:
-            pass
-        hsb.grid(column=0, row=1, sticky="ew")
-
-        master.grid_columnconfigure(0, weight=1)
-        master.grid_rowconfigure(0, weight=1)
-
-        if sys.version_info >= (3, 0):
-            methods = (
-                tk.Pack.__dict__.keys()
-                | tk.Grid.__dict__.keys()
-                | tk.Place.__dict__.keys()
-            )
-        else:
-            methods = (
-                tk.Pack.__dict__.keys()
-                + tk.Grid.__dict__.keys()
-                + tk.Place.__dict__.keys()
-            )
-
-        for meth in methods:
-            if meth[0] != "_" and meth not in ("config", "configure"):
-                setattr(self, meth, getattr(master, meth))
-
-    @staticmethod
-    def _autoscroll(sbar):
-        """Hide and show scrollbar as needed."""
-
-        def wrapped(first, last):
-            """Wrap scrollbar hide/show"""
-            first, last = float(first), float(last)
-            if first <= 0 and last >= 1:
-                sbar.grid_remove()
-            else:
-                sbar.grid()
-            sbar.set(first, last)
-
-        return wrapped
-
-    def __str__(self):
-        return str(self.first_tab)
+    def reinsert(self):
+        """Rebuild listbox with current datacollection"""
+        self.hop_lstbx.delete(0, tk.END)
+        for hop in sorted(brew_data.hop_data, key=lambda kv: kv.lower()):
+            self.hop_lstbx.insert(tk.END, hop)
 
 
-def _create_container(func):
-    """Creates a ttk Frame with a given master, and use this new frame to
-    place the scrollbars and the widget."""
 
-    def wrapped(cls, master, **kw):
-        """Wrap container"""
-        container = ttk.Frame(master)
-        container.bind("<Enter>", lambda e: _bound_to_mousewheel(e, container))
-        container.bind("<Leave>", lambda e: _unbound_to_mousewheel(e, container))
-        return func(cls, container, **kw)
-
-    return wrapped
-
-
-class ScrolledTreeView(AutoScroll, ttk.Treeview):
-    """A standard ttk Treeview widget with scrollbars that will
-    automatically show/hide as needed."""
-
-    @_create_container
-    def __init__(self, master, **kw):
-        ttk.Treeview.__init__(self, master, **kw)
-        AutoScroll.__init__(self, master)
-
-    def insert(self, parent, index, iid=None, **kw):
-        opts = ttk._format_optdict(kw)
-        if iid is not None:
-            res = self.tk.call(self._w, "insert", parent, index, "-id", iid, *opts)
-        else:
-            # hex(len(self.get_children())).split('x')[-1]
-            iid = "I{iid}".format(iid=format(len(self.get_children()) + 1, "03x"))
-            res = self.tk.call(self._w, "insert", parent, index, "-id", iid, *opts)
-        return res
-
-
-class ScrolledListBox(AutoScroll, tk.Listbox):
-    """A standard Tkinter Text widget with scrollbars that will
-    automatically show/hide as needed."""
-
-    @_create_container
-    def __init__(self, master, **kw):
-        tk.Listbox.__init__(self, master, **kw)
-        AutoScroll.__init__(self, master)
-
-
-class ScrolledText(AutoScroll, tk.Text):
-    """A standard Tkinter Text widget with scrollbars that will
-    automatically show/hide as needed."""
-
-    @_create_container
-    def __init__(self, master, **kw):
-        tk.Text.__init__(self, master, **kw)
-        AutoScroll.__init__(self, master)
-
-
-def _bound_to_mousewheel(event, widget):
-    """Enable On mousewheel scroll move scrollbar"""
-    child = widget.winfo_children()[0]
-    if platform.system() == "Windows" or platform.system() == "Darwin":
-        child.bind_all("<MouseWheel>", lambda e: _on_mousewheel(e, child))
-        child.bind_all("<Shift-MouseWheel>", lambda e: _on_shiftmouse(e, child))
-    else:
-        child.bind_all("<Button-4>", lambda e: _on_mousewheel(e, child))
-        child.bind_all("<Button-5>", lambda e: _on_mousewheel(e, child))
-        child.bind_all("<Shift-Button-4>", lambda e: _on_shiftmouse(e, child))
-        child.bind_all("<Shift-Button-5>", lambda e: _on_shiftmouse(e, child))
-
-
-def _unbound_to_mousewheel(event, widget):
-    """Disable On mousewheel scroll move scrollbar"""
-    if platform.system() == "Windows" or platform.system() == "Darwin":
-        widget.unbind_all("<MouseWheel>")
-        widget.unbind_all("<Shift-MouseWheel>")
-    else:
-        widget.unbind_all("<Button-4>")
-        widget.unbind_all("<Button-5>")
-        widget.unbind_all("<Shift-Button-4>")
-        widget.unbind_all("<Shift-Button-5>")
-
-
-def _on_mousewheel(event, widget):
-    """On mousewheel scroll move scrollbar"""
-    if platform.system() == "Windows":
-        widget.yview_scroll(-1 * int(event.delta / 120), "units")
-    elif platform.system() == "Darwin":
-        widget.yview_scroll(-1 * int(event.delta), "units")
-    else:
-        if event.num == 4:
-            widget.yview_scroll(-1, "units")
-        elif event.num == 5:
-            widget.yview_scroll(1, "units")
-
-
-def _on_shiftmouse(event, widget):
-    """On shift mousewheel scroll move scrollbar"""
-    if platform.system() == "Windows":
-        widget.xview_scroll(-1 * int(event.delta / 120), "units")
-    elif platform.system() == "Darwin":
-        widget.xview_scroll(-1 * int(event.delta), "units")
-    else:
-        if event.num == 4:
-            widget.xview_scroll(-1, "units")
-        elif event.num == 5:
-            widget.xview_scroll(1, "units")
 
 
 def resource_path(relative_path):
