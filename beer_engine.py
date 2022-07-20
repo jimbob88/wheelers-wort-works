@@ -2,17 +2,9 @@
 '''
 Wheeler's Wort Works, an auto-updating beer engine clone
 '''
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-try:
-	import tkinter as tk
-	import tkinter.ttk as ttk
-	from tkinter import filedialog, messagebox
-except BaseException:
-	import Tkinter as tk
-	import ttk
-	import tkFileDialog as filedialog
-	import tkMessageBox as messagebox
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog, messagebox
 import sys
 import platform
 import math
@@ -22,11 +14,10 @@ import os
 import webbrowser
 import ast
 import brew_data
+import contextlib
 
-try:
+with contextlib.suppress(ImportError):
 	import bs4
-except ImportError:
-	pass
 
 __mode__ = 'local'
 _bgcolor = 'SystemButtonFace' if platform.system() == 'Windows' else '#d9d9d9'
@@ -45,7 +36,7 @@ class beer_engine_mainwin:
 		self.style = ttk.Style()
 
 		if not os.path.isfile(resource_path('defaults.txt')):
-			with open(resource_path('defaults.txt'), 'w') as f:
+			with open(resource_path('defaults.txt'), 'w', encoding="utf-8") as f:
 				volume = brew_data.constants['Volume']
 				efficiency = brew_data.constants['Efficiency'] * 100
 				evaporation = round(
@@ -67,7 +58,7 @@ class beer_engine_mainwin:
 							 LGratio=LGratio, attenuation=attenuation, save_close=save_close, 
 							 boil_time=boil_time, replace_defaults=replace_defaults))
 		else:
-			with open(resource_path('defaults.txt'), 'r') as f:
+			with open(resource_path('defaults.txt'), 'r', encoding="utf-8") as f:
 				data = [line.strip().split('=') for line in f]
 				for constants in data:
 					if constants[0] == 'efficiency':
@@ -92,7 +83,7 @@ class beer_engine_mainwin:
 						brew_data.constants['Replace Defaults'] = True if constants[1] == 'True' else False
 
 		if not os.path.isfile(resource_path('hop_data.txt')):
-			with open(resource_path('hop_data.txt'), 'w') as f:
+			with open(resource_path('hop_data.txt'), 'w', encoding="utf-8") as f:
 				for hop, value in brew_data.hop_data.items():
 					name = hop
 					hop_type = value['Form']
@@ -109,7 +100,7 @@ class beer_engine_mainwin:
 							use=use,
 							description=description))
 		else:
-			with open(resource_path('hop_data.txt'), 'r') as f:
+			with open(resource_path('hop_data.txt'), 'r', encoding="utf-8") as f:
 				if brew_data.constants['Replace Defaults']:
 					brew_data.hop_data = {}
 				data = [line.strip().split('\t') for line in f]
@@ -129,7 +120,7 @@ class beer_engine_mainwin:
 						'Description': description}
 				#print('hop_data =', brew_data.hop_data)
 		if not os.path.isfile(resource_path('grain_data.txt')):
-			with open(resource_path('grain_data.txt'), 'w') as f:
+			with open(resource_path('grain_data.txt'), 'w', encoding="utf-8") as f:
 				for ingredient, value in brew_data.grist_data.items():
 					name = ingredient
 					ebc = value['EBC']
@@ -148,7 +139,7 @@ class beer_engine_mainwin:
 							fermentability=fermentability,
 							description=description))
 		else:
-			with open(resource_path('grain_data.txt'), 'r') as f:
+			with open(resource_path('grain_data.txt'), 'r', encoding="utf-8") as f:
 				if brew_data.constants['Replace Defaults']:
 					brew_data.grain_data = {}
 				data = [line.strip().split('\t') for line in f]
@@ -171,7 +162,7 @@ class beer_engine_mainwin:
 				#print('grist_data =', brew_data.grist_data)
 
 		if not os.path.isfile(resource_path('yeast_data.txt')):
-			with open(resource_path('yeast_data.txt'), 'w') as f:
+			with open(resource_path('yeast_data.txt'), 'w', encoding="utf-8") as f:
 				if brew_data.constants['Replace Defaults']:
 					brew_data.yeast_data = {}
 				for yeast, value in brew_data.yeast_data.items():
@@ -194,7 +185,7 @@ class beer_engine_mainwin:
 							origin=origin,
 							description=description))
 		else:
-			with open(resource_path('yeast_data.txt'), 'r') as f:
+			with open(resource_path('yeast_data.txt'), 'r', encoding="utf-8") as f:
 				data = [line.strip().split('\t') for line in f]
 				for yeast in data:
 					name = yeast[0]
@@ -215,7 +206,7 @@ class beer_engine_mainwin:
 						'Origin': origin}
 
 		if not os.path.isfile(resource_path('water_chem_data.txt')):
-			with open(resource_path('water_chem_data.txt'), 'w') as f:
+			with open(resource_path('water_chem_data.txt'), 'w', encoding="utf-8") as f:
 				for water_chem, values in brew_data.water_chemistry_additions.items():
 					value = values['Values']
 					name = water_chem
@@ -225,7 +216,7 @@ class beer_engine_mainwin:
 					f.write('{name}\t{time}\t{water_chem_type}\n'.format(
 						name=name, time=time, water_chem_type=water_chem_type))
 		else:
-			with open(resource_path('water_chem_data.txt'), 'r') as f:
+			with open(resource_path('water_chem_data.txt'), 'r', encoding="utf-8") as f:
 				if brew_data.constants['Replace Defaults']:
 					brew_data.water_chemistry_additions = {}
 				data = [line.strip().split('\t') for line in f]
@@ -1549,7 +1540,7 @@ class beer_engine_mainwin:
 		''' Add/Remove Alpha to/from Hops '''
 		try:
 			selection = self.scrolled_tree_hops.selection()[0]
-			id = int(str(selection)[1:], 16)
+			hop_id = int(str(selection)[1:], 16)
 			alpha = round(self.hops[hop_id - 1]['Values']['Alpha'] + alpha, 1)
 			if alpha < 0:
 				alpha = 0
@@ -2145,7 +2136,7 @@ class beer_engine_mainwin:
 			start, features="html.parser").prettify() if 'bs4' in sys.modules else start
 		text_file_name = resource_path('{recipe_name}.html'.format(
 			recipe_name=self.recipe_name_ent.get().replace('/', '⁄')))
-		with open(text_file_name, 'w') as hs:
+		with open(text_file_name, 'w', encoding="utf-8") as hs:
 			hs.write(start)
 		if open_browser:
 			webbrowser.open(
@@ -2294,7 +2285,7 @@ class beer_engine_mainwin:
 
 			elif file.lower().endswith('.berfx'):
 				self.current_file = file
-				with open(file, 'r') as f:
+				with open(file, 'r', encoding="utf-8") as f:
 					#data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
 					data = [
 						line.replace(
@@ -2441,7 +2432,7 @@ class beer_engine_mainwin:
 
 			elif file.lower()[-6:] == '.berfx':
 				self.current_file = file
-				with open(file, 'w') as f:
+				with open(file, 'w', encoding="utf-8") as f:
 					for ingredient in self.ingredients:
 						f.write(
 							'grain\xa7{name}\t{data}\n'.format(
@@ -3073,7 +3064,7 @@ class hops_editor(tk.Frame):
 
 	def save(self):
 		''' Saves current temporary variables to file '''
-		with open(resource_path('hop_data.txt'), 'w') as f:
+		with open(resource_path('hop_data.txt'), 'w', encoding="utf-8") as f:
 			for hop, value in brew_data.hop_data.items():
 				name = hop
 				form = value['Form']
@@ -3540,7 +3531,7 @@ class grist_editor(tk.Frame):
 
 	def save(self):
 		''' Saves current temporary variables to file '''
-		with open(resource_path('grain_data.txt'), 'w') as f:
+		with open(resource_path('grain_data.txt'), 'w', encoding="utf-8") as f:
 			for ingredient, value in brew_data.grist_data.items():
 				name = ingredient
 				ebc = value['EBC']
@@ -3842,7 +3833,7 @@ class defaults_editor(tk.Frame):
 		self.mash_efficiency_ent.delete(0, tk.END)
 		self.liquor_to_grist_ent.delete(0, tk.END)
 
-		with open(resource_path('defaults.txt'), 'r') as f:
+		with open(resource_path('defaults.txt'), 'r', encoding="utf-8") as f:
 			data = [line.strip().split('=') for line in f]
 			for constants in data:
 				if constants[0] == 'efficiency':
@@ -3872,7 +3863,7 @@ class defaults_editor(tk.Frame):
 
 	def save_all(self):
 		''' Save current defaults to dataset'''
-		with open(resource_path('defaults.txt'), 'w') as f:
+		with open(resource_path('defaults.txt'), 'w', encoding="utf-8") as f:
 			volume = float(self.target_vol_ent.get())
 			efficiency = float(self.mash_efficiency_ent.get())
 			# round((brew_data.constants['Boil Volume Scale']-1)*100, 1)
@@ -4723,13 +4714,6 @@ class special_editor(tk.Frame):
 		self.water_boil_time_lbl.configure(text='''Boil Time:''')
 		self.water_boil_check()
 
-	@staticmethod
-	def popup1(event, *args, **kwargs):
-		''' Create Popupmenu '''
-		Popupmenu1 = tk.Menu(root, tearoff=0)
-		Popupmenu1.configure(activebackground="#f9f9f9")
-		Popupmenu1.post(event.x_root, event.y_root)
-
 	def refresh_orig(self):
 		''' Refresh the original additions listbox '''
 		self.water_chem_orig_lstbx.delete(0, tk.END)
@@ -4816,7 +4800,7 @@ class special_editor(tk.Frame):
 		def save_to_database():
 			''' Add New Water Chemistry Addition to textfile database '''
 			done()
-			with open(resource_path('water_chem_data.txt'), 'w') as f:
+			with open(resource_path('water_chem_data.txt'), 'w', encoding="utf-8") as f:
 				for water_chem, values in brew_data.water_chemistry_additions.items():
 					value = values['Values']
 					name = water_chem
@@ -5375,7 +5359,7 @@ class yeast_editor(tk.Frame):
 
 	def save(self):
 		''' Saves current temporary variables to file '''
-		with open(resource_path('yeast_data.txt'), 'w') as f:
+		with open(resource_path('yeast_data.txt'), 'w', encoding="utf-8") as f:
 			for yeast, value in brew_data.yeast_data.items():
 				name = yeast
 				yeast_type = value['Type']
