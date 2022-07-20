@@ -23,6 +23,7 @@ from ScrolledWidgets import (
     ScrolledText,
     bind_treeview,
 )
+import htmlwriter
 
 with contextlib.suppress(ImportError):
     import bs4
@@ -123,6 +124,10 @@ class beer_engine_mainwin:
         self.tabbed_frame.grid(row=0, column=0, sticky="nsew")
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
+
+        ######################## Emtpy Defs #######################
+        self.ingredients = []
+        self.hops = []
 
         ######################### Menu ############################
         self.setup_menu(_fgcolor)
@@ -228,7 +233,7 @@ class beer_engine_mainwin:
                     ),
                     title="Select file",
                     defaultextension=".berfx",
-                    initialfile="{0}.berf".format(self.recipe_name_ent.get()),
+                    initialfile=f"{self.recipe_name_ent.get()}.berf",
                 )
             ),
             accelerator="Ctrl+Shift+S",
@@ -815,16 +820,11 @@ class beer_engine_mainwin:
         self.frame_ingredients.place(
             relx=0.013, rely=0.085, relheight=0.315, relwidth=0.581
         )
-        # [{'Name:': 'Wheat Flour', 'Values': {'EBC:': 0.0, 'Grav': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
-        self.ingredients = []
 
         self.frame_hops = tk.Frame(self.first_tab)
         self.frame_hops.grid_rowconfigure(0, weight=1)
         self.frame_hops.grid_columnconfigure(0, weight=1)
         self.frame_hops.place(relx=0.013, rely=0.55, relheight=0.273, relwidth=0.657)
-
-        # [{'Name': 'Nelson Sauvin', 'Values': {'Type': 'Whole', 'Alpha': 12.7, 'Time': 0.0, 'Util': 0.0, 'ibu': 0.0, 'lb:oz': (0.0,0.0), 'Grams': 0.0, 'Percent': 0.0}}]
-        self.hops = []
 
         self.ingredients_imperial_chk_butt = tk.Checkbutton(self.first_tab)
         self.ingredients_imperial_chk_butt.place(
@@ -1018,17 +1018,14 @@ class beer_engine_mainwin:
         else:
             non_mashables = [6.0, 5.0]
             factor = sum(
-                [
-                    ingredient["Values"]["Percent"]
-                    * brew_data.grist_data[ingredient["Name"]]["Extract"]
-                    * (
-                        1
-                        if brew_data.grist_data[ingredient["Name"]]["Type"]
-                        in non_mashables
-                        else brew_data.constants["Efficiency"]
-                    )
-                    for idx, ingredient in enumerate(self.ingredients)
-                ]
+                ingredient["Values"]["Percent"]
+                * brew_data.grist_data[ingredient["Name"]]["Extract"]
+                * (
+                    1
+                    if brew_data.grist_data[ingredient["Name"]]["Type"] in non_mashables
+                    else brew_data.constants["Efficiency"]
+                )
+                for idx, ingredient in enumerate(self.ingredients)
             )
 
             for idx, ingredient in enumerate(self.ingredients):
@@ -1037,9 +1034,9 @@ class beer_engine_mainwin:
                 orig_grav = float(self.original_gravity_ent.get()) - 1000
                 self.og = orig_grav + 1000
                 vol = float(self.volume.get())
-                try:
+                if factor != 0:
                     weight = percent * ((orig_grav * vol) / factor) * 1000
-                except BaseException:
+                else:
                     weight = 0
                 lb = weight / brew_data.constants["Conversion"]["lb-g"]
                 oz = (lb - int(lb)) * 16
@@ -1205,35 +1202,33 @@ class beer_engine_mainwin:
             refresh_ibu()
         else:
             factor = sum(
-                [
-                    hop["Values"]["Percent"]
-                    * hop["Values"]["Alpha"]
-                    * hop["Values"]["Util"]
-                    for idx, hop in enumerate(self.hops)
-                ]
+                hop["Values"]["Percent"]
+                * hop["Values"]["Alpha"]
+                * hop["Values"]["Util"]
+                for idx, hop in enumerate(self.hops)
             )
 
             for idx, hop in enumerate(self.hops):
                 percent = hop["Values"]["Percent"]
 
                 alpha = hop["Values"]["Alpha"]
-                type = brew_data.hop_data[hop["Name"]]["Form"]
+                hop_type = brew_data.hop_data[hop["Name"]]["Form"]
                 util = hop["Values"]["Util"]
                 time = hop["Values"]["Time"]
                 if util > 0 and alpha > 0:
                     self.ibu = total_ibus = float(self.bitterness_ibu_ent.get())
                     vol = float(self.volume.get())
-                    try:
+                    if factor != 0:
                         # (((total_ibus*(percent/100))*(vol*10))/util)/alpha
                         weight = percent * ((total_ibus * vol * 10) / factor)
-                    except BaseException:
+                    else:
                         weight = 0
                     lb = weight / brew_data.constants["Conversion"]["lb-g"]
                     oz = (lb - int(lb)) * 16
                     self.hops[idx] = {
                         "Name": hop["Name"],
                         "Values": {
-                            "Type": type,
+                            "Type": hop_type,
                             "Alpha": alpha,
                             "Time": time,
                             "Util": 0.0,
@@ -1383,12 +1378,12 @@ class beer_engine_mainwin:
             self.scrolled_tree_ingredient.see(selection)
             self.scrolled_tree_ingredient.selection_set(selection)
 
-    def add_weight_hops(self, weight):    # Selected Item
+    def add_weight_hops(self, weight):  # Selected Item
         """Add/Remove Mass to/from Hops"""
         with contextlib.suppress(IndexError):
             selection = self.scrolled_tree_hops.selection()[0]
             hop_id = int(str(selection)[1:], 16)
-            grams = self.hops[id - 1]["Values"]["Grams"] + weight
+            grams = self.hops[hop_id - 1]["Values"]["Grams"] + weight
             grams = max(grams, 0)
             lb = grams / brew_data.constants["Conversion"]["lb-g"]
             oz = (lb - int(lb)) * 16
@@ -1426,7 +1421,6 @@ class beer_engine_mainwin:
             self.scrolled_tree_ingredient.focus_set()
             self.scrolled_tree_ingredient.see(selection)
             self.scrolled_tree_ingredient.selection_set(selection)
-
 
     def zero_hops(self):
         """Zero Data Values in Hop"""
@@ -1570,26 +1564,19 @@ class beer_engine_mainwin:
             # Not effected by efficiency  ["Copper Sugar", "Malt Extract"]
             non_mashables = [6.0, 5.0]
             return sum(
-                [
-                    formula(ingredient, 1)
-                    if brew_data.grist_data[ingredient["Name"]]["Type"] in non_mashables
-                    else formula(ingredient, brew_data.constants["Efficiency"])
-                    for ingredient in self.ingredients
-                ]
+                formula(ingredient, 1)
+                if brew_data.grist_data[ingredient["Name"]]["Type"] in non_mashables
+                else formula(ingredient, brew_data.constants["Efficiency"])
+                for ingredient in self.ingredients
             )
 
         """
-		MCU = color rating of the malt °L × weight(lb)
+		MCU = color rating of the malt °L x weight(lb)
 			°SRM = MCU 					(Traditional)
-			°SRM = 0.3 × MCU + 4.7		(Mosher)
-			°SRM = 0.2 × MCU + 8.4		(Daniels)
-			°SRM = 1.49 × MCU ^ 0.69	(Morey)
+			°SRM = 0.3 x MCU + 4.7		(Mosher)
+			°SRM = 0.2 x MCU + 8.4		(Daniels)
+			°SRM = 1.49 x MCU ^ 0.69	(Morey)
 		"""
-        # self.colour = 1.49 *
-        # (sum([((ingredient['Values']['EBC']*1.84)*(ingredient['Values']['lb:oz'][0]
-        # +
-        # (ingredient['Values']['lb:oz'][1]/16)))/(float(self.volume.get())/brew_data.constants['Conversion']['usg-l'])
-        # for ingredient in self.ingredients]) ** 0.69) # Morey's Formula
         self.refresh_hop()
         self.refresh_grist()
 
@@ -1834,41 +1821,7 @@ class beer_engine_mainwin:
         """Apply Attenuation to an Ingredient"""
         # print(brew_data.grist_data[ingredient['Name']]['Fermentability'])
         if int(brew_data.grist_data[ingredient["Name"]]["Fermentability"]) == 200:
-            table_dict = {
-                "low-62": 51,
-                "med-62": 59,
-                "high-62": 66,
-                "low-63": 52,
-                "med-63": 60,
-                "high-63": 68,
-                "low-64": 53,
-                "med-64": 61,
-                "high-64": 69,
-                "low-65": 53,
-                "med-65": 62,
-                "high-65": 69,
-                "low-66": 53,
-                "med-66": 62,
-                "high-66": 69,
-                "low-67": 53,
-                "med-67": 62,
-                "high-67": 69,
-                "low-68": 52,
-                "med-68": 60,
-                "high-68": 67,
-                "low-69": 51,
-                "med-69": 58,
-                "high-69": 66,
-                "low-70": 49,
-                "med-70": 56,
-                "high-70": 63,
-                "low-71": 47,
-                "med-71": 54,
-                "high-71": 61,
-                "low-72": 44,
-                "med-72": 51,
-                "high-72": 57,
-            }
+            table_dict = brew_data.table_dict
             atten = table_dict[self.sixth_tab.current_attenuation.get()]
         else:
             atten = brew_data.grist_data[ingredient["Name"]]["Fermentability"]
@@ -1942,311 +1895,35 @@ class beer_engine_mainwin:
             self.hops.reverse()
         self.refresh_hop()
 
-    def create_html(self, start="", open_browser=True, use_sorttable=False):
+    def create_html(self, open_browser=True, use_sorttable=False):
         """Export an HTML File from Recipe"""
-        self.recalculate()
-        if use_sorttable:
-            start += '<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
-        start += '<html><head><title>{name}</title><link rel="shortcut icon" href="{logo}" />'.format(
-            name=self.recipe_name_ent.get().replace("&", "&amp;"),
-            logo=resource_path("logo.png"),
+        html = htmlwriter.write_html(
+            use_sorttable=use_sorttable,
+            brew_data=brew_data,
+            added_additions=self.sixth_tab.added_additions,
+            ingredients=self.ingredients,
+            hops=self.hops,
+            logo_location=resource_path("logo.png"),
+            recipe_name=self.recipe_name_ent.get(),
+            volume=self.volume.get(),
+            og=self.og,
+            fg=self.fg,
+            abv=self.abv,
+            ibu=self.ibu,
+            colour=self.colour,
+            notes=self.seventh_tab.texpert.get("1.0", "end"),
+            water_boil_time=self.sixth_tab.water_boil_time_spinbx.get(),
         )
-        start += r"""
-		<!--Extracted From Graham Wheeler's Beer Engine recipe.html-->
-		<!--Yeast Section added by jimbob88-->
-		<style>
-		body {text-align: left; margin-left: 30; margin-top: 15px; background: #FFFFFF; font-family: Helvetica,Verdana,Tahoma,Sans-serif; font-size: 10pt; color: #000000}
-		table {border-spacing:0}
-		td {text-align:left;font-family: Helvetica,Verdana,Tahoma,Sans-serif; font-size: 10pt; color: #000000;padding:0px;border-bottom: 1px solid  #000000;border-left: 1px solid  #000000;}
-		td.ing1 {width:200; text-align:left;background-color: #FFFFFF;padding:4px}
-		td.ing2 {width:70; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.ing3 {width:90; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.ing4 {width:40; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
-		td.hop1 {width:152; text-align:left; background-color: #FFFFFF;padding:4px}
-		td.hop2 {width:60; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.hop3 {width:50; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.hop4 {width:60; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.hop5 {width:80; text-align:right; background-color: #FFFFFF;padding:4px}
-		td.hop6 {width:40; text-align:right; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
-		td.yst1 {width:300; text-align:left;background-color: #FFFFFF;padding:4px}
-		td.yst2 {width:100; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.yst3 {width:100; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.yst4 {width:40; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.yst5 {width:40; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.yst6 {width:20; text-align:center; background-color: #FFFFFF;padding:4px}
-		td.yst7 {width:10; text-align:center; background-color: #FFFFFF;padding:4px;border-right: 1px solid #000000;}
-		span.bold {font-weight: bold}
-		th.subhead {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-bottom: 1px solid #000000;}
-		th.subhead2 {font-weight:bold; text-align:center;background-color:#E8E8E8;padding:4px;border-top: 1px solid #000000;border-left: 1px solid #000000;border-right: 1px solid #000000;border-bottom: 1px solid #000000;}
-		table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
-			content: " \25B4\25BE"
-		}
-		</style>"""
-        start += "</head><body>"
-        start += "<h2>{name}</h2>".format(
-            name=self.recipe_name_ent.get().replace("&", "&amp;")
-        )
-        if use_sorttable:
-            start += '<table style="width:800px" class="sortable" id="sortable">'
-        else:
-            start += '<table style="width:800px">'
-        start += '<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
-
-        for addition in self.sixth_tab.added_additions:
-            try:
-                if (
-                    brew_data.water_chemistry_additions[addition]["Values"]["Type"]
-                    == "Malt"
-                ):
-                    start += "<tr>"
-                    start += '<td class="ing1">{name}</td>'.format(name=addition)
-                    start += '<td class="ing2">N/A</td>'
-                    start += '<td class="ing3">N/A</td>'
-                    start += '<td class="ing3">N/A</td>'
-                    start += '<td class="ing4">N/A</td>'
-                    start += "</tr>"
-            except KeyError:
-                pass
-
-        for ingredient in self.ingredients:
-            start += "<tr>"
-            start += '<td class="ing1">{name}</td>'.format(name=ingredient["Name"])
-            start += '<td class="ing2">{colour}</td>'.format(
-                colour=ingredient["Values"]["EBC"]
-            )
-            start += '<td class="ing3">{lb}:{oz}</td>'.format(
-                lb=int(ingredient["Values"]["lb:oz"][0]),
-                oz=round(ingredient["Values"]["lb:oz"][1], 1),
-            )
-            start += '<td class="ing3">{grams}</td>'.format(
-                grams=(round(ingredient["Values"]["Grams"], 1))
-                if (ingredient["Values"]["Grams"] - int(ingredient["Values"]["Grams"]))
-                >= 2
-                else round(ingredient["Values"]["Grams"])
-            )
-            start += '<td class="ing4">{percentage}%</td>'.format(
-                percentage=ingredient["Values"]["Percent"]
-            )
-            start += "</tr>"
-        start += "</table><br>"
-        if (
-            start[-179:]
-            == '<tr><th class="subhead">Fermentable</th><th class="subhead">Colour</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>'
-        ):
-            start = start[:-179]
-
-        if self.sixth_tab.water_boil_is_disabled.get() == 1:
-            start += "<p><b>Boil Time: </b>{boil_time}</p>".format(
-                boil_time=self.sixth_tab.water_boil_time_spinbx.get()
-            )
-
-        if use_sorttable:
-            start += '<table style="width:800px" class="sortable" id="sortable">'
-        else:
-            start += '<table style="width:800px">'
-        start += '<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr>'
-        # temp_hop = [*self.hops] + [{'Name': addition, 'Values': brew_data.water_chemistry_additions[addition]['Values']} if brew_data.water_chemistry_additions[addition]['Values']['Type'] == 'Hop' else None for addition in self.sixth_tab.added_additions]
-        temp_hop = self.hops[:]
-        for addition in self.sixth_tab.added_additions:
-            try:
-                if (
-                    brew_data.water_chemistry_additions[addition]["Values"]["Type"]
-                    == "Hop"
-                ):
-                    temp_hop.append(
-                        {
-                            "Name": addition,
-                            "Values": brew_data.water_chemistry_additions[addition][
-                                "Values"
-                            ],
-                        }
-                    )
-                else:
-                    temp_hop.append(None)
-            except KeyError:
-                pass
-
-        temp_hop = list(
-            sorted(
-                [x for x in temp_hop if x is not None],
-                key=lambda k: k["Values"]["Time"],
-            )
-        )
-        for hop in reversed(temp_hop):
-            if hop["Values"]["Type"] != "Hop":
-                start += "<tr>"
-                start += '<td class="hop1">{name}</td>'.format(name=hop["Name"])
-                start += '<td class="hop2">{type}</td>'.format(
-                    type=hop["Values"]["Type"]
-                )
-                start += '<td class="hop3">{alpha}</td>'.format(
-                    alpha=hop["Values"]["Alpha"]
-                )
-                start += '<td class="hop4">{time}</td>'.format(
-                    time=round(hop["Values"]["Time"])
-                )
-                start += '<td class="hop5">{lb}:{oz}</td>'.format(
-                    lb=int(hop["Values"]["lb:oz"][0]),
-                    oz=round(hop["Values"]["lb:oz"][1], 1),
-                )
-                start += '<td class="hop5">{grams}</td>'.format(
-                    grams=(round(hop["Values"]["Grams"], 1))
-                    if (hop["Values"]["Grams"] - int(hop["Values"]["Grams"])) >= 2
-                    else round(hop["Values"]["Grams"])
-                )
-                start += '<td class="hop6">{percentage}%</td>'.format(
-                    percentage=hop["Values"]["Percent"]
-                )
-                start += "</tr>"
-            else:
-                start += "<tr>"
-                start += '<td class="hop1">{name}</td>'.format(name=hop["Name"])
-                start += '<td class="hop2">N/A</td>'
-                start += '<td class="hop3">N/A</td>'
-                start += '<td class="hop4">{time}</td>'.format(
-                    time=hop["Values"]["Time"]
-                )
-                start += '<td class="hop5">N/A</td>'
-                start += '<td class="hop5">N/A</td>'
-                start += '<td class="hop6">N/A</td>'
-                start += "</tr>"
-        start += "</table><br>"
-        if (
-            start[-236:]
-            == '<tr><th class="subhead">Hop Variety</th><th class="subhead">Type</th><th class="subhead">Alpha</th><th class="subhead">Time</th><th class="subhead">lb:oz</th><th class="subhead">Grams</th><th class="subhead2">Ratio</th></tr></table><br>'
-        ):
-            start = start[:-236]
-
-        if use_sorttable:
-            start += '<table style="width:800px" class="sortable" id="sortable">'
-        else:
-            start += '<table style="width:800px">'
-        start += '<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr>'
-        for addition in self.sixth_tab.added_additions:
-            try:
-                if brew_data.yeast_data[addition]["Type"] == "D":
-                    yeast_type = "Dry"
-                elif brew_data.yeast_data[addition]["Type"] == "L":
-                    yeast_type = "Liquid"
-                else:
-                    yeast_type = brew_data.yeast_data[addition]["Type"]
-
-                lab = brew_data.yeast_data[addition]["Lab"]
-                origin = brew_data.yeast_data[addition]["Origin"]
-                flocculation = brew_data.yeast_data[addition]["Flocculation"]
-                attenuation = brew_data.yeast_data[addition]["Attenuation"]
-                if (
-                    len(
-                        brew_data.yeast_data[addition]["Temperature"]
-                        .replace("°", "")
-                        .split("-")
-                    )
-                    >= 2
-                ):
-                    temperature = (
-                        brew_data.yeast_data[addition]["Temperature"]
-                        .replace("°", "")
-                        .split("-")[0]
-                    )
-                    temperature += (
-                        "-"
-                        + brew_data.yeast_data[addition]["Temperature"]
-                        .replace("°", "")
-                        .split("-")[1]
-                    )
-                else:
-                    temperature = temperature
-
-                start += "<tr>"
-                start += '<td class="yst1">{name}</td>'.format(name=addition)
-                start += '<td class="yst2">{lab}</td>'.format(lab=lab)
-                start += '<td class="yst3">{origin}</td>'.format(origin=origin)
-                start += '<td class="yst4">{yeast_type}</td>'.format(
-                    yeast_type=yeast_type
-                )
-                start += '<td class="yst5">{flocculation}</td>'.format(
-                    flocculation=flocculation
-                )
-                start += '<td class="yst6">{attenuation}</td>'.format(
-                    attenuation=attenuation
-                )
-                start += '<td class="yst7">{temperature}</td>'.format(
-                    temperature=temperature
-                )
-                start += "</tr>"
-            except KeyError:
-                try:
-                    if (
-                        brew_data.water_chemistry_additions[addition]["Values"]["Type"]
-                        == "Yeast"
-                    ):
-                        start += "<tr>"
-                        start += '<td class="yst1">{name}</td>'.format(name=addition)
-                        start += '<td class="yst2">N/A</td>'
-                        start += '<td class="yst3">N/A</td>'
-                        start += '<td class="yst4">N/A</td>'
-                        start += '<td class="yst5">N/A</td>'
-                        start += '<td class="yst6">N/A</td>'
-                        start += '<td class="yst7">N/A</td>'
-                        start += "</tr>"
-                except KeyError:
-                    pass
-        start += "</table>"
-        if (
-            start[-245:]
-            == '<tr><th class="subhead">Yeast</th><th class="subhead">Lab</th><th class="subhead">Origin</th><th class="subhead">Type</th><th class="subhead">Flocculation</th><th class="subhead">Attenuation</th><th class="subhead2">Temperature</th></tr></table>'
-        ):
-            start = start[:-245]
-
-        start += "<p><b>Final Volume: </b>{volume} Litres</p>".format(
-            volume=self.volume.get()
-        )
-        start += "<p><b>Original Gravity: </b>{og}</p>".format(og=round(self.og, 1))
-        start += "<p><b>Final Gravity: </b>{fg}</p>".format(fg=round(self.fg, 1))
-        start += "<p><b>Alcohol Content: </b>{abv}% ABV</p>".format(
-            abv=round(self.abv, 1)
-        )
-        start += "<p><b>Mash Efficiency: </b>{efficiency}</p>".format(
-            efficiency=brew_data.constants["Efficiency"] * 100
-        )
-        start += "<p><b>Bitterness: </b>{bitterness} IBU</p>".format(
-            bitterness=round(self.ibu)
-        )
-        start += "<p><b>Colour: </b>{colour} EBC</p>".format(
-            colour=round(self.colour, 1)
-        )
-        notes = self.seventh_tab.texpert.get("1.0", "end")
-        if self.seventh_tab.html_formatting.get():
-            start += (
-                """<hr><h2>Notes</h2>\n{notes}""".format(notes=notes)
-                if len(notes) >= 1
-                else ""
-            )
-        else:
-            start += (
-                """<hr><h2>Notes</h2>\n<p>{notes}</p>""".format(
-                    notes=notes.replace("\n", "<br>")
-                )
-                if len(notes) >= 1
-                else ""
-            )
-        start += "</body>"
-        start += "</html>"
-
-        start = (
-            bs4.BeautifulSoup(start, features="html.parser").prettify()
-            if "bs4" in sys.modules
-            else start
-        )
+        if "bs4" in sys.modules:
+            html = bs4.BeautifulSoup(html, features="html.parser").prettify()
         text_file_name = resource_path(
             "{recipe_name}.html".format(
                 recipe_name=self.recipe_name_ent.get().replace("/", "⁄")
             )
         )
         with open(text_file_name, "w", encoding="utf-8") as hs:
-            hs.write(start)
-        if open_browser:
-            webbrowser.open("file://" + os.path.realpath(text_file_name), new=1)
+            hs.write(html)
+        webbrowser.open(text_file_name)
 
     def create_complex_html(self):
         """Create HTML with JavaScript Sorttable module"""

@@ -368,6 +368,19 @@ yeast_data = {'Abbaye Belgian Ale': {'Type': 'D', 'Lab': 'Lallemand', 'Flocculat
 	 'Whitbread Ale (Dry) 1098': {'Type': 'L', 'Lab': 'Wyeast', 'Flocculation': 'Medium', 'Attenuation': '73-75%', 'Temperature': '18-22°', 'Description': ' Ferments dry and crisp, slightly tart and fruity.', 'Origin': 'Whitbread - dry'}
 }
 
+table_dict = {
+	"low-62": 51, "med-62": 59, "high-62": 66,
+	"low-63": 52, "med-63": 60, "high-63": 68,
+	"low-64": 53, "med-64": 61, "high-64": 69,
+	"low-65": 53, "med-65": 62, "high-65": 69, 
+	"low-66": 53, "med-66": 62, "high-66": 69,
+	"low-67": 53, "med-67": 62, "high-67": 69,
+	"low-68": 52, "med-68": 60, "high-68": 67,
+	"low-69": 51, "med-69": 58, "high-69": 66,
+	"low-70": 49, "med-70": 56, "high-70": 63,
+	"low-71": 47, "med-71": 54, "high-71": 61,
+	"low-72": 44, "med-72": 51, "high-72": 57,
+}
 
 constants = {
 	u'Efficiency': 0.75,
