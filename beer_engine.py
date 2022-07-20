@@ -16,7 +16,7 @@ import ast
 import brew_data
 import contextlib
 import database
-
+from typing import Union
 with contextlib.suppress(ImportError):
 	import bs4
 
@@ -26,7 +26,7 @@ _bgcolor = 'SystemButtonFace' if platform.system() == 'Windows' else '#d9d9d9'
 
 class beer_engine_mainwin:
 	''' WWW Main Window Creation '''
-	def __init__(self, master=None):
+	def __init__(self, master: Union[None, tk.Tk] = None):
 		''' Tab creation + 1st tab creation '''
 		_fgcolor = '#000000'  # X11 color: 'black'
 		_compcolor = '#d9d9d9'  # X11 color: 'gray85'
@@ -69,9 +69,8 @@ class beer_engine_mainwin:
 				brew_data.water_chemistry_additions = {}
 			database.write_water_chem_data(brew_data.water_chemistry_additions)
 
-		self.style.configure('.', background=_bgcolor)
-		self.style.configure('.', foreground=_fgcolor)
-		self.style.configure('.', font="TkDefaultFont")
+		self.style.configure('.', background=_bgcolor,  foreground=_fgcolor, font="TkDefaultFont")
+		
 		self.style.map(
 			'.', background=[
 				('selected', _compcolor), ('active', _ana2color)])
@@ -108,6 +107,44 @@ class beer_engine_mainwin:
 		self.master.columnconfigure(0, weight=1)
 
 		######################### Menu ############################
+		self.setup_menu(_fgcolor)
+
+		######################## First Tab ########################
+		self.setup_main_tab(font9, _bgcolor)
+
+		self.refresh_grist()
+		self.refresh_hop()
+		# self.tabbed_frame.bind('<Button-1>', lambda event: self.refresh_all()
+		# if self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
+		# event.x, event.y) == 1 else False) #
+		# print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
+		# "tab", event.x, event.y))
+		self.tabbed_frame.bind('<Button-1>', self.refresh_tab_onclick)
+
+		######################## Second Tab ########################
+		# for hop in sorted(brew_data.hop_data):
+		#	self.second_tab.hop_lstbx.insert(tk.END, hop)
+		self.second_tab.reinsert()
+
+		######################### Third Tab #########################
+		# for grist in sorted(brew_data.grist_data):
+		#	self.third_tab.grist_lstbx.insert(tk.END, grist)
+		self.third_tab.reinsert()
+
+		######################### Fifth Tab ##########################
+		# self.tabbed_frame.bind('<Button-1>', lambda event:
+		# self.fifth_tab.refresh_all() if
+		# self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
+		# event.x, event.y) == 5 else False) #
+		# print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
+		# "tab", event.x, event.y))
+
+		######################### Fourth Tab ##########################
+		# for yeast in sorted(brew_data.yeast_data):
+		#	self.fourth_tab.yeast_lstbx.insert(tk.END, yeast)
+		self.fourth_tab.reinsert()
+
+	def setup_menu(self, _fgcolor: str):
 		self.menubar = tk.Menu(
 			self.master,
 			font="TkMenuFont",
@@ -240,28 +277,21 @@ class beer_engine_mainwin:
 			"<Control-h>",
 			lambda e: webbrowser.open_new('https://github.com/jimbob88/wheelers-wort-works/wiki'))
 
-		######################## First Tab ########################
+	def setup_main_tab(self, font9: str, _bgcolor: str):
 		self.first_tab.configure(background=_bgcolor)
 		self.recipe_name_ent = tk.Entry(self.first_tab)
 		self.recipe_name_ent.place(
 			relx=0.126, rely=0.021, height=23, relwidth=0.28)
-		self.recipe_name_ent.configure(background="white")
-		self.recipe_name_ent.configure(font="TkFixedFont")
-		self.recipe_name_ent.configure(selectbackground="#c4c4c4")
-		self.recipe_name_ent.configure(justify='center')
+		self.recipe_name_ent.configure(background="white", font="TkFixedFont", selectbackground="#c4c4c4", justify='center')
 		self.recipe_name_ent.insert(0, 'No Name')
 
 		self.recipe_name_lbl = tk.Label(self.first_tab)
 		self.recipe_name_lbl.place(relx=0.013, rely=0.021, height=18, width=90)
-		self.recipe_name_lbl.configure(activebackground="#f9f9f9")
-		self.recipe_name_lbl.configure(background=_bgcolor)
-		self.recipe_name_lbl.configure(text='''Recipe Name:''')
+		self.recipe_name_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, text='Recipe Name:')
 
 		self.volume_lbl = tk.Label(self.first_tab)
 		self.volume_lbl.place(relx=0.417, rely=0.021, height=18, width=53)
-		self.volume_lbl.configure(activebackground="#f9f9f9")
-		self.volume_lbl.configure(background=_bgcolor)
-		self.volume_lbl.configure(text='''Volume:''')
+		self.volume_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, text='Volume:')
 
 		self.volume = tk.StringVar()
 		self.volume_ent = tk.Entry(self.first_tab)
@@ -270,12 +300,7 @@ class beer_engine_mainwin:
 			rely=0.021,
 			height=23,
 			width=55)  # relwidth=0.045
-		self.volume_ent.configure(background="white")
-		self.volume_ent.configure(font="TkFixedFont")
-		self.volume_ent.configure(selectbackground="#c4c4c4")
-		self.volume_ent.configure(justify='center')
-		self.volume_ent.configure(validate="focusout")
-		self.volume_ent.configure(textvariable=self.volume)
+		self.volume_ent.configure(background="white", font="TkFixedFont", selectbackground="#c4c4c4", justify='center', validate="focusout", textvariable=self.volume)
 		self.volume_ent.configure(
 			validatecommand=lambda: self.boil_vol.set(
 				round(
@@ -295,8 +320,7 @@ class beer_engine_mainwin:
 
 		self.boil_volume_lbl = tk.Label(self.first_tab)
 		self.boil_volume_lbl.place(relx=0.571, rely=0.021, height=18, width=85)
-		self.boil_volume_lbl.configure(text='''Boil Volume:''')
-		self.boil_volume_lbl.configure(background=_bgcolor)
+		self.boil_volume_lbl.configure(background=_bgcolor, text='Boil Volume:')
 
 		self.boil_vol = tk.StringVar()
 		self.boil_volume_ent = tk.Entry(self.first_tab)
@@ -305,123 +329,82 @@ class beer_engine_mainwin:
 			rely=0.021,
 			height=23,
 			relwidth=0.058)
-		self.boil_volume_ent.configure(background="white")
-		self.boil_volume_ent.configure(font="TkFixedFont")
-		self.boil_volume_ent.configure(width=46)
-		self.boil_volume_ent.configure(justify='center')
-		self.boil_volume_ent.configure(textvariable=self.boil_vol)
+		self.boil_volume_ent.configure(background="white", font="TkFixedFont", justify='center', textvariable=self.boil_vol)
 		self.boil_vol.set(
 			str(brew_data.constants['Volume'] * brew_data.constants['Boil Volume Scale']))
 		self.ingredient_rem_butt = tk.Button(self.first_tab)
 		self.ingredient_rem_butt.place(
 			relx=0.013, rely=0.402, height=29, width=76)
-		self.ingredient_rem_butt.configure(activebackground="#f9f9f9")
-		self.ingredient_rem_butt.configure(background=_bgcolor)
-		self.ingredient_rem_butt.configure(cursor="X_cursor")
-		self.ingredient_rem_butt.configure(text='''Remove''')
-		self.ingredient_rem_butt.configure(command=self.delete_ingredient)
+		self.ingredient_rem_butt.configure(activebackground="#f9f9f9", background=_bgcolor, cursor="X_cursor", text='Remove', command=self.delete_ingredient)
 
 		self.ingredient_add_new_butt = tk.Button(self.first_tab)
 		self.ingredient_add_new_butt.place(
 			relx=0.606, rely=0.085, height=28, width=82)
-		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9")
-		self.ingredient_add_new_butt.configure(background=_bgcolor)
-		self.ingredient_add_new_butt.configure(text='''Add New''')
-		self.ingredient_add_new_butt.configure(command=self.add_grist)
+		self.ingredient_add_new_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='''Add New''', command=self.add_grist)
 
 		self.adjust_weight_ing_lbl = tk.Label(self.first_tab)
 		self.adjust_weight_ing_lbl.place(
 			relx=0.606, rely=0.169, height=14, width=91)
-		self.adjust_weight_ing_lbl.configure(activebackground="#f9f9f9")
-		self.adjust_weight_ing_lbl.configure(background=_bgcolor)
-		self.adjust_weight_ing_lbl.configure(font=font9)
-		self.adjust_weight_ing_lbl.configure(text='''Adjust Weight''')
+		self.adjust_weight_ing_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, font=font9, text='Adjust Weight')
 
 		self.add_1000g_ing_butt = tk.Button(self.first_tab)
 		self.add_1000g_ing_butt.place(
 			relx=0.606, rely=0.211, height=28, width=45)
-		self.add_1000g_ing_butt.configure(activebackground="#f9f9f9")
-		self.add_1000g_ing_butt.configure(background=_bgcolor)
-		self.add_1000g_ing_butt.configure(text='''+1Kg''')
+		self.add_1000g_ing_butt.configure(activebackground="#f9f9f9", text='+1Kg', background=_bgcolor, font="TkFixedFont")
 		self.add_1000g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(1000))
-		self.add_1000g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_100g_ing_butt = tk.Button(self.first_tab)
 		self.add_100g_ing_butt.place(
 			relx=0.606, rely=0.275, height=28, width=45)
-		self.add_100g_ing_butt.configure(activebackground="#f9f9f9")
-		self.add_100g_ing_butt.configure(background=_bgcolor)
-		self.add_100g_ing_butt.configure(text='''+100g''')
+		self.add_100g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+100g', font="TkFixedFont")
 		self.add_100g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(100))
-		self.add_100g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_1000g_ing_butt = tk.Button(self.first_tab)
 		self.rem_1000g_ing_butt.place(
 			relx=0.669, rely=0.211, height=28, width=45)
-		self.rem_1000g_ing_butt.configure(activebackground="#f9f9f9")
-		self.rem_1000g_ing_butt.configure(background=_bgcolor)
-		self.rem_1000g_ing_butt.configure(text='''-1Kg''')
+		self.rem_1000g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-1Kg', font="TkFixedFont")
 		self.rem_1000g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(-1000))
-		self.rem_1000g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_100g_ing_butt = tk.Button(self.first_tab)
 		self.rem_100g_ing_butt.place(
 			relx=0.669, rely=0.275, height=28, width=45)
-		self.rem_100g_ing_butt.configure(activebackground="#f9f9f9")
-		self.rem_100g_ing_butt.configure(background=_bgcolor)
-		self.rem_100g_ing_butt.configure(text='''-100g''')
+		self.rem_100g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-100g', font="TkFixedFont")
 		self.rem_100g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(-100))
-		self.rem_100g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_10g_ing_butt = tk.Button(self.first_tab)
 		self.add_10g_ing_butt.place(
 			relx=0.606, rely=0.338, height=28, width=45)
-		self.add_10g_ing_butt.configure(activebackground="#f9f9f9")
-		self.add_10g_ing_butt.configure(background=_bgcolor)
-		self.add_10g_ing_butt.configure(text='''+10g''')
+		self.add_10g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+10g', font="TkFixedFont")
 		self.add_10g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(10))
-		self.add_10g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_10g_ing_butt = tk.Button(self.first_tab)
 		self.rem_10g_ing_butt.place(
 			relx=0.669, rely=0.338, height=28, width=45)
-		self.rem_10g_ing_butt.configure(activebackground="#f9f9f9")
-		self.rem_10g_ing_butt.configure(background=_bgcolor)
-		self.rem_10g_ing_butt.configure(text='''-10g''')
+		self.rem_10g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-10g', font="TkFixedFont")
 		self.rem_10g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(-10))
-		self.rem_10g_ing_butt.configure(font="TkFixedFont")
 
 		self.add_1g_ing_butt = tk.Button(self.first_tab)
 		self.add_1g_ing_butt.place(relx=0.606, rely=0.402, height=28, width=45)
-		self.add_1g_ing_butt.configure(activebackground="#f9f9f9")
-		self.add_1g_ing_butt.configure(background=_bgcolor)
-		self.add_1g_ing_butt.configure(text='''+1g''')
+		self.add_1g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+1g', font="TkFixedFont")
 		self.add_1g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(1))
-		self.add_1g_ing_butt.configure(font="TkFixedFont")
 
 		self.rem_1g_ing_butt = tk.Button(self.first_tab)
 		self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, height=28, width=45)
-		self.rem_1g_ing_butt.configure(activebackground="#f9f9f9")
-		self.rem_1g_ing_butt.configure(background=_bgcolor)
-		self.rem_1g_ing_butt.configure(text='''-1g''')
+		self.rem_1g_ing_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-1g', font="TkFixedFont")
 		self.rem_1g_ing_butt.configure(
 			command=lambda: self.add_weight_ingredients(-1))
-		self.rem_1g_ing_butt.configure(font="TkFixedFont")
 
 		self.original_gravity_lbl = tk.Label(self.first_tab)
 		self.original_gravity_lbl.place(
 			relx=0.72, rely=0.085, height=14, width=79)
-		self.original_gravity_lbl.configure(activebackground="#f9f9f9")
-		self.original_gravity_lbl.configure(background=_bgcolor)
-		self.original_gravity_lbl.configure(font=font9)
-		self.original_gravity_lbl.configure(text='''Original Gravity''')
+		self.original_gravity_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, font=font9, text='Original Gravity')
 
 		self.original_gravity_ent = tk.Entry(self.first_tab)
 		self.original_gravity_ent.place(
@@ -430,25 +413,16 @@ class beer_engine_mainwin:
 			height=20,
 			width=18,
 			relwidth=0.058)
-		self.original_gravity_ent.configure(background="white")
-		self.original_gravity_ent.configure(font="TkFixedFont")
-		self.original_gravity_ent.configure(selectbackground="#c4c4c4")
-		self.original_gravity_ent.configure(justify='center')
+		self.original_gravity_ent.configure(background="white", font="TkFixedFont", selectbackground="#c4c4c4", justify='center')
 		
 		self.ingredient_zero_butt = tk.Button(self.first_tab)
 		self.ingredient_zero_butt.place(
 			relx=0.745, rely=0.211, height=29, width=55)
-		self.ingredient_zero_butt.configure(activebackground="#f9f9f9")
-		self.ingredient_zero_butt.configure(background=_bgcolor)
-		self.ingredient_zero_butt.configure(text='''Zero''')
-		self.ingredient_zero_butt.configure(command=self.zero_ingredients)
+		self.ingredient_zero_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='Zero', command=self.zero_ingredients)
 
 		self.recalc_butt = tk.Button(self.first_tab)
 		self.recalc_butt.place(relx=0.859, rely=0.042, height=29, width=97)
-		self.recalc_butt.configure(activebackground="#f9f9f9")
-		self.recalc_butt.configure(background=_bgcolor)
-		self.recalc_butt.configure(text='''Recalculate''')
-		self.recalc_butt.configure(command=self.recalculate)
+		self.recalc_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='Recalculate', command=self.recalculate)
 
 		self.calculation_frame = ttk.Labelframe(self.first_tab)
 		self.calculation_frame.place(
@@ -456,147 +430,89 @@ class beer_engine_mainwin:
 			rely=0.106,
 			relheight=0.391,
 			relwidth=0.152)
-		self.calculation_frame.configure(relief='sunken')
-		self.calculation_frame.configure(text='''Calculation''')
-		self.calculation_frame.configure(underline="0")
-		self.calculation_frame.configure(relief='sunken')
+		self.calculation_frame.configure(relief='sunken', text='Calculation', underline="0")
 		self.calculation_frame.grid_rowconfigure(0, weight=1)
 		self.calculation_frame.grid_columnconfigure(0, weight=1)
 
-		# self.calc_lbl = tk.Message(self.calculation_frame)
-		# self.calc_lbl.grid(row=0, column=0, pady=5,padx=5)
-		# self.calc_lbl.configure(background=_bgcolor)
-		# self.calc_lbl.configure(foreground="#000000")
-		# self.calc_lbl.configure(font=(None, 7))
-		# self.calc_lbl.configure(relief='flat')
-		# #self.calc_lbl.configure(anchor='nw')
-		# self.calc_lbl.configure(text='''Efficiency: {efficiency}%
-		# Final Gravity: {final_gravity}
-		# Alcohol (ABV): {abv}
-		# Colour: {colour}EBC
-		# Mash Liquor: {mash_liquor}L
-		# IBU:GU: {ibu_gu}'''.format(efficiency=brew_data.constants['Efficiency']*100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0))
-		# #self.calc_lbl.configure(width=97)
-
 		self.calc_lbl = tk.Text(self.calculation_frame)
 		self.calc_lbl.grid(row=0, column=0, pady=5, padx=5)
-		self.calc_lbl.configure(background=_bgcolor)
-		self.calc_lbl.configure(foreground="#000000")
-		self.calc_lbl.configure(font=(None, 7))
-		self.calc_lbl.configure(relief='flat', wrap=tk.WORD)
-		# self.calc_lbl.configure(anchor='nw')
+		self.calc_lbl.configure(background=_bgcolor, foreground="#000000", font=(None, 7), relief='flat', wrap=tk.WORD)
+
 		default_text = '''Efficiency: {efficiency}%{enter}Final Gravity: {final_gravity}{enter}Alcohol (ABV): {abv}{enter}Colour: {colour}EBC{enter}Mash Liquor: {mash_liquor}L{enter}IBU:GU: {ibu_gu}'''.format(
 			efficiency=brew_data.constants['Efficiency'] * 100, final_gravity=1.000, abv=0, colour=0, mash_liquor=0, ibu_gu=0, enter='\n\n')
 
 		self.calc_lbl.insert('end', default_text)
 		self.calc_lbl.configure(state='disabled')
-		# self.calc_lbl.configure(width=97)
 
 		self.hop_add_new_butt = tk.Button(self.first_tab)
 		self.hop_add_new_butt.place(
 			relx=0.707, rely=0.507, height=29, width=80)
-		self.hop_add_new_butt.configure(activebackground="#f9f9f9")
-		self.hop_add_new_butt.configure(background=_bgcolor)
-		self.hop_add_new_butt.configure(text='''Add Hop''')
-		self.hop_add_new_butt.configure(command=self.add_hop)
+		self.hop_add_new_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='Add Hop', command=self.add_hop)
 
 		self.adjust_weight_hop_lbl = tk.Label(self.first_tab)
 		self.adjust_weight_hop_lbl.place(
 			relx=0.72, rely=0.592, height=14, width=91)
-		self.adjust_weight_hop_lbl.configure(activebackground="#f9f9f9")
-		self.adjust_weight_hop_lbl.configure(background=_bgcolor)
-		self.adjust_weight_hop_lbl.configure(font=font9)
-		self.adjust_weight_hop_lbl.configure(text='''Adjust Weight''')
+		self.adjust_weight_hop_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, font=font9, text='Adjust Weight')
 
 		self.add_100g_hop_butt = tk.Button(self.first_tab)
 		self.add_100g_hop_butt.place(
 			relx=0.72, rely=0.634, height=28, width=45)
-		self.add_100g_hop_butt.configure(activebackground="#f9f9f9")
-		self.add_100g_hop_butt.configure(background=_bgcolor)
-		self.add_100g_hop_butt.configure(text='''+100g''')
+		self.add_100g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+100g', font="TkFixedFont")
 		self.add_100g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(100))
-		self.add_100g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_100g_hop_butt = tk.Button(self.first_tab)
 		self.rem_100g_hop_butt.place(
 			relx=0.783, rely=0.634, height=28, width=45)
-		self.rem_100g_hop_butt.configure(activebackground="#f9f9f9")
-		self.rem_100g_hop_butt.configure(background=_bgcolor)
-		self.rem_100g_hop_butt.configure(text='''-100g''')
+		self.rem_100g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-100g', font="TkFixedFont")
 		self.rem_100g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(-100))
-		self.rem_100g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_25g_hop_butt = tk.Button(self.first_tab)
 		self.add_25g_hop_butt.place(relx=0.72, rely=0.698, height=28, width=45)
-		self.add_25g_hop_butt.configure(activebackground="#f9f9f9")
-		self.add_25g_hop_butt.configure(background=_bgcolor)
-		self.add_25g_hop_butt.configure(text='''+25g''')
+		self.add_25g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+25g', font="TkFixedFont")
 		self.add_25g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(25))
-		self.add_25g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_25g_hop_butt = tk.Button(self.first_tab)
 		self.rem_25g_hop_butt.place(
 			relx=0.783, rely=0.698, height=28, width=45)
-		self.rem_25g_hop_butt.configure(activebackground="#f9f9f9")
-		self.rem_25g_hop_butt.configure(background=_bgcolor)
-		self.rem_25g_hop_butt.configure(text='''-25g''')
+		self.rem_25g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-25g', font="TkFixedFont")
 		self.rem_25g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(-25))
-		self.rem_25g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_10g_hop_butt = tk.Button(self.first_tab)
 		self.add_10g_hop_butt.place(relx=0.72, rely=0.761, height=28, width=45)
-		self.add_10g_hop_butt.configure(activebackground="#f9f9f9")
-		self.add_10g_hop_butt.configure(background=_bgcolor)
-		self.add_10g_hop_butt.configure(text='''+10g''')
+		self.add_10g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+10g', font="TkFixedFont")
 		self.add_10g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(10))
-		self.add_10g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_10g_hop_butt = tk.Button(self.first_tab)
 		self.rem_10g_hop_butt.place(
 			relx=0.783, rely=0.761, height=28, width=45)
-		self.rem_10g_hop_butt.configure(activebackground="#f9f9f9")
-		self.rem_10g_hop_butt.configure(background=_bgcolor)
-		self.rem_10g_hop_butt.configure(text='''-10g''')
+		self.rem_10g_hop_butt.configure(activebackground="#f9f9f9", text='-10g', background=_bgcolor, font="TkFixedFont")
 		self.rem_10g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(-10))
-		self.rem_10g_hop_butt.configure(font="TkFixedFont")
 
 		self.add_1g_hop_butt = tk.Button(self.first_tab)
 		self.add_1g_hop_butt.place(relx=0.72, rely=0.825, height=28, width=45)
-		self.add_1g_hop_butt.configure(activebackground="#f9f9f9")
-		self.add_1g_hop_butt.configure(background=_bgcolor)
-		self.add_1g_hop_butt.configure(text='''+1g''')
+		self.add_1g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='+1g', font="TkFixedFont")
 		self.add_1g_hop_butt.configure(command=lambda: self.add_weight_hops(1))
-		self.add_1g_hop_butt.configure(font="TkFixedFont")
 
 		self.rem_1g_hop_butt = tk.Button(self.first_tab)
 		self.rem_1g_hop_butt.place(relx=0.783, rely=0.825, height=28, width=45)
-		self.rem_1g_hop_butt.configure(activebackground="#f9f9f9")
-		self.rem_1g_hop_butt.configure(background=_bgcolor)
-		self.rem_1g_hop_butt.configure(text='''-1g''')
+		self.rem_1g_hop_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='-1g', font="TkFixedFont")
 		self.rem_1g_hop_butt.configure(
 			command=lambda: self.add_weight_hops(-1))
-		self.rem_1g_hop_butt.configure(font="TkFixedFont")
 
 		self.hop_zero_butt = tk.Button(self.first_tab)
 		self.hop_zero_butt.place(relx=0.859, rely=0.634, height=28, width=55)
-		self.hop_zero_butt.configure(activebackground="#f9f9f9")
-		self.hop_zero_butt.configure(background=_bgcolor)
-		self.hop_zero_butt.configure(text='''Zero''')
-		self.hop_zero_butt.configure(command=self.zero_hops)
+		self.hop_zero_butt.configure(activebackground="#f9f9f9", background=_bgcolor, text='Zero', command=self.zero_hops)
 
 		self.bitterness_ibu_lbl = tk.Label(self.first_tab)
 		self.bitterness_ibu_lbl.place(
 			relx=0.846, rely=0.507, height=14, width=79)
-		self.bitterness_ibu_lbl.configure(activebackground="#f9f9f9")
-		self.bitterness_ibu_lbl.configure(background=_bgcolor)
-		self.bitterness_ibu_lbl.configure(font=font9)
-		self.bitterness_ibu_lbl.configure(text='''Bitterness IBU''')
+		self.bitterness_ibu_lbl.configure(activebackground="#f9f9f9", background=_bgcolor, text='Bitterness IBU', font=font9)
 
 		self.bitterness_ibu_ent = tk.Entry(self.first_tab)
 		self.bitterness_ibu_ent.place(
@@ -605,88 +521,53 @@ class beer_engine_mainwin:
 			height=20,
 			width=18,
 			relwidth=0.058)
-		self.bitterness_ibu_ent.configure(background="white")
-		self.bitterness_ibu_ent.configure(font="TkFixedFont")
-		self.bitterness_ibu_ent.configure(selectbackground="#c4c4c4")
-		self.bitterness_ibu_ent.configure(justify='center')
+		self.bitterness_ibu_ent.configure(background="white", font="TkFixedFont", selectbackground="#c4c4c4", justify='center')
 
 		self.hop_rem_butt = tk.Button(self.first_tab)
 		self.hop_rem_butt.place(relx=0.013, rely=0.825, height=28, width=76)
-		self.hop_rem_butt.configure(activebackground="#f9f9f9")
-		self.hop_rem_butt.configure(background=_bgcolor)
-		self.hop_rem_butt.configure(cursor="X_cursor")
-		self.hop_rem_butt.configure(text='''Remove''')
-		self.hop_rem_butt.configure(command=self.delete_hop)
+		self.hop_rem_butt.configure(activebackground="#f9f9f9", background=_bgcolor, cursor="X_cursor", text='Remove', command=self.delete_hop)
 
 		self.quit_btt = tk.Button(self.first_tab)
 		self.quit_btt.place(relx=0.922, rely=0.93, height=29, width=53)
-		self.quit_btt.configure(activebackground="#f9f9f9")
-		self.quit_btt.configure(background=_bgcolor)
-		self.quit_btt.configure(text='''Quit''')
-		self.quit_btt.configure(command=self.quit)
+		self.quit_btt.configure(activebackground="#f9f9f9", background=_bgcolor, text='Quit', command=self.quit)
 
 		self.add_time_butt_1 = tk.Button(self.first_tab)
 		self.add_time_butt_1.place(relx=0.426, rely=0.825, height=28, width=78)
-		self.add_time_butt_1.configure(activebackground="#f9f9f9")
-		self.add_time_butt_1.configure(background=_bgcolor)
-		self.add_time_butt_1.configure(text='''Time +1''')
-		self.add_time_butt_1.configure(command=lambda: self.add_time(1))
+		self.add_time_butt_1.configure(activebackground="#f9f9f9", background=_bgcolor, text='Time +1', command=lambda: self.add_time(1))
 
 		self.rem_time_butt_1 = tk.Button(self.first_tab)
 		self.rem_time_butt_1.place(relx=0.426, rely=0.888, height=28, width=78)
-		self.rem_time_butt_1.configure(activebackground="#f9f9f9")
-		self.rem_time_butt_1.configure(background=_bgcolor)
-		self.rem_time_butt_1.configure(text='''Time -1''')
-		self.rem_time_butt_1.configure(command=lambda: self.add_time(-1))
+		self.rem_time_butt_1.configure(activebackground="#f9f9f9", background=_bgcolor, text='''Time -1''', command=lambda: self.add_time(-1))
 
 		self.add_time_butt_10 = tk.Button(self.first_tab)
 		self.add_time_butt_10.place(
 			relx=0.328, rely=0.825, height=28, width=78)
-		self.add_time_butt_10.configure(activebackground="#f9f9f9")
-		self.add_time_butt_10.configure(background=_bgcolor)
-		self.add_time_butt_10.configure(text='''Time +10''')
-		self.add_time_butt_10.configure(command=lambda: self.add_time(10))
+		self.add_time_butt_10.configure(activebackground="#f9f9f9", background=_bgcolor, text='Time +10', command=lambda: self.add_time(10))
 
 		self.rem_time_butt_10 = tk.Button(self.first_tab)
 		self.rem_time_butt_10.place(
 			relx=0.328, rely=0.888, height=28, width=78)
-		self.rem_time_butt_10.configure(activebackground="#f9f9f9")
-		self.rem_time_butt_10.configure(background=_bgcolor)
-		self.rem_time_butt_10.configure(text='''Time -10''')
-		self.rem_time_butt_10.configure(command=lambda: self.add_time(-10))
+		self.rem_time_butt_10.configure(activebackground="#f9f9f9", background=_bgcolor, text='Time -10', command=lambda: self.add_time(-10))
 
 		self.add_alpha_butt_pt1 = tk.Button(self.first_tab)
 		self.add_alpha_butt_pt1.place(
 			relx=0.129, rely=0.825, height=29, width=78)
-		self.add_alpha_butt_pt1.configure(activebackground="#f9f9f9")
-		self.add_alpha_butt_pt1.configure(background=_bgcolor)
-		self.add_alpha_butt_pt1.configure(text='''Alpha +0.1''')
-		self.add_alpha_butt_pt1.configure(command=lambda: self.add_alpha(0.1))
+		self.add_alpha_butt_pt1.configure(activebackground="#f9f9f9", background=_bgcolor, text='Alpha +0.1', command=lambda: self.add_alpha(0.1))
 
 		self.rem_alpha_butt_pt1 = tk.Button(self.first_tab)
 		self.rem_alpha_butt_pt1.place(
 			relx=0.129, rely=0.888, height=28, width=78)
-		self.rem_alpha_butt_pt1.configure(activebackground="#f9f9f9")
-		self.rem_alpha_butt_pt1.configure(background=_bgcolor)
-		self.rem_alpha_butt_pt1.configure(text='''Alpha -0.1''')
-		self.rem_alpha_butt_pt1.configure(command=lambda: self.add_alpha(-0.1))
+		self.rem_alpha_butt_pt1.configure(activebackground="#f9f9f9", background=_bgcolor, text='Alpha -0.1', command=lambda: self.add_alpha(-0.1))
 
 		self.add_alpha_butt_1 = tk.Button(self.first_tab)
 		self.add_alpha_butt_1.place(
 			relx=0.227, rely=0.825, height=29, width=76)
-		self.add_alpha_butt_1.configure(activebackground="#f9f9f9")
-		self.add_alpha_butt_1.configure(background=_bgcolor)
-		self.add_alpha_butt_1.configure(text='''Alpha +1''')
-		self.add_alpha_butt_1.configure(width=76)
-		self.add_alpha_butt_1.configure(command=lambda: self.add_alpha(1))
+		self.add_alpha_butt_1.configure(activebackground="#f9f9f9", background=_bgcolor, text='Alpha +1', command=lambda: self.add_alpha(1))
 
 		self.rem_alpha_butt_1 = tk.Button(self.first_tab)
 		self.rem_alpha_butt_1.place(
 			relx=0.227, rely=0.888, height=28, width=76)
-		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9")
-		self.rem_alpha_butt_1.configure(background=_bgcolor)
-		self.rem_alpha_butt_1.configure(text='''Alpha -1''')
-		self.rem_alpha_butt_1.configure(command=lambda: self.add_alpha(-1))
+		self.rem_alpha_butt_1.configure(activebackground="#f9f9f9", background=_bgcolor, text='Alpha -1', command=lambda: self.add_alpha(-1))
 
 		self.style.configure('Treeview.Heading', font="TkDefaultFont")
 		self.style.configure(
@@ -734,10 +615,7 @@ class beer_engine_mainwin:
 		self.hops_imperial_chk_butt.place(
 			relx=0.53, rely=0.825, relheight=0.044, relwidth=0.149)
 		self.is_imperial_hop = tk.IntVar()
-		self.hops_imperial_chk_butt.configure(text='''Imperial Units''')
-		self.hops_imperial_chk_butt.configure(background=_bgcolor)
-		self.hops_imperial_chk_butt.configure(command=self.hop_to_imperial)
-		self.hops_imperial_chk_butt.configure(variable=self.is_imperial_hop)
+		self.hops_imperial_chk_butt.configure(text='''Imperial Units''', background=_bgcolor, command=self.hop_to_imperial, variable=self.is_imperial_hop)
 
 		self.ogfixed_chkbutton = tk.Checkbutton(self.first_tab)
 		self.is_ogfixed = tk.IntVar()
@@ -746,11 +624,7 @@ class beer_engine_mainwin:
 			rely=0.127,
 			relheight=0.044,
 			relwidth=0.033)
-		self.ogfixed_chkbutton.configure(activebackground="#f9f9f9")
-		self.ogfixed_chkbutton.configure(background=_bgcolor)
-		self.ogfixed_chkbutton.configure(justify='left')
-		self.ogfixed_chkbutton.configure(variable=self.is_ogfixed)
-		self.ogfixed_chkbutton.configure(command=self.og_fixed)
+		self.ogfixed_chkbutton.configure(activebackground="#f9f9f9", background=_bgcolor, justify='left', variable=self.is_ogfixed, command=self.og_fixed)
 
 		self.ebufixed_chkbutton = tk.Checkbutton(self.first_tab)
 		self.is_ebufixed = tk.IntVar()
@@ -759,43 +633,7 @@ class beer_engine_mainwin:
 			rely=0.55,
 			relheight=0.044,
 			relwidth=0.033)
-		self.ebufixed_chkbutton.configure(activebackground="#f9f9f9")
-		self.ebufixed_chkbutton.configure(background=_bgcolor)
-		self.ebufixed_chkbutton.configure(justify='left')
-		self.ebufixed_chkbutton.configure(variable=self.is_ebufixed)
-		self.ebufixed_chkbutton.configure(command=self.ebu_fixed)
-
-		self.refresh_grist()
-		self.refresh_hop()
-		# self.tabbed_frame.bind('<Button-1>', lambda event: self.refresh_all()
-		# if self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
-		# event.x, event.y) == 1 else False) #
-		# print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
-		# "tab", event.x, event.y))
-		self.tabbed_frame.bind('<Button-1>', self.refresh_tab_onclick)
-
-		######################## Second Tab ########################
-		# for hop in sorted(brew_data.hop_data):
-		#	self.second_tab.hop_lstbx.insert(tk.END, hop)
-		self.second_tab.reinsert()
-
-		######################### Third Tab #########################
-		# for grist in sorted(brew_data.grist_data):
-		#	self.third_tab.grist_lstbx.insert(tk.END, grist)
-		self.third_tab.reinsert()
-
-		######################### Fifth Tab ##########################
-		# self.tabbed_frame.bind('<Button-1>', lambda event:
-		# self.fifth_tab.refresh_all() if
-		# self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify", "tab",
-		# event.x, event.y) == 5 else False) #
-		# print(self.tabbed_frame.tk.call(self.tabbed_frame._w, "identify",
-		# "tab", event.x, event.y))
-
-		######################### Fourth Tab ##########################
-		# for yeast in sorted(brew_data.yeast_data):
-		#	self.fourth_tab.yeast_lstbx.insert(tk.END, yeast)
-		self.fourth_tab.reinsert()
+		self.ebufixed_chkbutton.configure(activebackground="#f9f9f9", background=_bgcolor, justify='left', variable=self.is_ebufixed, command=self.ebu_fixed)
 
 	def refresh_tab_onclick(self, event):
 		''' When tab is clicked, refresh/reinsert '''
