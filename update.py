@@ -1,8 +1,12 @@
 def update():
+    base_url = "https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master"
     files = {
-        'beer_engine.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/beer_engine.py',
-        'brew_data.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/brew_data.py',
-        'main.py': 'https://raw.githubusercontent.com/jimbob88/wheelers-wort-works/master/main.py',
+        'beer_engine.py': f'{base_url}/beer_engine.py',
+        'brew_data.py': f'{base_url}/brew_data.py',
+        'main.py': f'{base_url}/main.py',
+        'ScrolledWidgets.py': f'{base_url}/ScrolledWidgets.py',
+        'AutoScroll.py': f'{base_url}/AutoScroll.py',
+        'database.py': f'{base_url}/database.py',
     }
 
     for file, url in files.items():
