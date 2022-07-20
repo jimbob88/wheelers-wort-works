@@ -55,8 +55,7 @@ def get_args():
 						action=u'store_true',
 						help=u'Use the debian mode (only use on a Debian/Ubuntu system)')
 
-	args = parser.parse_args()
-	return args
+	return parser.parse_args()
 
 __mode__ = u'local'
 if __name__ == u'__main__':
@@ -70,10 +69,15 @@ if __name__ == u'__main__':
 	try:
 		with urlopen(u'https://github.com/jimbob88/wheelers-wort-works') as response:
 			text =response.read().decode(u'utf-8')
-			sec = (''.join(text[text.find(u'<a class="commit-tease-sha mr-1"'):].partition(u'</a>')[0:2]))
+			sec = ''.join(
+				text[text.find(u'<a class="commit-tease-sha mr-1"') :].partition(
+					u'</a>'
+				)[:2]
+			)
+
 			commit = (sec.split(u'"')[3].split(u'/')[-1])
 			if os.path.isfile(resource_path(u'commit.txt')):
-				prev_commit = [line for line in open(resource_path(u'commit.txt'), 'r')][0]
+				prev_commit = list(open(resource_path(u'commit.txt'), 'r'))[0]
 			else:
 				prev_commit = 0
 			if prev_commit != commit:
@@ -86,7 +90,12 @@ if __name__ == u'__main__':
 
 
 	if args.update or args.coreupdate:
-		commit = commit if 'commit' in locals() or 'commit' in globals() else [line for line in open(resource_path(u'commit.txt'), 'r')][0]
+		commit = (
+			commit
+			if 'commit' in locals() or 'commit' in globals()
+			else list(open(resource_path(u'commit.txt'), 'r'))[0]
+		)
+
 		if args.update and update:
 			with open(resource_path(u'update.py'), u'r') as f:
 				exec(f.read())
@@ -104,11 +113,16 @@ if __name__ == u'__main__':
 			with open(resource_path(u'commit.txt'), 'w') as f:
 				f.write(commit)
 		if __mode__ == 'deb': exit()
-	if args.file != None:
-		if os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
-			beer_engine.__mode__ = __mode__
-			file = os.path.join(os.getcwd(), args.file) if not os.path.isfile(args.file) else os.path.expanduser(args.file)
-			beer_engine.main(file=file, update_available=update_available)
-	else:
+	if args.file is None:
 		beer_engine.__mode__ = __mode__
 		beer_engine.main(update_available=update_available)
+
+	elif os.path.splitext(args.file)[1] in [u'.berf', u'.berfx']:
+		beer_engine.__mode__ = __mode__
+		file = (
+			os.path.expanduser(args.file)
+			if os.path.isfile(args.file)
+			else os.path.join(os.getcwd(), args.file)
+		)
+
+		beer_engine.main(file=file, update_available=update_available)
