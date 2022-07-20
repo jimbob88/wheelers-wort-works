@@ -50,7 +50,8 @@ class beer_engine_mainwin:
         if not os.path.isfile(resource_path("defaults.txt")):
             database.write_defaults_data(brew_data.constants)
         else:
-            brew_data.constants = database.read_defaults_data(brew_data.constants)
+            brew_data.constants = database.read_defaults_data(
+                brew_data.constants)
 
         if not os.path.isfile(resource_path("hop_data.txt")):
             database.write_hop_data(brew_data.hop_data)
@@ -64,14 +65,16 @@ class beer_engine_mainwin:
         else:
             if brew_data.constants["Replace Defaults"]:
                 brew_data.grist_data = {}
-            brew_data.grist_data = database.read_grain_data(brew_data.grist_data)
+            brew_data.grist_data = database.read_grain_data(
+                brew_data.grist_data)
 
         if not os.path.isfile(resource_path("yeast_data.txt")):
             if brew_data.constants["Replace Defaults"]:
                 brew_data.yeast_data = {}
             database.write_yeast_data(brew_data.yeast_data)
         else:
-            brew_data.yeast_data = database.read_yeast_data(brew_data.yeast_data)
+            brew_data.yeast_data = database.read_yeast_data(
+                brew_data.yeast_data)
 
         if not os.path.isfile(resource_path("water_chem_data.txt")):
             database.write_water_chem_data(brew_data.water_chemistry_additions)
@@ -149,7 +152,8 @@ class beer_engine_mainwin:
         self.fourth_tab.reinsert()
 
     def setup_menu(self, _fgcolor: str):
-        self.menubar = tk.Menu(self.master, font="TkMenuFont", bg=_bgcolor, fg=_fgcolor)
+        self.menubar = tk.Menu(
+            self.master, font="TkMenuFont", bg=_bgcolor, fg=_fgcolor)
         self.master.configure(menu=self.menubar)
 
         self.file_menu = tk.Menu(self.master, tearoff=0)
@@ -310,7 +314,8 @@ class beer_engine_mainwin:
     def setup_main_tab(self, font9: str, _bgcolor: str):
         self.first_tab.configure(background=_bgcolor)
         self.recipe_name_ent = tk.Entry(self.first_tab)
-        self.recipe_name_ent.place(relx=0.126, rely=0.021, height=23, relwidth=0.28)
+        self.recipe_name_ent.place(
+            relx=0.126, rely=0.021, height=23, relwidth=0.28)
         self.recipe_name_ent.configure(
             background="white",
             font="TkFixedFont",
@@ -347,7 +352,8 @@ class beer_engine_mainwin:
         self.volume_ent.configure(
             validatecommand=lambda: self.boil_vol.set(
                 round(
-                    float(self.volume.get()) * brew_data.constants["Boil Volume Scale"],
+                    float(self.volume.get()) *
+                    brew_data.constants["Boil Volume Scale"],
                     2,
                 )
             )
@@ -356,7 +362,8 @@ class beer_engine_mainwin:
             "<Return>",
             lambda event: self.boil_vol.set(
                 round(
-                    float(self.volume.get()) * brew_data.constants["Boil Volume Scale"],
+                    float(self.volume.get()) *
+                    brew_data.constants["Boil Volume Scale"],
                     2,
                 )
             ),
@@ -365,11 +372,13 @@ class beer_engine_mainwin:
 
         self.boil_volume_lbl = tk.Label(self.first_tab)
         self.boil_volume_lbl.place(relx=0.571, rely=0.021, height=18, width=85)
-        self.boil_volume_lbl.configure(background=_bgcolor, text="Boil Volume:")
+        self.boil_volume_lbl.configure(
+            background=_bgcolor, text="Boil Volume:")
 
         self.boil_vol = tk.StringVar()
         self.boil_volume_ent = tk.Entry(self.first_tab)
-        self.boil_volume_ent.place(relx=0.682, rely=0.021, height=23, relwidth=0.058)
+        self.boil_volume_ent.place(
+            relx=0.682, rely=0.021, height=23, relwidth=0.058)
         self.boil_volume_ent.configure(
             background="white",
             font="TkFixedFont",
@@ -378,11 +387,13 @@ class beer_engine_mainwin:
         )
         self.boil_vol.set(
             str(
-                brew_data.constants["Volume"] * brew_data.constants["Boil Volume Scale"]
+                brew_data.constants["Volume"] *
+                brew_data.constants["Boil Volume Scale"]
             )
         )
         self.ingredient_rem_butt = tk.Button(self.first_tab)
-        self.ingredient_rem_butt.place(relx=0.013, rely=0.402, height=29, width=76)
+        self.ingredient_rem_butt.place(
+            relx=0.013, rely=0.402, height=29, width=76)
         self.ingredient_rem_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -392,7 +403,8 @@ class beer_engine_mainwin:
         )
 
         self.ingredient_add_new_butt = tk.Button(self.first_tab)
-        self.ingredient_add_new_butt.place(relx=0.606, rely=0.085, height=28, width=82)
+        self.ingredient_add_new_butt.place(
+            relx=0.606, rely=0.085, height=28, width=82)
         self.ingredient_add_new_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -401,7 +413,8 @@ class beer_engine_mainwin:
         )
 
         self.adjust_weight_ing_lbl = tk.Label(self.first_tab)
-        self.adjust_weight_ing_lbl.place(relx=0.606, rely=0.169, height=14, width=91)
+        self.adjust_weight_ing_lbl.place(
+            relx=0.606, rely=0.169, height=14, width=91)
         self.adjust_weight_ing_lbl.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -410,7 +423,8 @@ class beer_engine_mainwin:
         )
 
         self.add_1000g_ing_butt = tk.Button(self.first_tab)
-        self.add_1000g_ing_butt.place(relx=0.606, rely=0.211, height=28, width=45)
+        self.add_1000g_ing_butt.place(
+            relx=0.606, rely=0.211, height=28, width=45)
         self.add_1000g_ing_butt.configure(
             activebackground="#f9f9f9",
             text="+1Kg",
@@ -422,7 +436,8 @@ class beer_engine_mainwin:
         )
 
         self.add_100g_ing_butt = tk.Button(self.first_tab)
-        self.add_100g_ing_butt.place(relx=0.606, rely=0.275, height=28, width=45)
+        self.add_100g_ing_butt.place(
+            relx=0.606, rely=0.275, height=28, width=45)
         self.add_100g_ing_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -434,7 +449,8 @@ class beer_engine_mainwin:
         )
 
         self.rem_1000g_ing_butt = tk.Button(self.first_tab)
-        self.rem_1000g_ing_butt.place(relx=0.669, rely=0.211, height=28, width=45)
+        self.rem_1000g_ing_butt.place(
+            relx=0.669, rely=0.211, height=28, width=45)
         self.rem_1000g_ing_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -446,7 +462,8 @@ class beer_engine_mainwin:
         )
 
         self.rem_100g_ing_butt = tk.Button(self.first_tab)
-        self.rem_100g_ing_butt.place(relx=0.669, rely=0.275, height=28, width=45)
+        self.rem_100g_ing_butt.place(
+            relx=0.669, rely=0.275, height=28, width=45)
         self.rem_100g_ing_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -458,17 +475,20 @@ class beer_engine_mainwin:
         )
 
         self.add_10g_ing_butt = tk.Button(self.first_tab)
-        self.add_10g_ing_butt.place(relx=0.606, rely=0.338, height=28, width=45)
+        self.add_10g_ing_butt.place(
+            relx=0.606, rely=0.338, height=28, width=45)
         self.add_10g_ing_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
             text="+10g",
             font="TkFixedFont",
         )
-        self.add_10g_ing_butt.configure(command=lambda: self.add_weight_ingredients(10))
+        self.add_10g_ing_butt.configure(
+            command=lambda: self.add_weight_ingredients(10))
 
         self.rem_10g_ing_butt = tk.Button(self.first_tab)
-        self.rem_10g_ing_butt.place(relx=0.669, rely=0.338, height=28, width=45)
+        self.rem_10g_ing_butt.place(
+            relx=0.669, rely=0.338, height=28, width=45)
         self.rem_10g_ing_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -487,7 +507,8 @@ class beer_engine_mainwin:
             text="+1g",
             font="TkFixedFont",
         )
-        self.add_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(1))
+        self.add_1g_ing_butt.configure(
+            command=lambda: self.add_weight_ingredients(1))
 
         self.rem_1g_ing_butt = tk.Button(self.first_tab)
         self.rem_1g_ing_butt.place(relx=0.669, rely=0.402, height=28, width=45)
@@ -497,10 +518,12 @@ class beer_engine_mainwin:
             text="-1g",
             font="TkFixedFont",
         )
-        self.rem_1g_ing_butt.configure(command=lambda: self.add_weight_ingredients(-1))
+        self.rem_1g_ing_butt.configure(
+            command=lambda: self.add_weight_ingredients(-1))
 
         self.original_gravity_lbl = tk.Label(self.first_tab)
-        self.original_gravity_lbl.place(relx=0.72, rely=0.085, height=14, width=79)
+        self.original_gravity_lbl.place(
+            relx=0.72, rely=0.085, height=14, width=79)
         self.original_gravity_lbl.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -520,7 +543,8 @@ class beer_engine_mainwin:
         )
 
         self.ingredient_zero_butt = tk.Button(self.first_tab)
-        self.ingredient_zero_butt.place(relx=0.745, rely=0.211, height=29, width=55)
+        self.ingredient_zero_butt.place(
+            relx=0.745, rely=0.211, height=29, width=55)
         self.ingredient_zero_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -574,7 +598,8 @@ class beer_engine_mainwin:
         self.calc_lbl.configure(state="disabled")
 
         self.hop_add_new_butt = tk.Button(self.first_tab)
-        self.hop_add_new_butt.place(relx=0.707, rely=0.507, height=29, width=80)
+        self.hop_add_new_butt.place(
+            relx=0.707, rely=0.507, height=29, width=80)
         self.hop_add_new_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -583,7 +608,8 @@ class beer_engine_mainwin:
         )
 
         self.adjust_weight_hop_lbl = tk.Label(self.first_tab)
-        self.adjust_weight_hop_lbl.place(relx=0.72, rely=0.592, height=14, width=91)
+        self.adjust_weight_hop_lbl.place(
+            relx=0.72, rely=0.592, height=14, width=91)
         self.adjust_weight_hop_lbl.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -592,24 +618,28 @@ class beer_engine_mainwin:
         )
 
         self.add_100g_hop_butt = tk.Button(self.first_tab)
-        self.add_100g_hop_butt.place(relx=0.72, rely=0.634, height=28, width=45)
+        self.add_100g_hop_butt.place(
+            relx=0.72, rely=0.634, height=28, width=45)
         self.add_100g_hop_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
             text="+100g",
             font="TkFixedFont",
         )
-        self.add_100g_hop_butt.configure(command=lambda: self.add_weight_hops(100))
+        self.add_100g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(100))
 
         self.rem_100g_hop_butt = tk.Button(self.first_tab)
-        self.rem_100g_hop_butt.place(relx=0.783, rely=0.634, height=28, width=45)
+        self.rem_100g_hop_butt.place(
+            relx=0.783, rely=0.634, height=28, width=45)
         self.rem_100g_hop_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
             text="-100g",
             font="TkFixedFont",
         )
-        self.rem_100g_hop_butt.configure(command=lambda: self.add_weight_hops(-100))
+        self.rem_100g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(-100))
 
         self.add_25g_hop_butt = tk.Button(self.first_tab)
         self.add_25g_hop_butt.place(relx=0.72, rely=0.698, height=28, width=45)
@@ -619,17 +649,20 @@ class beer_engine_mainwin:
             text="+25g",
             font="TkFixedFont",
         )
-        self.add_25g_hop_butt.configure(command=lambda: self.add_weight_hops(25))
+        self.add_25g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(25))
 
         self.rem_25g_hop_butt = tk.Button(self.first_tab)
-        self.rem_25g_hop_butt.place(relx=0.783, rely=0.698, height=28, width=45)
+        self.rem_25g_hop_butt.place(
+            relx=0.783, rely=0.698, height=28, width=45)
         self.rem_25g_hop_butt.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
             text="-25g",
             font="TkFixedFont",
         )
-        self.rem_25g_hop_butt.configure(command=lambda: self.add_weight_hops(-25))
+        self.rem_25g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(-25))
 
         self.add_10g_hop_butt = tk.Button(self.first_tab)
         self.add_10g_hop_butt.place(relx=0.72, rely=0.761, height=28, width=45)
@@ -639,17 +672,20 @@ class beer_engine_mainwin:
             text="+10g",
             font="TkFixedFont",
         )
-        self.add_10g_hop_butt.configure(command=lambda: self.add_weight_hops(10))
+        self.add_10g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(10))
 
         self.rem_10g_hop_butt = tk.Button(self.first_tab)
-        self.rem_10g_hop_butt.place(relx=0.783, rely=0.761, height=28, width=45)
+        self.rem_10g_hop_butt.place(
+            relx=0.783, rely=0.761, height=28, width=45)
         self.rem_10g_hop_butt.configure(
             activebackground="#f9f9f9",
             text="-10g",
             background=_bgcolor,
             font="TkFixedFont",
         )
-        self.rem_10g_hop_butt.configure(command=lambda: self.add_weight_hops(-10))
+        self.rem_10g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(-10))
 
         self.add_1g_hop_butt = tk.Button(self.first_tab)
         self.add_1g_hop_butt.place(relx=0.72, rely=0.825, height=28, width=45)
@@ -669,7 +705,8 @@ class beer_engine_mainwin:
             text="-1g",
             font="TkFixedFont",
         )
-        self.rem_1g_hop_butt.configure(command=lambda: self.add_weight_hops(-1))
+        self.rem_1g_hop_butt.configure(
+            command=lambda: self.add_weight_hops(-1))
 
         self.hop_zero_butt = tk.Button(self.first_tab)
         self.hop_zero_butt.place(relx=0.859, rely=0.634, height=28, width=55)
@@ -681,7 +718,8 @@ class beer_engine_mainwin:
         )
 
         self.bitterness_ibu_lbl = tk.Label(self.first_tab)
-        self.bitterness_ibu_lbl.place(relx=0.846, rely=0.507, height=14, width=79)
+        self.bitterness_ibu_lbl.place(
+            relx=0.846, rely=0.507, height=14, width=79)
         self.bitterness_ibu_lbl.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -738,7 +776,8 @@ class beer_engine_mainwin:
         )
 
         self.add_time_butt_10 = tk.Button(self.first_tab)
-        self.add_time_butt_10.place(relx=0.328, rely=0.825, height=28, width=78)
+        self.add_time_butt_10.place(
+            relx=0.328, rely=0.825, height=28, width=78)
         self.add_time_butt_10.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -747,7 +786,8 @@ class beer_engine_mainwin:
         )
 
         self.rem_time_butt_10 = tk.Button(self.first_tab)
-        self.rem_time_butt_10.place(relx=0.328, rely=0.888, height=28, width=78)
+        self.rem_time_butt_10.place(
+            relx=0.328, rely=0.888, height=28, width=78)
         self.rem_time_butt_10.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -756,7 +796,8 @@ class beer_engine_mainwin:
         )
 
         self.add_alpha_butt_pt1 = tk.Button(self.first_tab)
-        self.add_alpha_butt_pt1.place(relx=0.129, rely=0.825, height=29, width=78)
+        self.add_alpha_butt_pt1.place(
+            relx=0.129, rely=0.825, height=29, width=78)
         self.add_alpha_butt_pt1.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -765,7 +806,8 @@ class beer_engine_mainwin:
         )
 
         self.rem_alpha_butt_pt1 = tk.Button(self.first_tab)
-        self.rem_alpha_butt_pt1.place(relx=0.129, rely=0.888, height=28, width=78)
+        self.rem_alpha_butt_pt1.place(
+            relx=0.129, rely=0.888, height=28, width=78)
         self.rem_alpha_butt_pt1.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -774,7 +816,8 @@ class beer_engine_mainwin:
         )
 
         self.add_alpha_butt_1 = tk.Button(self.first_tab)
-        self.add_alpha_butt_1.place(relx=0.227, rely=0.825, height=29, width=76)
+        self.add_alpha_butt_1.place(
+            relx=0.227, rely=0.825, height=29, width=76)
         self.add_alpha_butt_1.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -783,7 +826,8 @@ class beer_engine_mainwin:
         )
 
         self.rem_alpha_butt_1 = tk.Button(self.first_tab)
-        self.rem_alpha_butt_1.place(relx=0.227, rely=0.888, height=28, width=76)
+        self.rem_alpha_butt_1.place(
+            relx=0.227, rely=0.888, height=28, width=76)
         self.rem_alpha_butt_1.configure(
             activebackground="#f9f9f9",
             background=_bgcolor,
@@ -808,7 +852,8 @@ class beer_engine_mainwin:
         self.frame_hops = tk.Frame(self.first_tab)
         self.frame_hops.grid_rowconfigure(0, weight=1)
         self.frame_hops.grid_columnconfigure(0, weight=1)
-        self.frame_hops.place(relx=0.013, rely=0.55, relheight=0.273, relwidth=0.657)
+        self.frame_hops.place(relx=0.013, rely=0.55,
+                              relheight=0.273, relwidth=0.657)
 
         self.ingredients_imperial_chk_butt = tk.Checkbutton(self.first_tab)
         self.ingredients_imperial_chk_butt.place(
@@ -891,13 +936,17 @@ class beer_engine_mainwin:
                 self.scrolled_tree_ingredient = ScrolledTreeView(
                     self.frame_ingredients, style="mystyle.Treeview"
                 )
-                self.scrolled_tree_ingredient.grid(row=0, column=0, sticky="nsew")
-                self.ingredient_columns = ("Ebc", "Grav", "lb:oz", "Grams", "%")
-                self.scrolled_tree_ingredient.configure(columns=self.ingredient_columns)
+                self.scrolled_tree_ingredient.grid(
+                    row=0, column=0, sticky="nsew")
+                self.ingredient_columns = (
+                    "Ebc", "Grav", "lb:oz", "Grams", "%")
+                self.scrolled_tree_ingredient.configure(
+                    columns=self.ingredient_columns)
                 self.scrolled_tree_ingredient.heading(
                     "#0",
                     text="Fermentable Ingredient",
-                    command=lambda c="Fermentable Ingredient": self.sort_by_grist(c),
+                    command=lambda c="Fermentable Ingredient": self.sort_by_grist(
+                        c),
                 )
                 self.scrolled_tree_ingredient.column(
                     "#0", width="170", minwidth="20", stretch="1"
@@ -908,7 +957,8 @@ class beer_engine_mainwin:
                         text=column,
                         command=lambda c=column: self.sort_by_grist(c),
                     )
-                    self.scrolled_tree_ingredient.column(column, anchor="center")
+                    self.scrolled_tree_ingredient.column(
+                        column, anchor="center")
                     if (
                         column in ["lb:oz", "%", "EBC"]
                         and column == "lb:oz"
@@ -920,7 +970,8 @@ class beer_engine_mainwin:
                                 max(
                                     len(
                                         "{lb}:{oz}".format(
-                                            lb=int(ingredient["Values"]["lb:oz"][0]),
+                                            lb=int(
+                                                ingredient["Values"]["lb:oz"][0]),
                                             oz=round(
                                                 ingredient["Values"]["lb:oz"][1], 1
                                             ),
@@ -1058,7 +1109,8 @@ class beer_engine_mainwin:
         def make_treeview():
             """Create Scrolled Tree View"""
             if "scrolled_tree_hops" in vars(self):
-                self.scrolled_tree_hops.delete(*self.scrolled_tree_hops.get_children())
+                self.scrolled_tree_hops.delete(
+                    *self.scrolled_tree_hops.get_children())
             else:
                 self.scrolled_tree_hops = ScrolledTreeView(
                     self.frame_hops, style="mystyle.Treeview"
@@ -1200,7 +1252,8 @@ class beer_engine_mainwin:
                 util = hop["Values"]["Util"]
                 time = hop["Values"]["Time"]
                 if util > 0 and alpha > 0:
-                    self.ibu = total_ibus = float(self.bitterness_ibu_ent.get())
+                    self.ibu = total_ibus = float(
+                        self.bitterness_ibu_ent.get())
                     vol = float(self.volume.get())
                     if factor != 0:
                         # (((total_ibus*(percent/100))*(vol*10))/util)/alpha
@@ -1239,7 +1292,8 @@ class beer_engine_mainwin:
                 round(hop["Values"]["Grams"], 1),
                 hop["Values"]["Percent"],
             )
-            self.scrolled_tree_hops.insert("", "end", text=hop["Name"], values=values)
+            self.scrolled_tree_hops.insert(
+                "", "end", text=hop["Name"], values=values)
 
     def refresh_all(self):
         """Run all refresh and recalculate commands"""
@@ -1279,17 +1333,20 @@ class beer_engine_mainwin:
 
         add_grist_gui = tk.Toplevel()
         add_grist_gui.resizable(0, 0)
-        grist_options = ScrolledTreeView(add_grist_gui, show="tree", columns=("EBC"))
+        grist_options = ScrolledTreeView(
+            add_grist_gui, show="tree", columns=("EBC"))
         grist_options.column(column="EBC", width=80)
         grist_options.grid(row=1, column=0)
         for grist in sorted(brew_data.grist_data):
             ebc = str(brew_data.grist_data[grist]["EBC"]) + " EBC"
             grist_options.insert("", tk.END, text=(grist), values=(ebc,))
-        grist_add_new = tk.Button(add_grist_gui, text="Add New", command=insert)
+        grist_add_new = tk.Button(
+            add_grist_gui, text="Add New", command=insert)
         grist_add_new.grid(row=1, column=1)
         add_grist_gui.bind(
             "<Any-Key>",
-            lambda evt: bound(evt, grist_options, sorted(brew_data.grist_data)),
+            lambda evt: bound(evt, grist_options,
+                              sorted(brew_data.grist_data)),
         )
         add_grist_gui.mainloop()
 
@@ -1330,7 +1387,8 @@ class beer_engine_mainwin:
 
         add_hop_gui = tk.Toplevel()
         add_hop_gui.resizable(0, 0)
-        hop_options = ScrolledTreeView(add_hop_gui, show="tree", columns=("Form"))
+        hop_options = ScrolledTreeView(
+            add_hop_gui, show="tree", columns=("Form"))
         hop_options.column(column="Form", width=80)
         hop_options.grid(row=1, column=0)
         for hop in sorted(brew_data.hop_data):
@@ -1340,7 +1398,8 @@ class beer_engine_mainwin:
         hop_add_new = tk.Button(add_hop_gui, text="Add New", command=insert)
         hop_add_new.grid(row=1, column=1)
         add_hop_gui.bind(
-            "<Any-Key>", lambda evt: bound(evt, hop_options, sorted(brew_data.hop_data))
+            "<Any-Key>", lambda evt: bound(evt,
+                                           hop_options, sorted(brew_data.hop_data))
         )
         add_hop_gui.mainloop()
 
@@ -1388,7 +1447,8 @@ class beer_engine_mainwin:
                 selection = curr_selection
             ingred_id = int(str(selection)[1:], 16)
             EBC = int(
-                brew_data.grist_data[self.ingredients[ingred_id - 1]["Name"]]["EBC"]
+                brew_data.grist_data[self.ingredients[ingred_id - 1]
+                                     ["Name"]]["EBC"]
             )
             self.ingredients[ingred_id - 1] = {
                 "Name": self.ingredients[ingred_id - 1]["Name"],
@@ -1412,7 +1472,8 @@ class beer_engine_mainwin:
             selection = self.scrolled_tree_hops.selection()[0]
             hop_id = int(str(selection)[1:], 16)
             alpha = brew_data.hop_data[self.hops[hop_id - 1]["Name"]]["Alpha"]
-            hop_type = brew_data.hop_data[self.hops[hop_id - 1]["Name"]]["Form"]
+            hop_type = brew_data.hop_data[self.hops[hop_id - 1]
+                                          ["Name"]]["Form"]
             self.hops[hop_id - 1] = {
                 "Name": self.hops[hop_id - 1]["Name"],
                 "Values": {
@@ -1567,7 +1628,8 @@ class beer_engine_mainwin:
         self.fg = final_gravity()
         self.og = float(self.og)
         self.abv = alcohol_by_volume(self.og / 1000, self.fg / 1000)
-        self.ibu_gu = float(self.ibu) / (self.og - 1000) if (self.og - 1000) != 0 else 0
+        self.ibu_gu = float(self.ibu) / (self.og -
+                                         1000) if (self.og - 1000) != 0 else 0
         self.calc_lbl.configure(state="normal")
         self.calc_lbl.delete("1.0", "end")
         self.calc_lbl.insert(
@@ -1706,34 +1768,42 @@ class beer_engine_mainwin:
         """Convert Hop Buttons to/from Imperial Units"""
         if self.is_imperial_hop.get() == 0:
             self.add_100g_hop_butt.configure(text="""+100g""")
-            self.add_100g_hop_butt.configure(command=lambda: self.add_weight_hops(100))
+            self.add_100g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(100))
             self.add_100g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_100g_hop_butt.configure(text="""-100g""")
-            self.rem_100g_hop_butt.configure(command=lambda: self.add_weight_hops(-100))
+            self.rem_100g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(-100))
             self.rem_100g_hop_butt.configure(font="TkFixedFont")
 
             self.add_25g_hop_butt.configure(text="""+25g""")
-            self.add_25g_hop_butt.configure(command=lambda: self.add_weight_hops(25))
+            self.add_25g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(25))
             self.add_25g_hop_butt.configure(font="TkFixedFont")
             self.rem_25g_hop_butt.configure(text="""-25g""")
-            self.rem_25g_hop_butt.configure(command=lambda: self.add_weight_hops(-25))
+            self.rem_25g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(-25))
             self.rem_25g_hop_butt.configure(font="TkFixedFont")
 
             self.add_10g_hop_butt.configure(text="""+10g""")
-            self.add_10g_hop_butt.configure(command=lambda: self.add_weight_hops(10))
+            self.add_10g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(10))
             self.add_10g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_10g_hop_butt.configure(text="""-10g""")
-            self.rem_10g_hop_butt.configure(command=lambda: self.add_weight_hops(-10))
+            self.rem_10g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(-10))
             self.rem_10g_hop_butt.configure(font="TkFixedFont")
 
             self.add_1g_hop_butt.configure(text="""+1g""")
-            self.add_1g_hop_butt.configure(command=lambda: self.add_weight_hops(1))
+            self.add_1g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(1))
             self.add_1g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_1g_hop_butt.configure(text="""-1g""")
-            self.rem_1g_hop_butt.configure(command=lambda: self.add_weight_hops(-1))
+            self.rem_1g_hop_butt.configure(
+                command=lambda: self.add_weight_hops(-1))
             self.rem_1g_hop_butt.configure(font="TkFixedFont")
 
         elif self.is_imperial_hop.get() == 1:
@@ -1816,7 +1886,8 @@ class beer_engine_mainwin:
         old_ingred = self.ingredients
 
         if column == "Fermentable Ingredient":
-            self.ingredients = sorted(self.ingredients, key=lambda k: k["Name"])
+            self.ingredients = sorted(
+                self.ingredients, key=lambda k: k["Name"])
         elif column == "Ebc":
             self.ingredients = sorted(
                 self.ingredients, key=lambda k: k["Values"]["EBC"]
@@ -1905,7 +1976,8 @@ class beer_engine_mainwin:
         )
         with open(text_file_name, "w", encoding="utf-8") as hs:
             hs.write(html)
-        webbrowser.open(text_file_name)
+        if open_browser:
+            webbrowser.open(text_file_name)
 
     def create_complex_html(self):
         """Create HTML with JavaScript Sorttable module"""
@@ -1946,7 +2018,8 @@ class beer_engine_mainwin:
         tk.Button(dialog, text="Open without saving", command=j_open).grid(
             row=1, column=1
         )
-        tk.Button(dialog, text="Cancel", command=dialog.destroy).grid(row=1, column=2)
+        tk.Button(dialog, text="Cancel", command=dialog.destroy).grid(
+            row=1, column=2)
         dialog.update_idletasks()
         x = (
             self.master.winfo_x()
@@ -1958,211 +2031,213 @@ class beer_engine_mainwin:
             + (self.master.winfo_height() / 2)
             - (dialog.winfo_height() / 2)
         )
-        dialog.geometry("+{x}+{y}".format(x=int(x), y=int(y)))
+        dialog.geometry(f"+{int(x)}+{int(y)}")
         dialog.attributes("-topmost", True)
 
     def open_file(self, file):
         """Open a `.berf` or `.berfx` file"""
-        if file != "" and file is not None and not isinstance(file, tuple):
-            self.sixth_tab.original_additions = list(
-                sorted(brew_data.water_chemistry_additions)
-            ) + list(sorted(brew_data.yeast_data))
-            self.sixth_tab.added_additions = []
-            self.sixth_tab.refresh_all()
-            examples = [
-                "1920s Bitter",
-                "Bog-Standard Bitter",
-                "Black-Country Mild",
-                "Irish Stout",
-                "1920s Mild",
-                "1920s Porter",
-                "1920s Stock Ale",
-                "1920s Stout",
-            ]
-            is_ogfixed = 0
-            is_ebufixed = 0
-            self.ingredients = []
-            self.hops = []
-            self.seventh_tab.texpert.delete("1.0", "end")
-            notes = b""
-            if file.lower().endswith(".berf") or file.split("/")[-1] in examples:
-                self.current_file = file
-                with open(file, "rb") as f:
-                    # data = [line for line in f]
-                    data = [
-                        line.replace(b"\xa7", b"\t")
-                        .strip()
-                        .decode("ISO-8859-1")
-                        .split("\t")
-                        for line in f
-                    ]
-                    # print(data)
-                    for sublist in data:
-                        if sublist[0] == "grain":
-                            grams = float(sublist[7])
-                            lb = grams / brew_data.constants["Conversion"]["lb-g"]
-                            oz = (lb - int(lb)) * 16
-                            percent = float(sublist[8])
-                            EBC = float(sublist[2])
-                            self.ingredients.append(
-                                {
-                                    "Name": sublist[1],
-                                    "Values": {
-                                        "EBC": EBC,
-                                        "Grav": 0,
-                                        "lb:oz": (lb, oz),
-                                        "Grams": grams,
-                                        "Percent": percent,
-                                    },
-                                }
-                            )
-                        elif sublist[0] == "hop":
-                            alpha = float(sublist[3])
-                            grams = float(sublist[5])
-                            lb = grams / brew_data.constants["Conversion"]["lb-g"]
-                            oz = (lb - int(lb)) * 16
-                            time = float(sublist[6])
-                            percent = float(sublist[7])
-                            self.hops.append(
-                                {
-                                    "Name": sublist[1],
-                                    "Values": {
-                                        "Type": sublist[2],
-                                        "Alpha": alpha,
-                                        "Time": time,
-                                        "Util": 0.0,
-                                        "ibu": 0.0,
-                                        "lb:oz": (lb, oz),
-                                        "Grams": grams,
-                                        "Percent": percent,
-                                    },
-                                }
-                            )
-                        elif sublist[0] == "add":
-                            name = sublist[1]
-                            dictionary = ast.literal_eval(sublist[2])
-                            if "Lab" in dictionary:
-                                brew_data.yeast_data[name] = dictionary
-                            else:
-                                brew_data.water_chemistry_additions[name] = dictionary
+        if file == "" or file is None or isinstance(file, tuple):
+            return
+        self.sixth_tab.original_additions = list(
+            sorted(brew_data.water_chemistry_additions)
+        ) + list(sorted(brew_data.yeast_data))
+        self.sixth_tab.added_additions = []
+        self.sixth_tab.refresh_all()
+        examples = [
+            "1920s Bitter",
+            "Bog-Standard Bitter",
+            "Black-Country Mild",
+            "Irish Stout",
+            "1920s Mild",
+            "1920s Porter",
+            "1920s Stock Ale",
+            "1920s Stout",
+        ]
+        is_ogfixed = 0
+        is_ebufixed = 0
+        self.ingredients = []
+        self.hops = []
+        self.seventh_tab.texpert.delete("1.0", "end")
+        notes = b""
+        if file.lower().endswith(".berf") or file.split("/")[-1] in examples:
+            self.current_file = file
+            with open(file, "rb") as f:
+                # data = [line for line in f]
+                data = [
+                    line.replace(b"\xa7", b"\t")
+                    .strip()
+                    .decode("ISO-8859-1")
+                    .split("\t")
+                    for line in f
+                ]
+                # print(data)
+                for sublist in data:
+                    if sublist[0] == "grain":
+                        grams = float(sublist[7])
+                        lb = grams / brew_data.constants["Conversion"]["lb-g"]
+                        oz = (lb - int(lb)) * 16
+                        percent = float(sublist[8])
+                        EBC = float(sublist[2])
+                        self.ingredients.append(
+                            {
+                                "Name": sublist[1],
+                                "Values": {
+                                    "EBC": EBC,
+                                    "Grav": 0,
+                                    "lb:oz": (lb, oz),
+                                    "Grams": grams,
+                                    "Percent": percent,
+                                },
+                            }
+                        )
+                    elif sublist[0] == "hop":
+                        alpha = float(sublist[3])
+                        grams = float(sublist[5])
+                        lb = grams / brew_data.constants["Conversion"]["lb-g"]
+                        oz = (lb - int(lb)) * 16
+                        time = float(sublist[6])
+                        percent = float(sublist[7])
+                        self.hops.append(
+                            {
+                                "Name": sublist[1],
+                                "Values": {
+                                    "Type": sublist[2],
+                                    "Alpha": alpha,
+                                    "Time": time,
+                                    "Util": 0.0,
+                                    "ibu": 0.0,
+                                    "lb:oz": (lb, oz),
+                                    "Grams": grams,
+                                    "Percent": percent,
+                                },
+                            }
+                        )
+                    elif sublist[0] == "add":
+                        name = sublist[1]
+                        dictionary = ast.literal_eval(sublist[2])
+                        if "Lab" in dictionary:
+                            brew_data.yeast_data[name] = dictionary
+                        else:
+                            brew_data.water_chemistry_additions[name] = dictionary
 
-                            self.sixth_tab.added_additions.append(name)
+                        self.sixth_tab.added_additions.append(name)
 
+                    elif sublist[1] == "recipename":
+                        self.recipe_name_ent.delete(0, tk.END)
+                        self.recipe_name_ent.insert(0, sublist[2])
+                    elif sublist[1] == "volume":
+                        self.volume_ent.delete(0, tk.END)
+                        self.volume_ent.insert(0, sublist[2])
+                        if not any(e[1] == "boilvol" for e in data):
+                            self.boil_volume_ent.delete(0, tk.END)
+                            self.boil_volume_ent.insert(
+                                0,
+                                float(sublist[2])
+                                * brew_data.constants["Boil Volume Scale"],
+                            )
+                    elif sublist[1] == "boilvol":
+                        self.boil_volume_ent.delete(0, tk.END)
+                        self.boil_volume_ent.insert(0, sublist[2])
+                    elif sublist[1] == "efficiency":
+                        brew_data.constants["Efficiency"] = float(
+                            sublist[2]) / 100
+                    elif sublist[0] == "miscel":
+                        if sublist[1] == "ogfixed":
+                            is_ogfixed = sublist[2]
+                        elif sublist[1] == "ebufixed":
+                            is_ebufixed = sublist[2]
+                        elif sublist[1] == "notes":
+                            # notes += bytes(sublist[2],encoding='utf8')
+                            # print(notes, str(sublist[2]))
+                            notes = sublist[2]
+                            # print(notes, ast.literal_eval("'"+notes+"'"))
+
+        elif file.lower().endswith(".berfx"):
+            self.current_file = file
+            with open(file, "r", encoding="utf-8") as f:
+                # data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
+                data = [
+                    line.replace("\xa7", "\t").strip().split("\t") for line in f
+                ]
+                for sublist in data:
+                    if sublist[0] == "grain":
+                        self.ingredients.append(
+                            {
+                                "Name": sublist[1],
+                                "Values": ast.literal_eval(sublist[2]),
+                            }
+                        )
+                    elif sublist[0] == "hop":
+                        self.hops.append(
+                            {
+                                "Name": sublist[1],
+                                "Values": ast.literal_eval(sublist[2]),
+                            }
+                        )
+                    elif sublist[0] == "add":
+                        name = sublist[1]
+                        dictionary = ast.literal_eval(sublist[2])
+
+                        if "Lab" in dictionary:
+                            brew_data.yeast_data[name] = dictionary
+                        else:
+                            brew_data.water_chemistry_additions[name] = dictionary
+
+                        self.sixth_tab.added_additions.append(name)
+                    elif sublist[0] == "database":
+                        if sublist[1] == "grist":
+                            brew_data.grist_data[sublist[2]] = ast.literal_eval(
+                                sublist[3]
+                            )
+                        elif sublist[1] == "hop":
+                            brew_data.hop_data[sublist[2]] = ast.literal_eval(
+                                sublist[3]
+                            )
+                        elif sublist[1] == "yeast":
+                            brew_data.yeast_data[sublist[2]] = ast.literal_eval(
+                                sublist[3]
+                            )
+                        elif sublist[1] == "water_chem":
+                            brew_data.water_chemistry_additions[
+                                sublist[2]
+                            ] = ast.literal_eval(sublist[3])
+                        elif sublist[1] == "constant":
+                            for constant, value in ast.literal_eval(
+                                sublist[2]
+                            ).items():
+                                brew_data.constants[constant] = value
+                    elif sublist[0] == "miscel":
+                        if sublist[1] == "ogfixed":
+                            is_ogfixed = sublist[2]
+                        elif sublist[1] == "ebufixed":
+                            is_ebufixed = sublist[2]
                         elif sublist[1] == "recipename":
                             self.recipe_name_ent.delete(0, tk.END)
                             self.recipe_name_ent.insert(0, sublist[2])
-                        elif sublist[1] == "volume":
-                            self.volume_ent.delete(0, tk.END)
-                            self.volume_ent.insert(0, sublist[2])
-                            if not any(e[1] == "boilvol" for e in data):
-                                self.boil_volume_ent.delete(0, tk.END)
-                                self.boil_volume_ent.insert(
-                                    0,
-                                    float(sublist[2])
-                                    * brew_data.constants["Boil Volume Scale"],
-                                )
-                        elif sublist[1] == "boilvol":
-                            self.boil_volume_ent.delete(0, tk.END)
-                            self.boil_volume_ent.insert(0, sublist[2])
-                        elif sublist[1] == "efficiency":
-                            brew_data.constants["Efficiency"] = float(sublist[2]) / 100
-                        elif sublist[0] == "miscel":
-                            if sublist[1] == "ogfixed":
-                                is_ogfixed = sublist[2]
-                            elif sublist[1] == "ebufixed":
-                                is_ebufixed = sublist[2]
-                            elif sublist[1] == "notes":
-                                # notes += bytes(sublist[2],encoding='utf8')
-                                # print(notes, str(sublist[2]))
-                                notes = sublist[2]
-                                # print(notes, ast.literal_eval("'"+notes+"'"))
+                        elif sublist[1] == "notes":
+                            # notes += bytes(sublist[2],encoding='utf8')
+                            notes = sublist[2]
 
-            elif file.lower().endswith(".berfx"):
-                self.current_file = file
-                with open(file, "r", encoding="utf-8") as f:
-                    # data = [line.replace(b'\xa7', b'\t').strip().decode().split('\t') for line in f]
-                    data = [
-                        line.replace("\xa7", "\t").strip().split("\t") for line in f
-                    ]
-                    for sublist in data:
-                        if sublist[0] == "grain":
-                            self.ingredients.append(
-                                {
-                                    "Name": sublist[1],
-                                    "Values": ast.literal_eval(sublist[2]),
-                                }
-                            )
-                        elif sublist[0] == "hop":
-                            self.hops.append(
-                                {
-                                    "Name": sublist[1],
-                                    "Values": ast.literal_eval(sublist[2]),
-                                }
-                            )
-                        elif sublist[0] == "add":
-                            name = sublist[1]
-                            dictionary = ast.literal_eval(sublist[2])
-
-                            if "Lab" in dictionary:
-                                brew_data.yeast_data[name] = dictionary
-                            else:
-                                brew_data.water_chemistry_additions[name] = dictionary
-
-                            self.sixth_tab.added_additions.append(name)
-                        elif sublist[0] == "database":
-                            if sublist[1] == "grist":
-                                brew_data.grist_data[sublist[2]] = ast.literal_eval(
-                                    sublist[3]
-                                )
-                            elif sublist[1] == "hop":
-                                brew_data.hop_data[sublist[2]] = ast.literal_eval(
-                                    sublist[3]
-                                )
-                            elif sublist[1] == "yeast":
-                                brew_data.yeast_data[sublist[2]] = ast.literal_eval(
-                                    sublist[3]
-                                )
-                            elif sublist[1] == "water_chem":
-                                brew_data.water_chemistry_additions[
-                                    sublist[2]
-                                ] = ast.literal_eval(sublist[3])
-                            elif sublist[1] == "constant":
-                                for constant, value in ast.literal_eval(
-                                    sublist[2]
-                                ).items():
-                                    brew_data.constants[constant] = value
-                        elif sublist[0] == "miscel":
-                            if sublist[1] == "ogfixed":
-                                is_ogfixed = sublist[2]
-                            elif sublist[1] == "ebufixed":
-                                is_ebufixed = sublist[2]
-                            elif sublist[1] == "recipename":
-                                self.recipe_name_ent.delete(0, tk.END)
-                                self.recipe_name_ent.insert(0, sublist[2])
-                            elif sublist[1] == "notes":
-                                # notes += bytes(sublist[2],encoding='utf8')
-                                notes = sublist[2]
-
-            self.seventh_tab.texpert.insert(
-                "1.0",
-                ast.literal_eval(
-                    "'" + notes.replace("'", r"\'").replace('"', r"\"") + "'"
-                ),
-            )
-            self.refresh_hop()
-            self.refresh_grist()
-            self.sixth_tab.original_additions = sorted(
-                set(self.sixth_tab.original_additions)
-                - set(self.sixth_tab.added_additions),
-                key=self.sixth_tab.original_additions.index,
-            )
-            # print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
-            self.fifth_tab.open_locals()
-            self.sixth_tab.refresh_all()
-            self.recalculate()
-            self.is_ogfixed.set(is_ogfixed)
-            self.is_ebufixed.set(is_ebufixed)
-            self.recalculate()
+        self.seventh_tab.texpert.insert(
+            "1.0",
+            ast.literal_eval(
+                "'" + notes.replace("'", r"\'").replace('"', r"\"") + "'"
+            ),
+        )
+        self.refresh_hop()
+        self.refresh_grist()
+        self.sixth_tab.original_additions = sorted(
+            set(self.sixth_tab.original_additions)
+            - set(self.sixth_tab.added_additions),
+            key=self.sixth_tab.original_additions.index,
+        )
+        # print(set(self.sixth_tab.original_additions) - set(self.sixth_tab.added_additions))
+        self.fifth_tab.open_locals()
+        self.sixth_tab.refresh_all()
+        self.recalculate()
+        self.is_ogfixed.set(is_ogfixed)
+        self.is_ebufixed.set(is_ebufixed)
+        self.recalculate()
 
     def save_file(self, file):
         """Save Current Recipe as `.berf`/`.berfx`"""
@@ -2229,7 +2304,8 @@ class beer_engine_mainwin:
                         )
                     )
                     f.write(
-                        "default\xa7volume\t{volume}\n".format(volume=self.volume.get())
+                        "default\xa7volume\t{volume}\n".format(
+                            volume=self.volume.get())
                     )
                     f.write(
                         "default\xa7boilvol\t{boilvol}\n".format(
@@ -2251,13 +2327,15 @@ class beer_engine_mainwin:
                             ebufixed=self.is_ebufixed.get()
                         )
                     )
-                    f.write("miscel\xa7origgrav\t{origgrav}\n".format(origgrav=self.og))
+                    f.write("miscel\xa7origgrav\t{origgrav}\n".format(
+                        origgrav=self.og))
 
                     notes = repr(
                         self.seventh_tab.texpert.get("1.0", "end")
                     )  # , encoding='utf8')
                     # print(notes)
-                    f.write("miscel\xa7notes\t{notes}\n".format(notes=notes[1:-1]))
+                    f.write("miscel\xa7notes\t{notes}\n".format(
+                        notes=notes[1:-1]))
 
             elif file.lower()[-6:] == ".berfx":
                 self.current_file = file
@@ -2308,7 +2386,8 @@ class beer_engine_mainwin:
                     )
 
                     notes = repr(self.seventh_tab.texpert.get("1.0", "end"))
-                    f.write("miscel\xa7notes\t{notes}\n".format(notes=notes[1:-1]))
+                    f.write("miscel\xa7notes\t{notes}\n".format(
+                        notes=notes[1:-1]))
 
                     for key, grist in brew_data.grist_data.items():
                         f.write(
@@ -2409,82 +2488,84 @@ class beer_engine_mainwin:
 
     def add_percent_ingredients(self, amount, curr_selection=None):
         """Add a Percentage amount of Ingredients"""
-        try:
+        with contextlib.suppress(IndexError):
             if curr_selection is None:
                 selection = self.scrolled_tree_ingredient.selection()[0]
             else:
                 selection = curr_selection
             ingred_id = int(str(selection)[1:], 16)
-            percent = self.ingredients[ingred_id - 1]["Values"]["Percent"] + amount
-            if percent < 0:
-                percent = 0
+            percent = max(
+                self.ingredients[ingred_id - 1]["Values"]["Percent"] + amount, 0)
             self.ingredients[ingred_id - 1]["Values"]["Percent"] = percent
             self.refresh_grist()
             self.scrolled_tree_ingredient.focus_set()
             self.scrolled_tree_ingredient.see(selection)
             self.scrolled_tree_ingredient.selection_set(selection)
-        except IndexError:
-            pass
 
     def add_percent_hops(self, amount, curr_selection=None):
         """Add a Percentage amount of Hops"""
-        try:
+        with contextlib.suppress(IndexError):
             if curr_selection is None:
                 selection = self.scrolled_tree_hops.selection()[0]
             else:
                 selection = curr_selection
             hop_id = int(str(selection)[1:], 16)
-            percent = self.hops[hop_id - 1]["Values"]["Percent"] + amount
-            if percent < 0:
-                percent = 0
+            percent = max(self.hops[hop_id - 1]
+                          ["Values"]["Percent"] + amount, 0)
             self.hops[hop_id - 1]["Values"]["Percent"] = percent
             self.refresh_hop()
             self.scrolled_tree_hops.focus_set()
             self.scrolled_tree_hops.see(selection)
             self.scrolled_tree_hops.selection_set(selection)
-        except IndexError:
-            pass
 
     def ebu_fixed(self):
         """Reconfigure the hop buttons to read percentages"""
-        if self.is_ebufixed.get() == 1:
+        if self.is_ebufixed.get():
             self.add_100g_hop_butt.configure(text="""+10%""")
-            self.add_100g_hop_butt.configure(command=lambda: self.add_percent_hops(10))
+            self.add_100g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(10))
             self.add_100g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_100g_hop_butt.configure(text="""-10%""")
-            self.rem_100g_hop_butt.configure(command=lambda: self.add_percent_hops(-10))
+            self.rem_100g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(-10))
             self.rem_100g_hop_butt.configure(font="TkFixedFont")
 
             self.add_25g_hop_butt.configure(text="""+5%""")
-            self.add_25g_hop_butt.configure(command=lambda: self.add_percent_hops(5))
+            self.add_25g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(5))
             self.add_25g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_25g_hop_butt.configure(text="""-5%""")
-            self.rem_25g_hop_butt.configure(command=lambda: self.add_percent_hops(-5))
+            self.rem_25g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(-5))
             self.rem_25g_hop_butt.configure(font="TkFixedFont")
 
             self.add_10g_hop_butt.configure(text="""+1%""")
-            self.add_10g_hop_butt.configure(command=lambda: self.add_percent_hops(1))
+            self.add_10g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(1))
             self.add_10g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_10g_hop_butt.configure(text="""-1%""")
-            self.rem_10g_hop_butt.configure(command=lambda: self.add_percent_hops(-1))
+            self.rem_10g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(-1))
             self.rem_10g_hop_butt.configure(font="TkFixedFont")
 
             self.add_1g_hop_butt.configure(text="""+0.1%""")
-            self.add_1g_hop_butt.configure(command=lambda: self.add_percent_hops(0.1))
+            self.add_1g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(0.1))
             self.add_1g_hop_butt.configure(font="TkFixedFont")
 
             self.rem_1g_hop_butt.configure(text="""-0.1%""")
-            self.rem_1g_hop_butt.configure(command=lambda: self.add_percent_hops(-0.1))
+            self.rem_1g_hop_butt.configure(
+                command=lambda: self.add_percent_hops(-0.1))
             self.rem_1g_hop_butt.configure(font="TkFixedFont")
         else:
             self.hop_to_imperial()
 
     def og_fixed(self):
         """Reconfigure the Ingredient buttons to read percentages"""
-        if self.is_ogfixed.get() == 1:
+        if self.is_ogfixed.get():
             self.add_1000g_ing_butt.configure(text="""+10%""")
             self.add_1000g_ing_butt.configure(
                 command=lambda: self.add_percent_ingredients(10)
@@ -2585,7 +2666,8 @@ class grist_editor(tk.Frame):
         self.TPanedwindow1 = tk.PanedWindow(
             self, orient="horizontal", background=_bgcolor
         )
-        self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973, relwidth=0.966)
+        self.TPanedwindow1.place(relx=0.013, rely=0.0,
+                                 relheight=0.973, relwidth=0.966)
         self.grist_panedwindow1 = tk.LabelFrame(
             width=400, text="Fermentable Ingredients:", background=_bgcolor
         )
@@ -2649,7 +2731,8 @@ class grist_editor(tk.Frame):
         self.grist_name_ent.configure(cursor="xterm")
 
         self.grist_colour_lbl = tk.Label(self.grist_panedwindow2)
-        self.grist_colour_lbl.place(relx=0.056, rely=0.152, bordermode="ignore")
+        self.grist_colour_lbl.place(
+            relx=0.056, rely=0.152, bordermode="ignore")
         self.grist_colour_lbl.configure(background=_bgcolor)
         self.grist_colour_lbl.configure(foreground="#000000")
         self.grist_colour_lbl.configure(font=font10)
@@ -2674,7 +2757,8 @@ class grist_editor(tk.Frame):
         self.grist_colour_ebc.configure(text="""EBC""")
 
         self.grist_extract_lbl = tk.Label(self.grist_panedwindow2)
-        self.grist_extract_lbl.place(relx=0.056, rely=0.217, bordermode="ignore")
+        self.grist_extract_lbl.place(
+            relx=0.056, rely=0.217, bordermode="ignore")
         self.grist_extract_lbl.configure(background=_bgcolor)
         self.grist_extract_lbl.configure(foreground="#000000")
         self.grist_extract_lbl.configure(font=font10)
@@ -2691,7 +2775,8 @@ class grist_editor(tk.Frame):
         self.grist_extract_ent.configure(cursor="xterm")
 
         self.grist_extract_ldk = tk.Label(self.grist_panedwindow2)
-        self.grist_extract_ldk.place(relx=0.75, rely=0.217, bordermode="ignore")
+        self.grist_extract_ldk.place(
+            relx=0.75, rely=0.217, bordermode="ignore")
         self.grist_extract_ldk.configure(background=_bgcolor)
         self.grist_extract_ldk.configure(foreground="#000000")
         self.grist_extract_ldk.configure(font=font10)
@@ -2699,7 +2784,8 @@ class grist_editor(tk.Frame):
         self.grist_extract_ldk.configure(text="""LDK""")
 
         self.grist_moisture_lbl = tk.Label(self.grist_panedwindow2)
-        self.grist_moisture_lbl.place(relx=0.056, rely=0.283, bordermode="ignore")
+        self.grist_moisture_lbl.place(
+            relx=0.056, rely=0.283, bordermode="ignore")
         self.grist_moisture_lbl.configure(background=_bgcolor)
         self.grist_moisture_lbl.configure(foreground="#000000")
         self.grist_moisture_lbl.configure(font=font10)
@@ -2716,7 +2802,8 @@ class grist_editor(tk.Frame):
         self.grist_moisture_ent.configure(cursor="xterm")
 
         self.grist_moisture_percent = tk.Label(self.grist_panedwindow2)
-        self.grist_moisture_percent.place(relx=0.75, rely=0.283, bordermode="ignore")
+        self.grist_moisture_percent.place(
+            relx=0.75, rely=0.283, bordermode="ignore")
         self.grist_moisture_percent.configure(background=_bgcolor)
         self.grist_moisture_percent.configure(foreground="#000000")
         self.grist_moisture_percent.configure(font=font10)
@@ -2724,7 +2811,8 @@ class grist_editor(tk.Frame):
         self.grist_moisture_percent.configure(text="""%""")
 
         self.grist_ferment_lbl = tk.Label(self.grist_panedwindow2)
-        self.grist_ferment_lbl.place(relx=0.056, rely=0.348, bordermode="ignore")
+        self.grist_ferment_lbl.place(
+            relx=0.056, rely=0.348, bordermode="ignore")
         self.grist_ferment_lbl.configure(background=_bgcolor)
         self.grist_ferment_lbl.configure(foreground="#000000")
         self.grist_ferment_lbl.configure(font=font9)
@@ -2740,7 +2828,8 @@ class grist_editor(tk.Frame):
         self.grist_ferment_ent.configure(justify="center")
 
         self.grist_ferment_percent = tk.Label(self.grist_panedwindow2)
-        self.grist_ferment_percent.place(relx=0.75, rely=0.348, bordermode="ignore")
+        self.grist_ferment_percent.place(
+            relx=0.75, rely=0.348, bordermode="ignore")
         self.grist_ferment_percent.configure(background=_bgcolor)
         self.grist_ferment_percent.configure(foreground="#000000")
         self.grist_ferment_percent.configure(font=font10)
@@ -2851,7 +2940,8 @@ class grist_editor(tk.Frame):
     def select_listbox(self, event):
         """On listbox item selection fill data values"""
         try:
-            self.show_data(self.grist_lstbx.get(self.grist_lstbx.curselection()))
+            self.show_data(self.grist_lstbx.get(
+                self.grist_lstbx.curselection()))
         except BaseException:
             pass
 
@@ -2912,7 +3002,8 @@ class grist_editor(tk.Frame):
 
     def delete(self):
         """Delete grist from data set"""
-        del brew_data.grist_data[self.grist_lstbx.get(self.grist_lstbx.curselection())]
+        del brew_data.grist_data[self.grist_lstbx.get(
+            self.grist_lstbx.curselection())]
         self.grist_lstbx.delete(self.grist_lstbx.curselection())
 
     def new(self):
@@ -2974,7 +3065,8 @@ class grist_editor(tk.Frame):
         moisture = float(self.grist_moisture_ent.get())
         fermentability = float(self.grist_ferment_ent.get())
         description = self.grist_comm_ent.get()
-        grist_type = self.grist_type_combo_values.index(self.grist_type_combo.get()) + 1
+        grist_type = self.grist_type_combo_values.index(
+            self.grist_type_combo.get()) + 1
         del brew_data.grist_data[self.name]
         brew_data.grist_data[name] = {
             "EBC": colour,
@@ -3040,7 +3132,8 @@ class defaults_editor(tk.Frame):
         self.boil_vol_lbl.configure(text="""Boil Volume Scale:""")
 
         self.liquor_to_grist_lbl = tk.Label(self)
-        self.liquor_to_grist_lbl.place(relx=0.038, rely=0.317, height=19, width=165)
+        self.liquor_to_grist_lbl.place(
+            relx=0.038, rely=0.317, height=19, width=165)
         self.liquor_to_grist_lbl.configure(background=_bgcolor)
         self.liquor_to_grist_lbl.configure(foreground="#000000")
         self.liquor_to_grist_lbl.configure(font=font9)
@@ -3057,7 +3150,8 @@ class defaults_editor(tk.Frame):
         self.target_vol_ent.configure(cursor="xterm")
 
         self.boil_vol_ent = tk.Entry(self)
-        self.boil_vol_ent.place(relx=0.227, rely=0.148, relheight=0.044, relwidth=0.106)
+        self.boil_vol_ent.place(relx=0.227, rely=0.148,
+                                relheight=0.044, relwidth=0.106)
         self.boil_vol_ent.configure(justify="center")
         self.boil_vol_ent.configure(takefocus="")
         self.boil_vol_ent.configure(cursor="xterm")
@@ -3071,7 +3165,8 @@ class defaults_editor(tk.Frame):
         self.liquor_to_grist_ent.configure(cursor="xterm")
 
         self.target_vol_litres_lbl = tk.Label(self)
-        self.target_vol_litres_lbl.place(relx=0.316, rely=0.063, height=19, width=46)
+        self.target_vol_litres_lbl.place(
+            relx=0.316, rely=0.063, height=19, width=46)
         self.target_vol_litres_lbl.configure(background=_bgcolor)
         self.target_vol_litres_lbl.configure(foreground="#000000")
         self.target_vol_litres_lbl.configure(font=font9)
@@ -3079,7 +3174,8 @@ class defaults_editor(tk.Frame):
         self.target_vol_litres_lbl.configure(text="""Litres""")
 
         self.mash_efficiency_lbl = tk.Label(self)
-        self.mash_efficiency_lbl.place(relx=0.038, rely=0.233, height=19, width=125)
+        self.mash_efficiency_lbl.place(
+            relx=0.038, rely=0.233, height=19, width=125)
         self.mash_efficiency_lbl.configure(background=_bgcolor)
         self.mash_efficiency_lbl.configure(foreground="#000000")
         self.mash_efficiency_lbl.configure(font=font9)
@@ -3095,7 +3191,8 @@ class defaults_editor(tk.Frame):
         self.mash_efficiency_ent.configure(cursor="xterm")
 
         self.boil_vol_percent_lbl = tk.Label(self)
-        self.boil_vol_percent_lbl.place(relx=0.341, rely=0.148, height=19, width=15)
+        self.boil_vol_percent_lbl.place(
+            relx=0.341, rely=0.148, height=19, width=15)
         self.boil_vol_percent_lbl.configure(background=_bgcolor)
         self.boil_vol_percent_lbl.configure(foreground="#000000")
         self.boil_vol_percent_lbl.configure(font=font9)
@@ -3135,9 +3232,11 @@ class defaults_editor(tk.Frame):
         self.done_button.configure(command=self.temp_save)
 
         self.reset_to_defaults_butt = tk.Button(self)
-        self.reset_to_defaults_butt.place(relx=0.013, rely=0.93, height=28, width=190)
+        self.reset_to_defaults_butt.place(
+            relx=0.013, rely=0.93, height=28, width=190)
         self.reset_to_defaults_butt.configure(takefocus="")
-        self.reset_to_defaults_butt.configure(text="""Reset to Local Database""")
+        self.reset_to_defaults_butt.configure(
+            text="""Reset to Local Database""")
         self.reset_to_defaults_butt.configure(command=self.reset_to_defaults)
 
         self.attenuation_defaults_lbl = tk.Label(self)
@@ -3148,7 +3247,8 @@ class defaults_editor(tk.Frame):
         self.attenuation_defaults_lbl.configure(foreground="#000000")
         self.attenuation_defaults_lbl.configure(font=font9)
         self.attenuation_defaults_lbl.configure(relief="flat")
-        self.attenuation_defaults_lbl.configure(text="""Attenuation Default:""")
+        self.attenuation_defaults_lbl.configure(
+            text="""Attenuation Default:""")
         self.attenuation_defaults_lbl.configure(width=155)
 
         self.attenuation_types = ["Low", "Medium", "High"]
@@ -3225,7 +3325,8 @@ class defaults_editor(tk.Frame):
         self.replace_default_vars.configure(foreground="#000000")
         self.replace_default_vars.configure(font=font9)
         self.replace_default_vars.configure(relief="flat")
-        self.replace_default_vars.configure(text="""Update Default Configuration:""")
+        self.replace_default_vars.configure(
+            text="""Update Default Configuration:""")
 
         self.replace_default_vars_chckbutt = tk.Checkbutton(self)
         # self.replace_default_vars_chckbutt.place(
@@ -3309,8 +3410,10 @@ class defaults_editor(tk.Frame):
     def temp_save(self):
         """Temporarily save entry values to brew_data.constants"""
         brew_data.constants["Volume"] = float(self.target_vol_ent.get())
-        brew_data.constants["Efficiency"] = float(self.mash_efficiency_ent.get()) / 100
-        brew_data.constants["Boil Volume Scale"] = float(self.boil_vol_ent.get()) / 100
+        brew_data.constants["Efficiency"] = float(
+            self.mash_efficiency_ent.get()) / 100
+        brew_data.constants["Boil Volume Scale"] = float(
+            self.boil_vol_ent.get()) / 100
         brew_data.constants["Liquor To Grist Ratio"] = float(
             self.liquor_to_grist_ent.get()
         )
@@ -3332,12 +3435,14 @@ class defaults_editor(tk.Frame):
         self.liquor_to_grist_ent.delete(0, tk.END)
         self.default_boil_time_spinbox.delete(0, tk.END)
 
-        self.mash_efficiency_ent.insert(0, brew_data.constants["Efficiency"] * 100)
+        self.mash_efficiency_ent.insert(
+            0, brew_data.constants["Efficiency"] * 100)
         self.target_vol_ent.insert(0, brew_data.constants["Volume"])
         self.boil_vol_ent.insert(
             0, round(brew_data.constants["Boil Volume Scale"] * 100, 1)
         )
-        self.liquor_to_grist_ent.insert(0, brew_data.constants["Liquor To Grist Ratio"])
+        self.liquor_to_grist_ent.insert(
+            0, brew_data.constants["Liquor To Grist Ratio"])
         self.default_boil_time_spinbox.insert(
             0, brew_data.constants["Default Boil Time"]
         )
@@ -3354,7 +3459,8 @@ class special_editor(tk.Frame):
         self.current_attenuation = tk.StringVar()
         self.widgets()
         # self.attenuation_frame.bind('<Button-1>', lambda evt: print(self.current_attenuation.get()))
-        self.current_attenuation.set(brew_data.constants["Attenuation Default"])
+        self.current_attenuation.set(
+            brew_data.constants["Attenuation Default"])
         self.original_additions = list(
             sorted(brew_data.water_chemistry_additions)
         ) + list(sorted(brew_data.yeast_data))
@@ -3919,7 +4025,8 @@ class special_editor(tk.Frame):
             relx=0.253, rely=0.021, relheight=0.591, relwidth=0.568  # relheight=0.591
         )
         self.water_chem_add_frame.configure(relief="")
-        self.water_chem_add_frame.configure(text="""Water Chemistry Additions""")
+        self.water_chem_add_frame.configure(
+            text="""Water Chemistry Additions""")
         self.water_chem_add_frame.configure(width=450)
 
         self.water_chem_orig_lstbx = ScrolledListBox(self.water_chem_add_frame)
@@ -3976,7 +4083,8 @@ class special_editor(tk.Frame):
         self.move_all_left.configure(text="""<<""")
         self.move_all_left.configure(command=self.move_all_right_left)
 
-        self.water_chem_added_lstbx = ScrolledListBox(self.water_chem_add_frame)
+        self.water_chem_added_lstbx = ScrolledListBox(
+            self.water_chem_add_frame)
         self.water_chem_added_lstbx.place(
             relx=0.578, rely=0.073, relheight=0.865, relwidth=0.391, bordermode="ignore"
         )
@@ -4017,7 +4125,8 @@ class special_editor(tk.Frame):
         self.water_boil_time_spinbx.configure(width=58)
         # self.water_boil_time_spinbx.set(brew_data.constants['Default Boil Time'])
         self.water_boil_time_spinbx.delete(0, tk.END)
-        self.water_boil_time_spinbx.insert(0, brew_data.constants["Default Boil Time"])
+        self.water_boil_time_spinbx.insert(
+            0, brew_data.constants["Default Boil Time"])
 
         self.water_boil_time_lbl = tk.Label(self.water_boil_frame)
         self.water_boil_time_lbl.place(
@@ -4044,7 +4153,8 @@ class special_editor(tk.Frame):
         for idx, addition in enumerate(self.added_additions):
             self.water_chem_added_lstbx.insert(tk.END, addition)
             if addition in brew_data.yeast_data:
-                self.water_chem_added_lstbx.itemconfig(idx, {"bg": "lightblue"})
+                self.water_chem_added_lstbx.itemconfig(
+                    idx, {"bg": "lightblue"})
 
     def refresh_all(self):
         """Refresh all listboxes"""
@@ -4157,7 +4267,8 @@ class special_editor(tk.Frame):
         )
         time_spnbx.grid(row=1, column=1, sticky="nsew")
         tk.Label(new_water_chem_win, text="Type: ").grid(row=2, column=0)
-        type_opt = tk.OptionMenu(new_water_chem_win, type_var, "Hop", "Malt", "Yeast")
+        type_opt = tk.OptionMenu(
+            new_water_chem_win, type_var, "Hop", "Malt", "Yeast")
         type_opt.grid(row=2, column=1, sticky="nsew")
 
         type_var.trace("w", on_type_change)
@@ -4202,7 +4313,8 @@ class yeast_editor(tk.Frame):
         self.TPanedwindow1 = tk.PanedWindow(
             self, orient="horizontal", background=_bgcolor
         )
-        self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973, relwidth=0.966)
+        self.TPanedwindow1.place(relx=0.013, rely=0.0,
+                                 relheight=0.973, relwidth=0.966)
         self.yeast_panedwindow1 = tk.LabelFrame(
             width=400, text="Yeasts:", background=_bgcolor
         )
@@ -4301,7 +4413,8 @@ class yeast_editor(tk.Frame):
         self.yeast_lab_ent.configure(cursor="xterm")
 
         self.yeast_origin_lbl = tk.Label(self.yeast_panedwindow2)
-        self.yeast_origin_lbl.place(relx=0.056, rely=0.283, bordermode="ignore")
+        self.yeast_origin_lbl.place(
+            relx=0.056, rely=0.283, bordermode="ignore")
         self.yeast_origin_lbl.configure(background=_bgcolor)
         self.yeast_origin_lbl.configure(foreground="#000000")
         self.yeast_origin_lbl.configure(font=font9)
@@ -4345,7 +4458,8 @@ class yeast_editor(tk.Frame):
         self.yeast_flocc_combo.configure(justify="center")
 
         self.yeast_attenuation_lbl = tk.Label(self.yeast_panedwindow2)
-        self.yeast_attenuation_lbl.place(relx=0.056, rely=0.413, bordermode="ignore")
+        self.yeast_attenuation_lbl.place(
+            relx=0.056, rely=0.413, bordermode="ignore")
         self.yeast_attenuation_lbl.configure(background=_bgcolor)
         self.yeast_attenuation_lbl.configure(foreground="#000000")
         self.yeast_attenuation_lbl.configure(font=font9)
@@ -4470,10 +4584,12 @@ class yeast_editor(tk.Frame):
 
         if brew_data.yeast_data[name]["Temperature"] != "Unknown":
             temperature1 = float(
-                brew_data.yeast_data[name]["Temperature"].replace("°", "").split("-")[0]
+                brew_data.yeast_data[name]["Temperature"].replace(
+                    "°", "").split("-")[0]
             )
             temperature2 = float(
-                brew_data.yeast_data[name]["Temperature"].replace("°", "").split("-")[1]
+                brew_data.yeast_data[name]["Temperature"].replace(
+                    "°", "").split("-")[1]
             )
         else:
             temperature1 = 20
@@ -4491,11 +4607,13 @@ class yeast_editor(tk.Frame):
 
         if flocculation not in self.yeast_flocc_combo_values:
             self.yeast_flocc_combo_values.append(flocculation)
-            self.yeast_flocc_combo.configure(values=self.yeast_flocc_combo_values)
+            self.yeast_flocc_combo.configure(
+                values=self.yeast_flocc_combo_values)
 
         if yeast_type not in self.yeast_type_combo_values:
             self.yeast_type_combo_values.append(yeast_type)
-            self.yeast_type_combo.configure(values=self.yeast_type_combo_values)
+            self.yeast_type_combo.configure(
+                values=self.yeast_type_combo_values)
         self.yeast_flocc_combo.set(flocculation)
         self.yeast_type_combo.set(yeast_type)
 
@@ -4540,7 +4658,8 @@ class yeast_editor(tk.Frame):
 
     def delete(self):
         """Delete hop from data set"""
-        del brew_data.yeast_data[self.yeast_lstbx.get(self.yeast_lstbx.curselection())]
+        del brew_data.yeast_data[self.yeast_lstbx.get(
+            self.yeast_lstbx.curselection())]
         self.yeast_lstbx.delete(self.yeast_lstbx.curselection())
 
     def new(self):
@@ -4575,7 +4694,8 @@ class yeast_editor(tk.Frame):
     def select_listbox(self, event):
         """On listbox item selection fill data values"""
         try:
-            self.show_data(self.yeast_lstbx.get(self.yeast_lstbx.curselection()))
+            self.show_data(self.yeast_lstbx.get(
+                self.yeast_lstbx.curselection()))
         except BaseException:
             pass
 
@@ -4685,7 +4805,8 @@ class notes_area(tk.Frame):
         )
         self.editmenu.add_separator()
         self.html_formatting = tk.BooleanVar()
-        self.editmenu.add_checkbutton(label="HTML Mode", variable=self.html_formatting)
+        self.editmenu.add_checkbutton(
+            label="HTML Mode", variable=self.html_formatting)
         # self.editmenu.add_separator()
         # self.editmenu.add_command(label="Find", command=self.find_win, accelerator="Ctrl+F")
 
@@ -4782,7 +4903,8 @@ class hops_editor(tk.Frame):
         )
 
         self.TPanedwindow1 = tk.PanedWindow(self, orient="horizontal")
-        self.TPanedwindow1.place(relx=0.013, rely=0.0, relheight=0.973, relwidth=0.966)
+        self.TPanedwindow1.place(relx=0.013, rely=0.0,
+                                 relheight=0.973, relwidth=0.966)
         self.TPanedwindow1.configure(width=800)
         self.hop_panedwindow1 = tk.LabelFrame(
             width=400, text="Hops:", background=_bgcolor
@@ -4899,7 +5021,8 @@ class hops_editor(tk.Frame):
         self.hop_alpha_ent.configure(cursor="xterm")
 
         self.hop_alpha_percent = tk.Label(self.hop_panedwindow2)
-        self.hop_alpha_percent.place(relx=0.694, rely=0.283, bordermode="ignore")
+        self.hop_alpha_percent.place(
+            relx=0.694, rely=0.283, bordermode="ignore")
         self.hop_alpha_percent.configure(background=_bgcolor)
         self.hop_alpha_percent.configure(foreground="#000000")
         self.hop_alpha_percent.configure(font=font9)
@@ -5060,7 +5183,8 @@ class hops_editor(tk.Frame):
 
     def delete(self):
         """Delete hop from data set"""
-        del brew_data.hop_data[self.hop_lstbx.get(self.hop_lstbx.curselection())]
+        del brew_data.hop_data[self.hop_lstbx.get(
+            self.hop_lstbx.curselection())]
         self.hop_lstbx.delete(self.hop_lstbx.curselection())
 
     def new(self):
@@ -5132,7 +5256,8 @@ def resource_path(relative_path):
             path = "/usr/include/wheelers-wort-works/logo.png"
         elif os.path.splitext(os.path.basename(relative_path))[1] == ".html":
             path = os.path.join(
-                os.path.expanduser("~/.config/Wheelers-Wort-Works/recipes/html"),
+                os.path.expanduser(
+                    "~/.config/Wheelers-Wort-Works/recipes/html"),
                 relative_path,
             )
         path = os.path.join(
@@ -5187,9 +5312,11 @@ def main(file=None, update_available=False):
             command=lambda: copy_command(root, command),
             accelerator="Ctrl+C",
         )
-        command_box.bind("<Control-Key-c>", lambda event: copy_command(root, command))
+        command_box.bind("<Control-Key-c>",
+                         lambda event: copy_command(root, command))
         command_box.bind(
-            "<Button-3>", lambda event: editmenu.tk_popup(event.x_root, event.y_root)
+            "<Button-3>", lambda event: editmenu.tk_popup(
+                event.x_root, event.y_root)
         )
 
         tk.Button(update_win, text="Okay", command=update_win.destroy).grid(
